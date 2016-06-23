@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>Hello World - Vno</title>
-  <meta name="description" content="What’s this">
+  <title>windows下桌面网络图标显示未连接却可以上网的解决方案</title>
+  <meta name="description" content="RT， 博主某次更新注册表之后出现网络图标无法正常显示的情况，具体情况如下： 1. 网络与共享中心中的网络信息显示为未知。 2. 开机后需等待网络图标从正在连接转变为未连接，否则再次关机时会出现Task Host Windows任务宿主正在执行关闭任务的需强制关闭的选项 3. 更换无线连接节时连接时间较长，甚至出...">
   <meta name="author" content="Wei Wang">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Hello World - Vno">
-  <meta name="twitter:description" content="What’s this">
+  <meta name="twitter:title" content="windows下桌面网络图标显示未连接却可以上网的解决方案">
+  <meta name="twitter:description" content="RT， 博主某次更新注册表之后出现网络图标无法正常显示的情况，具体情况如下： 1. 网络与共享中心中的网络信息显示为未知。 2. 开机后需等待网络图标从正在连接转变为未连接，否则再次关机时会出现Task Host Windows任务宿主正在执行关闭任务的需强制关闭的选项 3. 更换无线连接节时连接时间较长，甚至出...">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Hello World - Vno">
-  <meta property="og:description" content="What’s this">
+  <meta property="og:title" content="windows下桌面网络图标显示未连接却可以上网的解决方案">
+  <meta property="og:description" content="RT， 博主某次更新注册表之后出现网络图标无法正常显示的情况，具体情况如下： 1. 网络与共享中心中的网络信息显示为未知。 2. 开机后需等待网络图标从正在连接转变为未连接，否则再次关机时会出现Task Host Windows任务宿主正在执行关闭任务的需强制关闭的选项 3. 更换无线连接节时连接时间较长，甚至出...">
   
   <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
   <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="/2016/02/hello-world-vno/">
+  <link rel="canonical" href="/2015/03/97/">
   <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -154,63 +154,44 @@
             <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
     <div class="post-meta">
-      <time datetime="2016-02-16 14:32:24 +0800" itemprop="datePublished" class="post-meta__date date">2016-02-16</time> &#8226; <span class="post-meta__tags tags"></span>
+      <time datetime="2015-03-05 00:47:58 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-05</time> &#8226; <span class="post-meta__tags tags">windows</span>
     </div>
-    <h1 class="post-title">Hello World - Vno</h1>
+    <h1 class="post-title">windows下桌面网络图标显示未连接却可以上网的解决方案</h1>
   </header>
 
   <section class="post">
-    <h4 id="whats-this">What’s this</h4>
+    <p>RT， 博主某次更新注册表之后出现<strong>网络图标无法正常显示的情况</strong>，具体情况如下：
+<img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/windows/windowsnetErorr2.jpeg" alt="" /> <br />
+1. 网络与共享中心中的<code class="highlighter-rouge">网络信息显示为未知</code>。 <br />
+2. 开机后需等待网络图标从正在连接转变为未连接，否则再次关机时会出现<code class="highlighter-rouge">Task Host Windows任务宿主正在执行关闭任务</code>的需强制关闭的选项 <br />
+3. 更换无线连接节时连接时间较长，甚至出现无法连接到新节点的情况 <br />
+4. 无线连接显示为<code class="highlighter-rouge">受限制的访问</code>。 <br />
+5. 在网络图标显示为正在更新的情况下强制打开网络与共享中心时会出现卡死状态。 <br />
+<img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/windows/windowsnetErorr1.jpg" alt="" /></p>
 
-<p><a href="https://github.com/onevcat/vno-jekyll">Vno Jekyll</a> is a theme for <a href="http://jekyllrb.com">Jekyll</a>. It is a port of my Ghost theme <a href="https://github.com/onevcat/vno">vno</a>, which is originally developed from <a href="https://github.com/daleanthony/uno">Dale Anthony’s Uno</a>.</p>
+<p>如所遇问题与题主列出的问题类似，则大多数原因出现在<strong>某些服务项无法启动的关系</strong>。</p>
 
-<h4 id="usage">Usage</h4>
+<p><strong>解决方案</strong>：    <br />
+在运行中输入<code class="highlighter-rouge">Services.msc</code>，打开服务列表，寻找以下几项：  <br />
+  <code class="highlighter-rouge">Network List Service</code><br />
+  <code class="highlighter-rouge">Network Connections</code><br />
+  <code class="highlighter-rouge">Network Location Awareness</code><br />
+  <code class="highlighter-rouge">Network Store Interface Service</code><br />
+一般不用重启就能检测问题是否解决。</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git clone https://github.com/onevcat/vno-jekyll.git your_site
-<span class="gp">$ </span><span class="nb">cd </span>your_site
-<span class="gp">$ </span>bundler install
-<span class="gp">$ </span>bundler <span class="nb">exec </span>jekyll serve
-</code></pre>
-</div>
-
-<p>Your site with <code class="highlighter-rouge">Vno Jekyll</code> enabled should be accessible in http://127.0.0.1:4000.</p>
-
-<p>For more information about Jekyll, please visit <a href="http://jekyllrb.com">Jekyll’s site</a>.</p>
-
-<h4 id="configuration">Configuration</h4>
-
-<p>All configuration could be done in <code class="highlighter-rouge">_config.yml</code>. Remember you need to restart to serve the page when after changing the config file. Everything in the config file should be self-explanatory.</p>
-
-<h4 id="background-image-and-avatar">Background image and avatar</h4>
-
-<p>You could replace the background and avatar image in <code class="highlighter-rouge">assets/images</code> folder to change them.</p>
-
-<h4 id="sites-using-vno">Sites using Vno</h4>
-
-<p><a href="http://onevcat.com">My blog</a> is using <code class="highlighter-rouge">Vno Jekyll</code> as well, you could see how it works in real. There are some other sites using the same theme. You can find them below:</p>
-
-<table>
-  <thead>
-    <tr>
-      <th>Site Name</th>
-      <th>URL</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>OneV’s Den</td>
-      <td>http://onevcat.com</td>
-    </tr>
-  </tbody>
-</table>
-
-<blockquote>
-  <p>If you happen to be using this theme, welcome to <a href="https://github.com/onevcat/vno-jekyll/pulls">send me a pull request</a> to add your site link here. :)</p>
-</blockquote>
-
-<h4 id="license">License</h4>
-
-<p>Great thanks to <a href="https://github.com/daleanthony">Dale Anthony</a> and his <a href="https://github.com/daleanthony/uno">Uno</a>. Vno Jekyll is based on Uno, and contains a lot of modification on page layout, animation, font and some more things I can not remember. Vno Jekyll is followed with Uno and be licensed as <a href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International</a>. See the link for more information.</p>
+<p>若其中<code class="highlighter-rouge">Network List Service</code>服务无法启动，出现<code class="highlighter-rouge">服务在其他程序运行时自动关闭</code>的情况（大多数情况类似于此，题主也不例外）：
+<img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/windows/windowsnetErorr3.jpg" alt="" /> <br />
+则使用以下方法启动服务： <br />
+    1）运行-输出<code class="highlighter-rouge">dcomcnfg</code>    <br />
+    2）组件服务-计算机-我的电脑-DCOM配置-<code class="highlighter-rouge">netprofm</code>   <br />
+    3）右键属性-安全-启动和激活权限-自定义 <br />
+    4）编辑-添加-输入对象名称来选择-输入<code class="highlighter-rouge">LOCAL SERVICE</code>-确定 <br />
+    5）返回之后，注意勾选下面的本地启动和本地激活（注意，默认是没有选择的） <br />
+    6）选择<code class="highlighter-rouge">LOCAL SERVICE</code>应用-确定   <br />
+    7）选择组件服务并行目录中的服务-<code class="highlighter-rouge">Network List Service</code>-右键启用! <br />
+    <img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/windows/windowsnetErorr4.jpg" alt="" /> <br />
+<strong>其他解决方案</strong>：    <br />
+类似网上回答，检查其他相关网络服务是否开启，更新网络适配器，关闭多余的虚拟适配器等。题主所述只是针对首段情况的一种解决方案，如无法解决大家的问题请多多包涵。但如果是跟题主类似情况更新注册表或者等等瞎鼓捣系统配置造成的类似反应，绝大可能性都可以用以上方法解决，自行谷歌百度。</p>
 
   </section>
 </article>
@@ -218,14 +199,14 @@
 <section class="read-more">
    
    
-   
-   
    <div class="read-more-item">
-       <span class="read-more-item-dim">更早的文章</span>
+       <span class="read-more-item-dim">最近的文章</span>
        <h2 class="post-list__post-title post-title"><a href="/2016/02/sample-post/" title="link to Sample Post">Sample Post</a></h2>
        <p class="excerpt">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-r...&hellip;</p>
        <div class="post-list__meta"><time datetime="2016-02-15 14:32:24 +0800" class="post-list__meta--date date">2016-02-15</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2016/02/sample-post/>继续阅读</a></div>
    </div>
+   
+   
    
 </section>
 
@@ -235,8 +216,8 @@
     <script>
     
     var disqus_config = function () {
-        this.page.url = "/2016/02/hello-world-vno/";
-        this.page.identifier = "/2016/02/hello-world-vno/";
+        this.page.url = "/2015/03/97/";
+        this.page.identifier = "/2015/03/97/";
     };
 
     var disqus_shortname = 'vno-jekyll';

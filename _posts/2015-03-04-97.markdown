@@ -1,0 +1,42 @@
+---
+layout: post
+title: windows下桌面网络图标显示未连接却可以上网的解决方案
+date: 2015-03-04 16:47:58+00:00
+categories:
+- windows日常
+tags:
+- windows
+---
+
+RT， 博主某次更新注册表之后出现**网络图标无法正常显示的情况**，具体情况如下：
+![](http://7xvk1t.com1.z0.glb.clouddn.com/image/windows/windowsnetErorr2.jpeg)   
+1. 网络与共享中心中的`网络信息显示为未知`。   
+2. 开机后需等待网络图标从正在连接转变为未连接，否则再次关机时会出现`Task Host Windows任务宿主正在执行关闭任务`的需强制关闭的选项   
+3. 更换无线连接节时连接时间较长，甚至出现无法连接到新节点的情况   
+4. 无线连接显示为`受限制的访问`。   
+5. 在网络图标显示为正在更新的情况下强制打开网络与共享中心时会出现卡死状态。   
+![](http://7xvk1t.com1.z0.glb.clouddn.com/image/windows/windowsnetErorr1.jpg)   
+
+如所遇问题与题主列出的问题类似，则大多数原因出现在**某些服务项无法启动的关系**。
+
+  __解决方案__：      
+在运行中输入`Services.msc`，打开服务列表，寻找以下几项：    
+  `Network List Service`  
+  `Network Connections`  
+  `Network Location Awareness`  
+  `Network Store Interface Service`  
+一般不用重启就能检测问题是否解决。
+
+若其中`Network List Service`服务无法启动，出现`服务在其他程序运行时自动关闭`的情况（大多数情况类似于此，题主也不例外）：
+![](http://7xvk1t.com1.z0.glb.clouddn.com/image/windows/windowsnetErorr3.jpg)   
+则使用以下方法启动服务：   
+    1）运行-输出`dcomcnfg`      
+    2）组件服务-计算机-我的电脑-DCOM配置-`netprofm`     
+    3）右键属性-安全-启动和激活权限-自定义   
+    4）编辑-添加-输入对象名称来选择-输入`LOCAL SERVICE`-确定   
+    5）返回之后，注意勾选下面的本地启动和本地激活（注意，默认是没有选择的）   
+    6）选择`LOCAL SERVICE`应用-确定     
+    7）选择组件服务并行目录中的服务-`Network List Service`-右键启用!   
+    ![](http://7xvk1t.com1.z0.glb.clouddn.com/image/windows/windowsnetErorr4.jpg)   
+**其他解决方案**：      
+类似网上回答，检查其他相关网络服务是否开启，更新网络适配器，关闭多余的虚拟适配器等。题主所述只是针对首段情况的一种解决方案，如无法解决大家的问题请多多包涵。但如果是跟题主类似情况更新注册表或者等等瞎鼓捣系统配置造成的类似反应，绝大可能性都可以用以上方法解决，自行谷歌百度。

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>编程之美--求二进制中1的个数</title>
+  <meta name="description" content="求二进制中1的个数对于一个字节（8bit）的变量，求其二进制表示中”1”的个数，要求算法的执行效率尽可能的高。 先来看看样章上给出的几个算法：">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="编程之美--求二进制中1的个数">
+  <meta name="twitter:description" content="求二进制中1的个数对于一个字节（8bit）的变量，求其二进制表示中”1”的个数，要求算法的执行效率尽可能的高。 先来看看样章上给出的几个算法：">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="编程之美--求二进制中1的个数">
+  <meta property="og:description" content="求二进制中1的个数对于一个字节（8bit）的变量，求其二进制表示中”1”的个数，要求算法的执行效率尽可能的高。 先来看看样章上给出的几个算法：">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="/2015/03/e7bc96e7a88be4b98be7be8e-e6b182e4ba8ce8bf9be588b6e4b8ad1e79a84e4b8aae695b0/">
+  <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Mageric 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Mageric logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Mageric" class="blog-button">Mageric</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">42 世界尽头</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Mageric的个人小站.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="http://project.onevcat.com" target="_blank" title="My Projects">Projects</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/magericyoung" title="@magericyoung 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Mageric0412" title="@Mageric0412 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- instagram -->
+  <li class="navigation__item">
+   <a href="https://www.instagram.com/mageric0412" title="@mageric0412 的Instagram" target="_blank">
+     <i class='social fa fa-instagram'></i>
+     <span class="label">instagram</span>
+   </a>
+  </li>
+  
+
+<!--
+  
+  <!-- website -->
+  <!--
+  <li class="navigation__item">
+    <a href="https://mageric-one.com" rel="author" title="mageric的小站" target="_blank">
+        <i class='social fa fa-rss'> </i>
+      <span class="label">website</span>
+    </a>
+  </li>
+  
+-->
+
+
+
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:mageric0412@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-03-05 00:50:52 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-05</time> &#8226; <span class="post-meta__tags tags">算法</span>
+    </div>
+    <h1 class="post-title">编程之美--求二进制中1的个数</h1>
+  </header>
+
+  <section class="post">
+    <h3 id="section">求二进制中1的个数</h3>
+<p>对于一个字节（8bit）的变量，求其二进制表示中”1”的个数，要求算法的执行效率尽可能的高。 <br />
+先来看看样章上给出的几个算法：</p>
+
+<p><strong>解法一</strong>：每次除二，看是否为奇数，是的话就累计加一，最后这个结果就是二进制表示中1的个数。 <br />
+<strong>解法二</strong>：同样用到一个循环，只是里面的操作用位移操作简化了。</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">  <span class="kt">int</span><span class="err"> </span><span class="n">Count</span><span class="p">(</span><span class="kt">int</span><span class="err"> </span><span class="n">v</span><span class="p">)</span>  
+  <span class="p">{</span>
+<span class="err">   </span><span class="kt">int</span><span class="err"> </span><span class="n">num</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="mi">0</span><span class="p">;</span>
+   <span class="k">while</span><span class="err"> </span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="err"> </span><span class="p">{</span>
+    <span class="n">num</span><span class="err"> </span><span class="o">+=</span><span class="err"> </span><span class="n">v</span><span class="err"> </span><span class="o">&amp;</span><span class="err"> </span><span class="mh">0x01</span><span class="p">;</span>
+    <span class="n">v</span><span class="err"> </span><span class="o">&gt;&gt;=</span><span class="err"> </span><span class="mi">1</span><span class="p">;</span>
+   <span class="p">}</span>
+   <span class="k">return</span><span class="err"> </span><span class="n">num</span><span class="p">;</span>  
+ <span class="p">}</span></code></pre></figure>
+
+<p><strong>解法三</strong>：用到一个巧妙的与操作，v &amp; (v -1 )每次能消去二进制表示中最后一位1，利用这个技巧可以减少一定的循环次数。 <br />
+<strong>解法四</strong>：查表法，因为只有数据8bit，直接建一张表，包含各个数中1的个数，然后查表就行。复杂度O(1)。</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">  <span class="kt">int</span><span class="err"> </span><span class="n">countTable</span><span class="p">[</span><span class="mi">256</span><span class="p">]</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="p">{</span><span class="err"> </span><span class="mi">0</span><span class="p">,</span><span class="err"> </span><span class="mi">1</span><span class="p">,</span><span class="err"> </span><span class="mi">1</span><span class="p">,</span><span class="err"> </span><span class="mi">2</span><span class="p">,</span><span class="err"> </span><span class="mi">1</span><span class="p">,</span><span class="err"> </span><span class="p">...,</span><span class="err"> </span><span class="mi">7</span><span class="p">,</span><span class="err"> </span><span class="mi">7</span><span class="p">,</span><span class="err"> </span><span class="mi">8</span><span class="err"> </span><span class="p">};</span>
+  <span class="kt">int</span><span class="err"> </span><span class="n">Count</span><span class="p">(</span><span class="kt">int</span><span class="err"> </span><span class="n">v</span><span class="p">)</span><span class="err"> </span><span class="p">{</span>
+<span class="err">  </span><span class="k">return</span><span class="err"> </span><span class="n">countTable</span><span class="p">[</span><span class="n">v</span><span class="p">];</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p>好了，这就是样章上给出的四种方案，下面谈谈我的看法：<br />
+<strong>首先</strong>，是对算法的衡量上，复杂度真的是唯一的标准吗？尤其对于这种数据规模给定，而且很小的情况下，复杂度其实是个比较次要的因素。
+查表法的复杂度为O(1)，我用解法一，循环八次固定，复杂度也是O(1)。至于数据规模变大，变成32位整型，那查表法自然也不合适了。 <br />
+<strong>其次</strong>，我觉得既然是这样一个很小的操作，衡量的尺度也必然要小，CPU时钟周期可以作为一个参考。解法一里有若干次整数加法，若干次整数除法（一般的编译器都能把它优化成位移），还有几个循环分支判断，几个奇偶性判断（这个比较耗时间，根据CSAPP上的数据，一个<code class="highlighter-rouge">branch penalty</code>得耗掉14个左右的<code class="highlighter-rouge">cycle</code>），加起来大概几十个<code class="highlighter-rouge">cycle</code>吧。  <br />
+<strong>再看解法四</strong>，查表法看似一次地址计算就能解决，但实际上这里用到一个访存操作，而且第一次访存的时候很有可能那个数组不在cache里，这样一个cache miss导致的后果可能就是耗去几十甚至上百个<code class="highlighter-rouge">cycle</code>（因为要访问内存）。所以对于这种“小操作”，这个算法的性能其实是很差的。</p>
+
+<p>这里我再推荐几个解决这个问题的算法，以32位无符号整型为例。</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="err"> </span><span class="kt">int</span><span class="err"> </span><span class="n">Count</span><span class="p">(</span><span class="kt">unsigned</span><span class="err"> </span><span class="n">x</span><span class="p">)</span><span class="err"> </span><span class="p">{</span>
+<span class="err">  </span><span class="n">x</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="n">x</span><span class="err"> </span><span class="o">-</span><span class="err"> </span><span class="p">((</span><span class="n">x</span><span class="err"> </span><span class="o">&gt;&gt;</span><span class="err"> </span><span class="mi">1</span><span class="p">)</span><span class="err"> </span><span class="o">&amp;</span><span class="err"> </span><span class="mh">0x55555555</span><span class="p">);</span>
+<span class="err">  </span><span class="n">x</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="p">(</span><span class="n">x</span><span class="err"> </span><span class="o">&amp;</span><span class="err"> </span><span class="mh">0x33333333</span><span class="p">)</span><span class="err"> </span><span class="o">+</span><span class="err"> </span><span class="p">((</span><span class="n">x</span><span class="err"> </span><span class="o">&gt;&gt;</span><span class="err"> </span><span class="mi">2</span><span class="p">)</span><span class="err"> </span><span class="o">&amp;</span><span class="err"> </span><span class="mh">0x33333333</span><span class="p">);</span>
+<span class="err">  </span><span class="n">x</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="p">(</span><span class="n">x</span><span class="err"> </span><span class="o">+</span><span class="err"> </span><span class="p">(</span><span class="n">x</span><span class="err"> </span><span class="o">&gt;&gt;</span><span class="err"> </span><span class="mi">4</span><span class="p">))</span><span class="err"> </span><span class="o">&amp;</span><span class="err"> </span><span class="mh">0x0F0F0F0F</span><span class="p">;</span>
+<span class="err">  </span><span class="n">x</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="n">x</span><span class="err"> </span><span class="o">+</span><span class="err"> </span><span class="p">(</span><span class="n">x</span><span class="err"> </span><span class="o">&gt;&gt;</span><span class="err"> </span><span class="mi">8</span><span class="p">);</span>
+<span class="err">  </span><span class="n">x</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="n">x</span><span class="err"> </span><span class="o">+</span><span class="err"> </span><span class="p">(</span><span class="n">x</span><span class="err"> </span><span class="o">&gt;&gt;</span><span class="err"> </span><span class="mi">16</span><span class="p">);</span>
+<span class="err">  </span><span class="k">return</span><span class="err"> </span><span class="n">x</span><span class="err"> </span><span class="o">&amp;</span><span class="err"> </span><span class="mh">0x0000003F</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>这里用的是二分法，两两一组相加，之后四个四个一组相加，接着八个八个，最后就得到各位之和了。</p>
+
+<p>还有一个更巧妙的<strong>HAKMEM</strong>算法：</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="err">  </span><span class="kt">int</span><span class="err"> </span><span class="n">Count</span><span class="p">(</span><span class="kt">unsigned</span><span class="err"> </span><span class="n">x</span><span class="p">)</span><span class="err"> </span><span class="p">{</span>
+<span class="err">    </span><span class="kt">unsigned</span><span class="err"> </span><span class="n">n</span><span class="p">;</span>
+<span class="err">    </span><span class="n">n</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="p">(</span><span class="n">x</span><span class="err"> </span><span class="o">&gt;&gt;</span><span class="err"> </span><span class="mi">1</span><span class="p">)</span><span class="err"> </span><span class="o">&amp;</span><span class="err"> </span><span class="mo">033333333333</span><span class="p">;</span>
+<span class="err">    </span><span class="n">x</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="n">x</span><span class="err"> </span><span class="o">-</span><span class="err"> </span><span class="n">n</span><span class="p">;</span>
+<span class="err">    </span><span class="n">n</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="p">(</span><span class="n">n</span><span class="err"> </span><span class="o">&gt;&gt;</span><span class="err"> </span><span class="mi">1</span><span class="p">)</span><span class="err"> </span><span class="o">&amp;</span><span class="err"> </span><span class="mo">033333333333</span><span class="p">;</span>
+<span class="err">    </span><span class="n">x</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="n">x</span><span class="err"> </span><span class="o">-</span><span class="err"> </span><span class="n">n</span><span class="p">;</span>
+<span class="err">   </span> <span class="n">x</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="p">(</span><span class="n">x</span><span class="err"> </span><span class="o">+</span><span class="err"> </span><span class="p">(</span><span class="n">x</span><span class="err"> </span><span class="o">&gt;&gt;</span><span class="err"> </span><span class="mi">3</span><span class="p">))</span><span class="err"> </span><span class="o">&amp;</span><span class="err"> </span><span class="mo">030707070707</span><span class="p">;</span>
+<span class="err">    </span><span class="n">x</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="n">modu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="err"> </span><span class="mi">63</span><span class="p">);</span>
+<span class="err">    </span><span class="k">return</span><span class="err"> </span><span class="n">x</span><span class="p">;</span>   
+  <span class="p">}</span></code></pre></figure>
+
+<p>首先是将二进制各位三个一组，求出每组中1的个数，然后相邻两组归并，得到六个一组的1的个数，最后很巧妙的用除63取余得到了结果。
+因为<code class="highlighter-rouge">2^6 = 64</code>，也就是说<code class="highlighter-rouge">x_0 + x_1 * 64 + x_2 * 64 * 64 = x_0 + x_1 + x_2 (mod 63)</code>，这里的等号表示同余。 <br />
+这个程序只需要<strong>十条左右</strong>指令，而且不访存，速度很快。由此可见，衡量一个算法实际效果不单要看复杂度，还要结合其他情况具体分析。
+关于后面的两道扩展问题，问题一是问32位整型如何处理，这个上面已经讲了。
+问题二是给定两个整数A和B，问A和B有多少位是不同的。
+这个问题其实就是数1问题多了一个步骤，只要先算出A和B的异或结果，然后求这个值中1的个数就行了。</p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2016/02/sample-post/" title="link to Sample Post">Sample Post</a></h2>
+       <p class="excerpt">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-r...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-02-15 14:32:24 +0800" class="post-list__meta--date date">2016-02-15</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2016/02/sample-post/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/03/97/" title="link to windows下桌面网络图标显示未连接却可以上网的解决方案">windows下桌面网络图标显示未连接却可以上网的解决方案</a></h2>
+       <p class="excerpt">RT， 博主某次更新注册表之后出现网络图标无法正常显示的情况，具体情况如下： 1. 网络与共享中心中的网络信息显示为未知。 2. 开机后需等待网络图标从正在连接转变为未连接，否则再次关机时会出现Task Host Windows任务宿主正在执行关闭任务的需强制关闭的选项 3. 更换无线连接节时连接时间较长，甚至出现无法连接到新节点的情况 4. 无线连接显示为受限制的访问。 5. 在网络图标显示为正在更新的情况下强制打开网络与共享中心时会出现卡死状态。 如所遇问题与题主列出的问题类似，则大多...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-03-05 00:47:58 +0800" class="post-list__meta--date date">2015-03-05</time> &#8226; <span class="post-list__meta--tags tags">windows</span><a class="btn-border-small" href=/2015/03/97/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "/2015/03/e7bc96e7a88be4b98be7be8e-e6b182e4ba8ce8bf9be588b6e4b8ad1e79a84e4b8aae695b0/";
+        this.page.identifier = "/2015/03/e7bc96e7a88be4b98be7be8e-e6b182e4ba8ce8bf9be588b6e4b8ad1e79a84e4b8aae695b0/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-06-23 生成</span>
+        <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

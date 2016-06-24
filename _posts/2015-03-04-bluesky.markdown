@@ -1,0 +1,19 @@
+---
+author: mageric
+comments: true
+date: 2015-03-04 10:24:36+00:00
+layout: post
+title: Blue Sky
+categories:
+- 偶尔拍拍
+post_format:
+- 图像
+tags:
+- 摄影
+---
+
+![DSC_0488](http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/DSC_0452.jpg)
+
+![DSC_0452](http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/DSC_0488.jpg)
+
+![DSC_0492](http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/DSC_0492.jpg)

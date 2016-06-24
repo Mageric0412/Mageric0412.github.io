@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>随机数组排序</title>
-  <meta name="description" content="如题，对一个数组进行随机排序，或者随机完整输出数组中所有元素且不重复：int nTemp;int nData[10], nTran[10];for(i=0; i&lt;10; i++)   nTran[i]=i;for(i=0; i&lt;10; i++)  {   nTemp	= rand()%(10-i); ...">
+  <title>Rudderless</title>
+  <meta name="description" content="[audio mp3=”http://www.mageric-one.com/wp-content/uploads/2015/03/Billy-Crudup-Home.mp3”][/audio]">
   <meta name="author" content="Wei Wang">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="随机数组排序">
-  <meta name="twitter:description" content="如题，对一个数组进行随机排序，或者随机完整输出数组中所有元素且不重复：int nTemp;int nData[10], nTran[10];for(i=0; i&lt;10; i++)   nTran[i]=i;for(i=0; i&lt;10; i++)  {   nTemp	= rand()%(10-i); ...">
+  <meta name="twitter:title" content="Rudderless">
+  <meta name="twitter:description" content="[audio mp3=”http://www.mageric-one.com/wp-content/uploads/2015/03/Billy-Crudup-Home.mp3”][/audio]">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="随机数组排序">
-  <meta property="og:description" content="如题，对一个数组进行随机排序，或者随机完整输出数组中所有元素且不重复：int nTemp;int nData[10], nTran[10];for(i=0; i&lt;10; i++)   nTran[i]=i;for(i=0; i&lt;10; i++)  {   nTemp	= rand()%(10-i); ...">
+  <meta property="og:title" content="Rudderless">
+  <meta property="og:description" content="[audio mp3=”http://www.mageric-one.com/wp-content/uploads/2015/03/Billy-Crudup-Home.mp3”][/audio]">
   
   <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
   <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="/2015/03/randomsort/">
+  <link rel="canonical" href="/2015/03/rudderless/">
   <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -154,26 +154,19 @@
             <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
     <div class="post-meta">
-      <time datetime="2015-03-06 22:47:49 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-06</time> &#8226; <span class="post-meta__tags tags">排序</span>
+      <time datetime="2015-03-06 22:30:50 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-06</time> &#8226; <span class="post-meta__tags tags"></span>
     </div>
-    <h1 class="post-title">随机数组排序</h1>
+    <h1 class="post-title">Rudderless</h1>
   </header>
 
   <section class="post">
-    <p>如题，对一个数组进行<strong>随机排序</strong>，或者随机完整<strong>输出数组中所有元素且不重复</strong>：</p>
+    <p>[audio mp3=”http://www.mageric-one.com/wp-content/uploads/2015/03/Billy-Crudup-Home.mp3”][/audio]</p>
 
-<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="n">nTemp</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">nData</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">nTran</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
-<span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-   <span class="n">nTran</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
-<span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-  <span class="p">{</span>
-   <span class="n">nTemp</span>	<span class="o">=</span> <span class="n">rand</span><span class="p">()</span><span class="o">%</span><span class="p">(</span><span class="mi">10</span><span class="o">-</span><span class="n">i</span><span class="p">);</span>
-   <span class="n">nData</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>	<span class="o">=</span> <span class="n">nTran</span><span class="p">[</span><span class="n">nTemp</span><span class="p">];</span>
-   <span class="n">nTran</span><span class="p">[</span><span class="n">nTemp</span><span class="p">]</span>	<span class="o">=</span> <span class="n">nTran</span><span class="p">[</span><span class="mi">9</span><span class="o">-</span><span class="n">i</span><span class="p">];</span>
-  <span class="p">}</span>
-<span class="o">//</span><span class="n">printf</span><span class="p">(</span><span class="n">nData</span><span class="p">);</span></code></pre></figure>
+<p>刚刚看了《无人领航》，很感人的一部音乐剧。痛失校园枪击谋杀者儿子的父亲浑浑噩噩，在偶然听到儿子留下的母带后重新认识儿子，也让大众重新审视这个灵魂。可爱的父亲也鼓励着另一个追寻音乐梦想的年轻人，不要轻言放弃。</p>
 
+<p>音乐诉说着苦与泪，唯有父亲爱子的心不变，赤子追梦的心不变。</p>
+
+<p>Rudderless</p>
 
   </section>
 </article>
@@ -183,9 +176,9 @@
    
    <div class="read-more-item">
        <span class="read-more-item-dim">最近的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2015/03/magicvoxel/" title="link to MagicaVoxel">MagicaVoxel</a></h2>
-       <p class="excerpt">star了一个游戏类git总结，其中有Magicavoxel，下载下来试用了一下，感觉这会是没有美工或者另辟蹊径的游戏开发所需必备工具。通过类似“塑泥”过程来创造崭新的3D/2D形象。同时新版本还提供了多种新的功能，比如导入image来生成全新Voxel化的角色/布景等。看来自己又有拿来打发时间的东西了。&hellip;</p>
-       <div class="post-list__meta"><time datetime="2015-03-09 00:20:14 +0800" class="post-list__meta--date date">2015-03-09</time> &#8226; <span class="post-list__meta--tags tags">MagicVoxel</span><a class="btn-border-small" href=/2015/03/magicvoxel/>继续阅读</a></div>
+       <h2 class="post-list__post-title post-title"><a href="/2015/03/randomsort/" title="link to 随机数组排序">随机数组排序</a></h2>
+       <p class="excerpt">如题，对一个数组进行随机排序，或者随机完整输出数组中所有元素且不重复： {% highlight c %}int nTemp;int nData[10], nTran[10];for(i=0; i&lt;10; i++)   nTran[i]=i;for(i=0; i&lt;10; i++)  {   nTemp	= rand()%(10-i);   nData[i]	= nTran[nTemp];   nTran[nTemp]	= nTran[9-i];  }//printf(nData...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-03-06 22:47:49 +0800" class="post-list__meta--date date">2015-03-06</time> &#8226; <span class="post-list__meta--tags tags">排序</span><a class="btn-border-small" href=/2015/03/randomsort/>继续阅读</a></div>
    </div>
    
    
@@ -206,8 +199,8 @@
     <script>
     
     var disqus_config = function () {
-        this.page.url = "/2015/03/randomsort/";
-        this.page.identifier = "/2015/03/randomsort/";
+        this.page.url = "/2015/03/rudderless/";
+        this.page.identifier = "/2015/03/rudderless/";
     };
 
     var disqus_shortname = 'vno-jekyll';

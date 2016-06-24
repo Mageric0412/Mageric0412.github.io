@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>A星算法</title>
+  <meta name="description" content="  将起始点加入OPEN表中  循环直到OPEN为空或者终点加入CLOSE表中，否则：找到OPEN表中F值最小的节点(使用堆排序得到小值点)，将此点从OPEN删除，加入CLOSE！(此时最小点已经取出，那么需要从新排序OPEN表，是的第一个点是最小F的点！)  对8个邻居进行处理：  邻居已经在CLOSE表中了，...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="A星算法">
+  <meta name="twitter:description" content="  将起始点加入OPEN表中  循环直到OPEN为空或者终点加入CLOSE表中，否则：找到OPEN表中F值最小的节点(使用堆排序得到小值点)，将此点从OPEN删除，加入CLOSE！(此时最小点已经取出，那么需要从新排序OPEN表，是的第一个点是最小F的点！)  对8个邻居进行处理：  邻居已经在CLOSE表中了，...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="A星算法">
+  <meta property="og:description" content="  将起始点加入OPEN表中  循环直到OPEN为空或者终点加入CLOSE表中，否则：找到OPEN表中F值最小的节点(使用堆排序得到小值点)，将此点从OPEN删除，加入CLOSE！(此时最小点已经取出，那么需要从新排序OPEN表，是的第一个点是最小F的点！)  对8个邻居进行处理：  邻居已经在CLOSE表中了，...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="/2015/03/Astar/">
+  <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Mageric 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Mageric logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Mageric" class="blog-button">Mageric</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">42 世界尽头</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Mageric的个人小站.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="http://mageric-one.com" target="_blank" title="My old site">OldSite</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/magericyoung" title="@magericyoung 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Mageric0412" title="@Mageric0412 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- instagram -->
+  <li class="navigation__item">
+   <a href="https://www.instagram.com/mageric0412" title="@mageric0412 的Instagram" target="_blank">
+     <i class='social fa fa-instagram'></i>
+     <span class="label">instagram</span>
+   </a>
+  </li>
+  
+
+<!--
+  
+  <!-- website -->
+  <!--
+  <li class="navigation__item">
+    <a href="https://mageric-one.com" rel="author" title="mageric的小站" target="_blank">
+        <i class='social fa fa-rss'> </i>
+      <span class="label">website</span>
+    </a>
+  </li>
+  
+-->
+
+
+
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:mageric0412@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-03-09 13:29:07 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-09</time> &#8226; <span class="post-meta__tags tags">A star</span>
+    </div>
+    <h1 class="post-title">A星算法</h1>
+  </header>
+
+  <section class="post">
+    <ol>
+  <li>将起始点加入OPEN表中</li>
+  <li>循环直到OPEN为空或者终点加入CLOSE表中，否则：找到OPEN表中F值最小的节点(使用堆排序得到小值点)，将此点从OPEN删除，加入CLOSE！
+(此时最小点已经取出，那么需要从新排序OPEN表，是的第一个点是最小F的点！)  <br />
+对8个邻居进行处理：</li>
+  <li>邻居已经在CLOSE表中了，那么不需要考虑了~</li>
+  <li>邻居是障碍物，不需要考虑了e</li>
+  <li>邻居不在OPEN表中，那么将邻居加入OPEN，并将次邻居的父节点赋值为当前节点</li>
+  <li>邻居在OPEN中，那么需要看看此邻居点的G值与当前点的(G值+当前点到邻居点的距离 (10或者14))的大小，如果从此点走更近(即G值更小)，那么将此点的父节点换成当前点。</li>
+</ol>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#define STARTNODE 1
+#define ENDNODE 2
+#define BARRIER 3   
+</span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">AStarNode</span>
+<span class="p">{</span>
+   <span class="kt">int</span> <span class="n">s_x</span><span class="p">;</span> <span class="c1">// 坐标(最终输出路径需要)
+</span>   <span class="kt">int</span> <span class="n">s_y</span><span class="p">;</span>
+   <span class="kt">int</span> <span class="n">s_g</span><span class="p">;</span> <span class="c1">// 起点到此点的距离( 由g和h可以得到f，此处f省略，f=g+h )
+</span>   <span class="kt">int</span> <span class="n">s_h</span><span class="p">;</span> <span class="c1">// 启发函数预测的此点到终点的距离
+</span>   <span class="kt">int</span> <span class="n">s_style</span><span class="p">;</span><span class="c1">// 结点类型：起始点，终点，障碍物
+</span>   <span class="k">struct</span> <span class="n">AStarNode</span> <span class="o">*</span> <span class="n">s_parent</span><span class="p">;</span> <span class="c1">// 父节点
+</span>   <span class="kt">int</span> <span class="n">s_is_in_closetable</span><span class="p">;</span> <span class="c1">// 是否在close表中
+</span>   <span class="kt">int</span> <span class="n">s_is_in_opentable</span><span class="p">;</span> <span class="c1">// 是否在open表中
+</span><span class="p">}</span><span class="n">AStarNode</span><span class="p">,</span> <span class="o">*</span><span class="n">pAStarNode</span><span class="p">;</span>
+<span class="n">AStarNode</span> <span class="n">map_maze</span><span class="p">[</span><span class="mi">10</span><span class="p">][</span><span class="mi">10</span><span class="p">];</span> <span class="c1">// 结点数组
+</span><span class="n">pAStarNode</span> <span class="n">open_table</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span> <span class="c1">// open表
+</span><span class="n">pAStarNode</span> <span class="n">close_table</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span> <span class="c1">// close表
+</span><span class="kt">int</span> <span class="n">open_node_count</span><span class="p">;</span> <span class="c1">// open表中节点数量
+</span><span class="kt">int</span> <span class="n">close_node_count</span><span class="p">;</span> <span class="c1">// close表中结点数量
+</span><span class="n">pAStarNode</span> <span class="n">path_stack</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span> <span class="c1">// 保存路径的栈
+</span><span class="kt">int</span> <span class="n">top</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="c1">// 栈顶
+// 交换两个元素
+</span><span class="kt">void</span> <span class="nf">swap</span><span class="p">(</span> <span class="kt">int</span> <span class="n">idx1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">idx2</span> <span class="p">)</span>
+<span class="p">{</span>
+   <span class="n">pAStarNode</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">open_table</span><span class="p">[</span><span class="n">idx1</span><span class="p">];</span>
+   <span class="n">open_table</span><span class="p">[</span><span class="n">idx1</span><span class="p">]</span> <span class="o">=</span> <span class="n">open_table</span><span class="p">[</span><span class="n">idx2</span><span class="p">];</span>
+   <span class="n">open_table</span><span class="p">[</span><span class="n">idx2</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">// 堆调整
+</span><span class="kt">void</span> <span class="nf">adjust_heap</span><span class="p">(</span> <span class="kt">int</span> <span class="cm">/*i*/</span><span class="n">nIndex</span> <span class="p">)</span>
+<span class="p">{</span>
+   <span class="kt">int</span> <span class="n">curr</span> <span class="o">=</span> <span class="n">nIndex</span><span class="p">;</span>
+   <span class="kt">int</span> <span class="n">child</span> <span class="o">=</span> <span class="n">curr</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 得到左孩子idx( 下标从0开始，所有做孩子是curr*2+1 )
+</span>   <span class="kt">int</span> <span class="n">parent</span> <span class="o">=</span> <span class="p">(</span> <span class="n">curr</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">// 得到双亲idx
+</span>  <span class="k">if</span> <span class="p">(</span><span class="n">nIndex</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">nIndex</span> <span class="o">&gt;=</span> <span class="n">open_node_count</span><span class="p">)</span>
+    <span class="p">{</span>
+     <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="c1">// 往下调整( 要比较左右孩子和cuur parent )
+</span>  <span class="k">while</span> <span class="p">(</span> <span class="n">child</span> <span class="o">&lt;</span> <span class="n">open_node_count</span> <span class="p">)</span>
+  <span class="p">{</span>
+   <span class="c1">// 小根堆是双亲值小于孩子值
+</span>   <span class="k">if</span> <span class="p">(</span> <span class="n">child</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">open_node_count</span> <span class="o">&amp;&amp;</span><span class="n">open_table</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_g</span> <span class="o">+</span> <span class="n">open_table</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_h</span> <span class="o">&gt;</span>
+      <span class="n">open_table</span><span class="p">[</span><span class="n">child</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_g</span> <span class="o">+</span> <span class="n">open_table</span><span class="p">[</span><span class="n">child</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_h</span> <span class="p">)</span>
+     <span class="p">{</span>
+      <span class="o">++</span><span class="n">child</span><span class="p">;</span> <span class="c1">// 判断左右孩子大小
+</span>     <span class="p">}</span>
+   <span class="k">if</span> <span class="p">(</span><span class="n">open_table</span><span class="p">[</span><span class="n">curr</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_g</span> <span class="o">+</span> <span class="n">open_table</span><span class="p">[</span><span class="n">curr</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_h</span> <span class="o">&lt;=</span> <span class="n">open_table</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_g</span> <span class="o">+</span> <span class="n">open_table</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_h</span><span class="p">)</span>
+     <span class="p">{</span>
+      <span class="k">break</span><span class="p">;</span>
+     <span class="p">}</span>
+   <span class="k">else</span>
+     <span class="p">{</span>
+      <span class="n">swap</span><span class="p">(</span> <span class="n">child</span><span class="p">,</span> <span class="n">curr</span> <span class="p">);</span> <span class="c1">// 交换节点
+</span>      <span class="n">curr</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span> <span class="c1">// 再判断当前孩子节点
+</span>      <span class="n">child</span> <span class="o">=</span> <span class="n">curr</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 再判断左孩子
+</span>     <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">curr</span> <span class="o">!=</span> <span class="n">nIndex</span><span class="p">)</span>
+  <span class="p">{</span>
+   <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="c1">// 往上调整( 只需要比较cuur child和parent )
+</span> <span class="k">while</span> <span class="p">(</span><span class="n">curr</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="p">{</span>
+   <span class="k">if</span> <span class="p">(</span><span class="n">open_table</span><span class="p">[</span><span class="n">curr</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_g</span> <span class="o">+</span> <span class="n">open_table</span><span class="p">[</span><span class="n">curr</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_h</span> <span class="o">&gt;=</span> <span class="n">open_table</span><span class="p">[</span><span class="n">parent</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_g</span> <span class="o">+</span>
+      <span class="n">open_table</span><span class="p">[</span><span class="n">parent</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_h</span><span class="p">)</span>
+    <span class="p">{</span>
+     <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+   <span class="k">else</span>
+    <span class="p">{</span>
+      <span class="n">swap</span><span class="p">(</span> <span class="n">curr</span><span class="p">,</span> <span class="n">parent</span> <span class="p">);</span>
+       <span class="n">curr</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+     <span class="n">parent</span> <span class="o">=</span> <span class="p">(</span><span class="n">curr</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// 判断邻居点是否可以进入open表
+</span><span class="kt">void</span> <span class="nf">insert_to_opentable</span><span class="p">(</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="n">pAStarNode</span> <span class="n">curr_node</span><span class="p">,</span> <span class="n">pAStarNode</span> <span class="n">end_node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">w</span> <span class="p">)</span>
+<span class="p">{</span>
+ <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span> <span class="n">map_maze</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">].</span><span class="n">s_style</span> <span class="o">!=</span> <span class="n">BARRIER</span> <span class="p">)</span> <span class="c1">// 不是障碍物
+</span>     <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="n">map_maze</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">].</span><span class="n">s_is_in_closetable</span> <span class="p">)</span> <span class="c1">// 不在闭表中
+</span>           <span class="p">{</span>
+              <span class="k">if</span> <span class="p">(</span> <span class="n">map_maze</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">].</span><span class="n">s_is_in_opentable</span> <span class="p">)</span> <span class="c1">// 在open表中
+</span>                <span class="p">{</span>
+                  <span class="c1">// 需要判断是否是一条更优化的路径
+</span>                  <span class="k">if</span> <span class="p">(</span> <span class="n">map_maze</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">].</span><span class="n">s_g</span> <span class="o">&gt;</span> <span class="n">curr_node</span><span class="o">-&gt;</span><span class="n">s_g</span> <span class="o">+</span> <span class="n">w</span> <span class="p">)</span> <span class="c1">// 如果更优化
+</span>                    <span class="p">{</span>
+                       <span class="n">map_maze</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">].</span><span class="n">s_g</span> <span class="o">=</span> <span class="n">curr_node</span><span class="o">-&gt;</span><span class="n">s_g</span> <span class="o">+</span> <span class="n">w</span><span class="p">;</span>
+                       <span class="n">map_maze</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">].</span><span class="n">s_parent</span> <span class="o">=</span> <span class="n">curr_node</span><span class="p">;</span>
+                       <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">open_node_count</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
+                       <span class="p">{</span>
+                         <span class="k">if</span> <span class="p">(</span> <span class="n">open_table</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_x</span> <span class="o">==</span> <span class="n">map_maze</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">].</span><span class="n">s_x</span> <span class="o">&amp;&amp;</span> <span class="n">open_table</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_y</span> <span class="o">==</span> <span class="n">map_maze</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">].</span><span class="n">s_y</span> <span class="p">)</span>
+                            <span class="p">{</span>
+                              <span class="k">break</span><span class="p">;</span>
+                            <span class="p">}</span>
+                      <span class="p">}</span>
+                     <span class="n">adjust_heap</span><span class="p">(</span> <span class="n">i</span> <span class="p">);</span> <span class="c1">// 下面调整点
+</span>                   <span class="p">}</span>
+                 <span class="p">}</span>
+                 <span class="k">else</span> <span class="c1">// 不在open中
+</span>                 <span class="p">{</span>
+                   <span class="n">map_maze</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">].</span><span class="n">s_g</span> <span class="o">=</span> <span class="n">curr_node</span><span class="o">-&gt;</span><span class="n">s_g</span> <span class="o">+</span> <span class="n">w</span><span class="p">;</span>
+                   <span class="n">map_maze</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">].</span><span class="n">s_h</span> <span class="o">=</span> <span class="n">abs</span><span class="p">(</span><span class="n">end_node</span><span class="o">-&gt;</span><span class="n">s_x</span> <span class="o">-</span> <span class="n">x</span> <span class="p">)</span> <span class="o">+</span> <span class="n">abs</span><span class="p">(</span><span class="n">end_node</span><span class="o">-&gt;</span><span class="n">s_y</span> <span class="o">-</span> <span class="n">y</span><span class="p">);</span>
+                   <span class="n">map_maze</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">].</span><span class="n">s_parent</span> <span class="o">=</span> <span class="n">curr_node</span><span class="p">;</span>
+                   <span class="n">map_maze</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">].</span><span class="n">s_is_in_opentable</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                   <span class="n">open_table</span><span class="p">[</span><span class="n">open_node_count</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="p">(</span><span class="n">map_maze</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]);</span>
+                 <span class="p">}</span>
+           <span class="p">}</span>
+        <span class="p">}</span>
+  <span class="p">}</span>
+    <span class="c1">// 查找邻居
+</span>    <span class="c1">// 对上下左右8个邻居进行查找
+</span>  <span class="kt">void</span> <span class="nf">get_neighbors</span><span class="p">(</span> <span class="n">pAStarNode</span> <span class="n">curr_node</span><span class="p">,</span> <span class="n">pAStarNode</span> <span class="n">end_node</span> <span class="p">)</span>
+  <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">curr_node</span><span class="o">-&gt;</span><span class="n">s_x</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">curr_node</span><span class="o">-&gt;</span><span class="n">s_y</span><span class="p">;</span>
+    <span class="c1">// 下面对于8个邻居进行处理！
+</span>    <span class="k">if</span> <span class="p">(</span> <span class="p">(</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">&amp;&amp;</span><span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="p">)</span>
+        <span class="n">insert_to_opentable</span><span class="p">(</span> <span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">curr_node</span><span class="p">,</span> <span class="n">end_node</span><span class="p">,</span> <span class="mi">10</span> <span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="p">(</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="p">)</span>
+        <span class="n">insert_to_opentable</span><span class="p">(</span> <span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">curr_node</span><span class="p">,</span> <span class="n">end_node</span><span class="p">,</span> <span class="mi">10</span> <span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="p">)</span>
+        <span class="n">insert_to_opentable</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">curr_node</span><span class="p">,</span> <span class="n">end_node</span><span class="p">,</span> <span class="mi">10</span> <span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="p">)</span>
+        <span class="n">insert_to_opentable</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">curr_node</span><span class="p">,</span> <span class="n">end_node</span><span class="p">,</span> <span class="mi">10</span> <span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="p">(</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="p">)</span>
+        <span class="n">insert_to_opentable</span><span class="p">(</span> <span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">curr_node</span><span class="p">,</span> <span class="n">end_node</span><span class="p">,</span> <span class="mi">14</span> <span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="p">(</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="p">)</span>
+        <span class="n">insert_to_opentable</span><span class="p">(</span> <span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">curr_node</span><span class="p">,</span> <span class="n">end_node</span><span class="p">,</span> <span class="mi">14</span> <span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="p">(</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="p">)</span>
+        <span class="n">insert_to_opentable</span><span class="p">(</span> <span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">curr_node</span><span class="p">,</span> <span class="n">end_node</span><span class="p">,</span> <span class="mi">14</span> <span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="p">(</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="p">)</span>
+        <span class="n">insert_to_opentable</span><span class="p">(</span> <span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">curr_node</span><span class="p">,</span> <span class="n">end_node</span><span class="p">,</span> <span class="mi">14</span> <span class="p">);</span>
+    <span class="p">}</span>
+        <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+           <span class="p">{</span>
+                 <span class="c1">// 地图数组的定义
+</span>                 <span class="n">AStarNode</span> <span class="o">*</span><span class="n">start_node</span><span class="p">;</span> <span class="c1">// 起始点
+</span>                 <span class="n">AStarNode</span> <span class="o">*</span><span class="n">end_node</span><span class="p">;</span> <span class="c1">// 结束点
+</span>                 <span class="n">AStarNode</span> <span class="o">*</span><span class="n">curr_node</span><span class="p">;</span> <span class="c1">// 当前点
+</span>                 <span class="kt">int</span> <span class="n">is_found</span><span class="p">;</span> <span class="c1">// 是否找到路径
+</span>                 <span class="kt">int</span> <span class="n">maze</span><span class="p">[][</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span><span class="p">{</span> <span class="c1">// 仅仅为了好赋值给map_maze
+</span>                   <span class="p">{</span> <span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span> <span class="p">},</span>
+                   <span class="p">{</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span> <span class="p">},</span>
+                   <span class="p">{</span> <span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span> <span class="p">},</span>
+                   <span class="p">{</span> <span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span> <span class="p">},</span>
+                   <span class="p">{</span> <span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span> <span class="p">},</span>
+                   <span class="p">{</span> <span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span> <span class="p">},</span>
+                   <span class="p">{</span> <span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span> <span class="p">},</span>
+                   <span class="p">{</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span> <span class="p">},</span>
+                   <span class="p">{</span> <span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span> <span class="p">},</span>
+                   <span class="p">{</span> <span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span> <span class="p">},</span>
+                 <span class="p">};</span>
+                 <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">x</span><span class="p">;</span>
+                 <span class="c1">// 下面准备点
+</span>                 <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
+                 <span class="p">{</span>
+                   <span class="k">for</span> <span class="p">(</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span> <span class="p">)</span>
+                   <span class="p">{</span>
+                     <span class="n">map_maze</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">].</span><span class="n">s_g</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                     <span class="n">map_maze</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">].</span><span class="n">s_h</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                     <span class="n">map_maze</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">].</span><span class="n">s_is_in_closetable</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                     <span class="n">map_maze</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">].</span><span class="n">s_is_in_opentable</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                     <span class="n">map_maze</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">].</span><span class="n">s_style</span> <span class="o">=</span> <span class="n">maze</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+                     <span class="n">map_maze</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">].</span><span class="n">s_x</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                     <span class="n">map_maze</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">].</span><span class="n">s_y</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+                     <span class="n">map_maze</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">].</span><span class="n">s_parent</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+                     <span class="k">if</span> <span class="p">(</span> <span class="n">map_maze</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">].</span><span class="n">s_style</span> <span class="o">==</span> <span class="n">STARTNODE</span> <span class="p">)</span> <span class="c1">// 起点
+</span>                     <span class="p">{</span> <span class="n">start_node</span> <span class="o">=</span> <span class="o">&amp;</span><span class="p">(</span><span class="n">map_maze</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span> <span class="p">}</span>
+                     <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">map_maze</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">].</span><span class="n">s_style</span> <span class="o">==</span> <span class="n">ENDNODE</span> <span class="p">)</span> <span class="c1">// 终点
+</span>                     <span class="p">{</span> <span class="n">end_node</span> <span class="o">=</span> <span class="o">&amp;</span><span class="p">(</span><span class="n">map_maze</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span> <span class="p">}</span>
+                     <span class="n">printf</span><span class="p">(</span><span class="s">"%d "</span><span class="p">,</span> <span class="n">maze</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
+                     <span class="p">}</span>
+                     <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+                  <span class="p">}</span>
+                  <span class="c1">// 下面使用A*算法得到路径 //
+</span>                  <span class="n">open_table</span><span class="p">[</span><span class="n">open_node_count</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_node</span><span class="p">;</span> <span class="c1">// 起始点加入open表
+</span>                  <span class="n">start_node</span><span class="o">-&gt;</span><span class="n">s_is_in_opentable</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 加入open表
+</span>                  <span class="n">start_node</span><span class="o">-&gt;</span><span class="n">s_g</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                  <span class="n">start_node</span><span class="o">-&gt;</span><span class="n">s_h</span> <span class="o">=</span> <span class="n">abs</span><span class="p">(</span><span class="n">end_node</span><span class="o">-&gt;</span><span class="n">s_x</span> <span class="o">-</span> <span class="n">start_node</span><span class="o">-&gt;</span><span class="n">s_x</span><span class="p">)</span> <span class="o">+</span> <span class="n">abs</span><span class="p">(</span><span class="n">end_node</span><span class="o">-&gt;</span><span class="n">s_y</span> <span class="o">-</span> <span class="n">start_node</span><span class="o">-&gt;</span><span class="n">s_y</span><span class="p">);</span>
+                  <span class="n">start_node</span><span class="o">-&gt;</span><span class="n">s_parent</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+                  <span class="k">if</span> <span class="p">(</span> <span class="n">start_node</span><span class="o">-&gt;</span><span class="n">s_x</span> <span class="o">==</span> <span class="n">end_node</span><span class="o">-&gt;</span><span class="n">s_x</span> <span class="o">&amp;&amp;</span> <span class="n">start_node</span><span class="o">-&gt;</span><span class="n">s_y</span> <span class="o">==</span> <span class="n">end_node</span><span class="o">-&gt;</span><span class="n">s_y</span> <span class="p">)</span>
+                   <span class="p">{</span>
+                    <span class="n">printf</span><span class="p">(</span><span class="s">"起点==终点！</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+                    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+                   <span class="p">}</span>
+                  <span class="n">is_found</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                  <span class="n">curr_node</span> <span class="o">=</span> <span class="n">open_table</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span> <span class="c1">// open表的第一个点一定是f值最小的点(通过堆排序得到的)
+</span>                  <span class="n">open_table</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">open_table</span><span class="p">[</span><span class="o">--</span><span class="n">open_node_count</span><span class="p">];</span> <span class="c1">// 最后一个点放到第一个点，然后进行堆调整
+</span>                  <span class="n">adjust_heap</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> <span class="c1">// 调整堆
+</span>                  <span class="n">close_table</span><span class="p">[</span><span class="n">close_node_count</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">curr_node</span><span class="p">;</span> <span class="c1">// 当前点加入close表
+</span>                  <span class="n">curr_node</span><span class="o">-&gt;</span><span class="n">s_is_in_closetable</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 已经在close表中了
+</span>                  <span class="k">if</span> <span class="p">(</span> <span class="n">curr_node</span><span class="o">-&gt;</span><span class="n">s_x</span> <span class="o">==</span> <span class="n">end_node</span><span class="o">-&gt;</span><span class="n">s_x</span> <span class="o">&amp;&amp;</span> <span class="n">curr_node</span><span class="o">-&gt;</span><span class="n">s_y</span> <span class="o">==</span> <span class="n">end_node</span><span class="o">-&gt;</span><span class="n">s_y</span> <span class="p">)</span><span class="c1">// 终点在close中，结束
+</span>                    <span class="p">{</span>
+                     <span class="n">is_found</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                     <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                  <span class="n">get_neighbors</span><span class="p">(</span> <span class="n">curr_node</span><span class="p">,</span> <span class="n">end_node</span> <span class="p">);</span> <span class="c1">// 对邻居的处理
+</span>                    <span class="k">if</span> <span class="p">(</span> <span class="n">open_node_count</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="c1">// 没有路径到达
+</span>                    <span class="p">{</span>
+                     <span class="n">is_found</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                     <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>                 
+                   <span class="k">if</span> <span class="p">(</span> <span class="n">is_found</span> <span class="p">)</span>
+                   <span class="p">{</span>
+                     <span class="n">curr_node</span> <span class="o">=</span> <span class="n">end_node</span><span class="p">;</span>
+                     <span class="k">while</span><span class="p">(</span> <span class="n">curr_node</span> <span class="p">)</span>
+                     <span class="p">{</span>
+                       <span class="n">path_stack</span><span class="p">[</span><span class="o">++</span><span class="n">top</span><span class="p">]</span> <span class="o">=</span> <span class="n">curr_node</span><span class="p">;</span>
+                       <span class="n">curr_node</span> <span class="o">=</span> <span class="n">curr_node</span><span class="o">-&gt;</span><span class="n">s_parent</span><span class="p">;</span>
+                     <span class="p">}</span>
+                     <span class="k">while</span><span class="p">(</span> <span class="n">top</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">)</span> <span class="c1">// 下面是输出路径看看~
+</span>                     <span class="p">{</span>
+                       <span class="k">if</span> <span class="p">(</span> <span class="n">top</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span>
+                       <span class="p">{</span>
+                         <span class="n">printf</span><span class="p">(</span><span class="s">"(%d,%d)--&gt;"</span><span class="p">,</span> <span class="n">path_stack</span><span class="p">[</span><span class="n">top</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_x</span><span class="p">,</span> <span class="n">path_stack</span><span class="p">[</span><span class="n">top</span><span class="o">--</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_y</span><span class="p">);</span>
+                       <span class="p">}</span>
+                       <span class="k">else</span>
+                       <span class="p">{</span>
+                         <span class="n">printf</span><span class="p">(</span><span class="s">"(%d,%d)"</span><span class="p">,</span> <span class="n">path_stack</span><span class="p">[</span><span class="n">top</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_x</span><span class="p">,</span> <span class="n">path_stack</span><span class="p">[</span><span class="n">top</span><span class="o">--</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">s_y</span><span class="p">);</span>
+                       <span class="p">}</span>
+                     <span class="p">}</span>
+                   <span class="p">}</span>
+                   <span class="k">else</span>
+                   <span class="p">{</span>
+                     <span class="n">printf</span><span class="p">(</span><span class="s">"么有找到路径"</span><span class="p">);</span>
+                   <span class="p">}</span>
+                   <span class="n">puts</span><span class="p">(</span><span class="s">""</span><span class="p">);</span>
+                   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+           <span class="p">}</span>   </code></pre></figure>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/03/magicvoxel/" title="link to MagicaVoxel">MagicaVoxel</a></h2>
+       <p class="excerpt">star了一个游戏类git总结，其中有Magicavoxel，下载下来试用了一下，感觉这会是没有美工或者另辟蹊径的游戏开发所需必备工具。通过类似“塑泥”过程来创造崭新的3D/2D形象。同时新版本还提供了多种新的功能，比如导入image来生成全新Voxel化的角色/布景等。看来自己又有拿来打发时间的东西了。&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-03-09 00:20:14 +0800" class="post-list__meta--date date">2015-03-09</time> &#8226; <span class="post-list__meta--tags tags">MagicVoxel</span><a class="btn-border-small" href=/2015/03/magicvoxel/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "/2015/03/Astar/";
+        this.page.identifier = "/2015/03/Astar/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-06-24 生成</span>
+        <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

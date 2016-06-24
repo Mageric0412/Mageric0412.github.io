@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>A星算法</title>
+  <meta name="description" content="Mageric的个人小站.">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="A星算法">
+  <meta name="twitter:description" content="Mageric的个人小站.">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="A星算法">
+  <meta property="og:description" content="Mageric的个人小站.">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="/2015-03-09-ae6989fe7ae97e6b395/">
+  <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Mageric 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Mageric logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Mageric" class="blog-button">Mageric</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">42 世界尽头</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Mageric的个人小站.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="http://mageric-one.com" target="_blank" title="My old site">OldSite</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/magericyoung" title="@magericyoung 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Mageric0412" title="@Mageric0412 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- instagram -->
+  <li class="navigation__item">
+   <a href="https://www.instagram.com/mageric0412" title="@mageric0412 的Instagram" target="_blank">
+     <i class='social fa fa-instagram'></i>
+     <span class="label">instagram</span>
+   </a>
+  </li>
+  
+
+<!--
+  
+  <!-- website -->
+  <!--
+  <li class="navigation__item">
+    <a href="https://mageric-one.com" rel="author" title="mageric的小站" target="_blank">
+        <i class='social fa fa-rss'> </i>
+      <span class="label">website</span>
+    </a>
+  </li>
+  
+-->
+
+
+
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:mageric0412@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-03-09 13:29:07 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-09</time> &#8226; <span class="post-meta__tags tags">A star</span>
+    </div>
+    <h1 class="post-title">A星算法</h1>
+  </header>
+
+  <section class="post">
+    <p>1：将起始点加入OPEN表中</p>
+
+<p>2：循环直到OPEN为空或者终点加入CLOSE表中</p>
+
+<p>否则：找到OPEN表中F值最小的节点(使用堆排序得到小值点)，将此点从OPEN删除，加入CLOSE！</p>
+
+<p>(此时最小点已经取出，那么需要从新排序OPEN表，是的第一个点是最小F的点！)</p>
+
+<p>对8个邻居进行处理：</p>
+
+<p>若：1：邻居已经在CLOSE表中了，那么不需要考虑了~</p>
+
+<p>2：邻居是障碍物，不需要考虑了e</p>
+
+<p>3：邻居不在OPEN表中，那么将邻居加入OPEN，并将次邻居的父节点赋值为当前节点</p>
+
+<p>4：邻居在OPEN中，那么需要看看此邻居点的G值与当前点的(G值+当前点到邻居点的距</p>
+
+<p>离 (10或者14))的大小，如果从此点走更近(即G值更小)，那么将此点的父节点换成当前点。
+`
+#define STARTNODE 1
+#define ENDNODE 2
+#define BARRIER 3`</p>
+
+<p>typedef struct AStarNode
+{
+int s_x; // 坐标(最终输出路径需要)
+int s_y;
+int s_g; // 起点到此点的距离( 由g和h可以得到f，此处f省略，f=g+h )
+int s_h; // 启发函数预测的此点到终点的距离
+int s_style;// 结点类型：起始点，终点，障碍物
+struct AStarNode * s_parent; // 父节点
+int s_is_in_closetable; // 是否在close表中
+int s_is_in_opentable; // 是否在open表中
+}AStarNode, *pAStarNode;</p>
+
+<p>AStarNode map_maze[10][10]; // 结点数组
+pAStarNode open_table[100]; // open表
+pAStarNode close_table[100]; // close表
+int open_node_count; // open表中节点数量
+int close_node_count; // close表中结点数量
+pAStarNode path_stack[100]; // 保存路径的栈
+int top = -1; // 栈顶</p>
+
+<p>// 交换两个元素
+//
+void swap( int idx1, int idx2 )
+{
+pAStarNode tmp = open_table[idx1];
+open_table[idx1] = open_table[idx2];
+open_table[idx2] = tmp;
+}</p>
+
+<p>// 堆调整
+//
+void adjust_heap( int /<em>i</em>/nIndex )
+{
+int curr = nIndex;
+int child = curr * 2 + 1; // 得到左孩子idx( 下标从0开始，所有做孩子是curr*2+1 )
+int parent = ( curr - 1 ) / 2; // 得到双亲idx</p>
+
+<p>if (nIndex &lt; 0 || nIndex &gt;= open_node_count)
+{
+return;
+}</p>
+
+<p>// 往下调整( 要比较左右孩子和cuur parent )
+//
+while ( child &lt; open_node_count )
+{
+// 小根堆是双亲值小于孩子值
+//
+if ( child + 1 &lt; open_node_count &amp;&amp;</p>
+
+<p>open_table[child]-&gt;s_g + open_table[child]-&gt;s_h &gt;</p>
+
+<p>open_table[child+1]-&gt;s_g + open_table[child+1]-&gt;s_h )
+{
+++child; // 判断左右孩子大小
+}</p>
+
+<p>if (open_table[curr]-&gt;s_g + open_table[curr]-&gt;s_h &lt;= open_table[child]-&gt;s_g + open_table[child]-&gt;s_h)
+{
+break;
+}
+else
+{
+swap( child, curr ); // 交换节点
+curr = child; // 再判断当前孩子节点
+child = curr * 2 + 1; // 再判断左孩子
+}
+}</p>
+
+<p>if (curr != nIndex)
+{
+return;
+}</p>
+
+<p>// 往上调整( 只需要比较cuur child和parent )
+//
+while (curr != 0)
+{
+if (open_table[curr]-&gt;s_g + open_table[curr]-&gt;s_h &gt;= open_table[parent]-&gt;s_g +</p>
+
+<p>open_table[parent]-&gt;s_h)
+{
+break;
+}
+else
+{
+swap( curr, parent );
+curr = parent;
+parent = (curr-1)/2;
+}
+}
+}</p>
+
+<p>// 判断邻居点是否可以进入open表
+//
+void insert_to_opentable( int x, int y, pAStarNode curr_node, pAStarNode end_node, int w )
+{
+int i;</p>
+
+<p>if ( map_maze[x][y].s_style != BARRIER ) // 不是障碍物
+{
+if ( !map_maze[x][y].s_is_in_closetable ) // 不在闭表中
+{
+if ( map_maze[x][y].s_is_in_opentable ) // 在open表中
+{
+// 需要判断是否是一条更优化的路径
+//
+if ( map_maze[x][y].s_g &gt; curr_node-&gt;s_g + w ) // 如果更优化
+{
+map_maze[x][y].s_g = curr_node-&gt;s_g + w;
+map_maze[x][y].s_parent = curr_node;</p>
+
+<p>for ( i = 0; i &lt; open_node_count; ++i ) { if ( open_table[i]-&gt;s_x == map_maze[x][y].s_x &amp;&amp; open_table[i]-&gt;s_y == map_maze[x][y].s_y )
+{
+break;
+}
+}</p>
+
+<p>adjust_heap( i ); // 下面调整点
+}
+}
+else // 不在open中
+{
+map_maze[x][y].s_g = curr_node-&gt;s_g + w;
+map_maze[x][y].s_h = abs(end_node-&gt;s_x - x ) + abs(end_node-&gt;s_y - y);
+map_maze[x][y].s_parent = curr_node;
+map_maze[x][y].s_is_in_opentable = 1;
+open_table[open_node_count++] = &amp;(map_maze[x][y]);
+}
+}
+}
+}</p>
+
+<p>// 查找邻居
+// 对上下左右8个邻居进行查找
+//
+void get_neighbors( pAStarNode curr_node, pAStarNode end_node )
+{
+int x = curr_node-&gt;s_x;
+int y = curr_node-&gt;s_y;</p>
+
+<p>// 下面对于8个邻居进行处理！
+//
+if ( ( x + 1 ) &gt;= 0 &amp;&amp; ( x + 1 ) &lt; 10 &amp;&amp;y &gt;= 0 &amp;&amp; y &lt; 10 )</p>
+
+<p>{ insert_to_opentable( x+1, y, curr_node, end_node, 10 ); }</p>
+
+<p>if ( ( x - 1 ) &gt;= 0 &amp;&amp; ( x - 1 ) &lt; 10 &amp;&amp; y &gt;= 0 &amp;&amp; y &lt; 10 )</p>
+
+<p>{ insert_to_opentable( x-1, y, curr_node, end_node, 10 ); }</p>
+
+<p>if ( x &gt;= 0 &amp;&amp; x &lt; 10 &amp;&amp; ( y + 1 ) &gt;= 0 &amp;&amp; ( y + 1 ) &lt; 10 )</p>
+
+<p>{ insert_to_opentable( x, y+1, curr_node, end_node, 10 ); }</p>
+
+<p>if ( x &gt;= 0 &amp;&amp; x &lt; 10 &amp;&amp; ( y - 1 ) &gt;= 0 &amp;&amp; ( y - 1 ) &lt; 10 )</p>
+
+<p>{ insert_to_opentable( x, y-1, curr_node, end_node, 10 ); }</p>
+
+<p>if ( ( x + 1 ) &gt;= 0 &amp;&amp; ( x + 1 ) &lt; 10 &amp;&amp; ( y + 1 ) &gt;= 0 &amp;&amp; ( y + 1 ) &lt; 10 )</p>
+
+<p>{ insert_to_opentable( x+1, y+1, curr_node, end_node, 14 ); }</p>
+
+<p>if ( ( x + 1 ) &gt;= 0 &amp;&amp; ( x + 1 ) &lt; 10 &amp;&amp; ( y - 1 ) &gt;= 0 &amp;&amp; ( y - 1 ) &lt; 10 )</p>
+
+<p>{ insert_to_opentable( x+1, y-1, curr_node, end_node, 14 ); }</p>
+
+<p>if ( ( x - 1 ) &gt;= 0 &amp;&amp; ( x - 1 ) &lt; 10 &amp;&amp; ( y + 1 ) &gt;= 0 &amp;&amp; ( y + 1 ) &lt; 10 )</p>
+
+<p>{ insert_to_opentable( x-1, y+1, curr_node, end_node, 14 ); }</p>
+
+<p>if ( ( x - 1 ) &gt;= 0 &amp;&amp; ( x - 1 ) &lt; 10 &amp;&amp; ( y - 1 ) &gt;= 0 &amp;&amp; ( y - 1 ) &lt; 10 )
+{ insert_to_opentable( x-1, y-1, curr_node, end_node, 14 );}
+}</p>
+
+<p>int main()
+{
+// 地图数组的定义
+//
+AStarNode *start_node; // 起始点
+AStarNode *end_node; // 结束点
+AStarNode *curr_node; // 当前点
+int is_found; // 是否找到路径
+int maze[][10] ={ // 仅仅为了好赋值给map_maze
+{ 1,0,0,3,0,3,0,0,0,0 },
+{ 0,0,3,0,0,3,0,3,0,3 },
+{ 3,0,0,0,0,3,3,3,0,3 },
+{ 3,0,3,0,0,0,0,0,0,3 },
+{ 3,0,0,0,0,3,0,0,0,3 },
+{ 3,0,0,3,0,0,0,3,0,3 },
+{ 3,0,0,0,0,3,3,0,0,0 },
+{ 0,0,2,0,0,0,0,0,0,0 },
+{ 3,3,3,0,0,3,0,3,0,3 },
+{ 3,0,0,0,0,3,3,3,0,3 },
+};
+int i,j,x;</p>
+
+<p>// 下面准备点
+//
+for( i = 0; i &lt; 10; ++i )
+{
+for ( j = 0; j &lt; 10; ++j ) { map_maze[i][j].s_g = 0; map_maze[i][j].s_h = 0; map_maze[i][j].s_is_in_closetable = 0;</p>
+
+<p>map_maze[i][j].s_is_in_opentable = 0; map_maze[i][j].s_style = maze[i][j];</p>
+
+<p>map_maze[i][j].s_x = i; map_maze[i][j].s_y = j;</p>
+
+<p>map_maze[i][j].s_parent = NULL;</p>
+
+<p>if ( map_maze[i][j].s_style == STARTNODE ) // 起点</p>
+
+<p>{ start_node = &amp;(map_maze[i][j]); }</p>
+
+<p>else if( map_maze[i][j].s_style == ENDNODE ) // 终点</p>
+
+<p>{ end_node = &amp;(map_maze[i][j]); }</p>
+
+<p>printf(“%d “, maze[i][j]); } printf(“\n”); } // 下面使用A*算法得到路径 //</p>
+
+<p>open_table[open_node_count++] = start_node; // 起始点加入open表</p>
+
+<p>start_node-&gt;s_is_in_opentable = 1; // 加入open表
+start_node-&gt;s_g = 0;
+start_node-&gt;s_h = abs(end_node-&gt;s_x - start_node-&gt;s_x) + abs(end_node-&gt;s_y - start_node-&gt;s_y);
+start_node-&gt;s_parent = NULL;</p>
+
+<p>if ( start_node-&gt;s_x == end_node-&gt;s_x &amp;&amp; start_node-&gt;s_y == end_node-&gt;s_y )
+{
+printf(“起点==终点！\n”);
+return 0;
+}</p>
+
+<p>is_found = 0;</p>
+
+<p>while( 1 )
+{
+// for test
+//
+/* for ( x = 0; x &lt; open_node_count; ++x )</p>
+
+<p>{ printf(“(%d,%d):%d “, open_table[x]-&gt;s_x, open_table[x]-&gt;s_y,</p>
+
+<p>open_table[x]-&gt;s_g+open_table[x]-&gt;s_h);
+}
+printf(“\n\n”);
+*/
+curr_node = open_table[0]; // open表的第一个点一定是f值最小的点(通过堆排序得到的)
+open_table[0] = open_table[–open_node_count]; // 最后一个点放到第一个点，然后进行堆调整
+adjust_heap( 0 ); // 调整堆</p>
+
+<p>close_table[close_node_count++] = curr_node; // 当前点加入close表
+curr_node-&gt;s_is_in_closetable = 1; // 已经在close表中了</p>
+
+<p>if ( curr_node-&gt;s_x == end_node-&gt;s_x &amp;&amp; curr_node-&gt;s_y == end_node-&gt;s_y )// 终点在close中，结束
+{
+is_found = 1;
+break;
+}</p>
+
+<p>get_neighbors( curr_node, end_node ); // 对邻居的处理</p>
+
+<p>if ( open_node_count == 0 ) // 没有路径到达
+{
+is_found = 0;
+break;
+}
+}</p>
+
+<p>if ( is_found )
+{
+curr_node = end_node;</p>
+
+<p>while( curr_node )
+{
+path_stack[++top] = curr_node;
+curr_node = curr_node-&gt;s_parent;
+}</p>
+
+<p>while( top &gt;= 0 ) // 下面是输出路径看看~
+{
+if ( top &gt; 0 )
+{
+printf(“(%d,%d)–&gt;”, path_stack[top]-&gt;s_x, path_stack[top–]-&gt;s_y);
+}
+else
+{
+printf(“(%d,%d)”, path_stack[top]-&gt;s_x, path_stack[top–]-&gt;s_y);
+}
+}
+}
+else
+{
+printf(“么有找到路径”);
+}</p>
+
+<p>puts(“”);</p>
+
+<p>return 0;
+}</p>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "/2015-03-09-ae6989fe7ae97e6b395/";
+        this.page.identifier = "/2015-03-09-ae6989fe7ae97e6b395/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-06-24 生成</span>
+        <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

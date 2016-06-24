@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>随机数组排序</title>
-  <meta name="description" content="如题，对一个数组进行随机排序，或者随机完整输出数组中所有元素且不重复：int nTemp;int nData[10], nTran[10];for(i=0; i&lt;10; i++)   nTran[i]=i;for(i=0; i&lt;10; i++)  {   nTemp	= rand()%(10-i); ...">
+  <title>MagicaVoxel</title>
+  <meta name="description" content="Mageric的个人小站.">
   <meta name="author" content="Wei Wang">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="随机数组排序">
-  <meta name="twitter:description" content="如题，对一个数组进行随机排序，或者随机完整输出数组中所有元素且不重复：int nTemp;int nData[10], nTran[10];for(i=0; i&lt;10; i++)   nTran[i]=i;for(i=0; i&lt;10; i++)  {   nTemp	= rand()%(10-i); ...">
+  <meta name="twitter:title" content="MagicaVoxel">
+  <meta name="twitter:description" content="Mageric的个人小站.">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="随机数组排序">
-  <meta property="og:description" content="如题，对一个数组进行随机排序，或者随机完整输出数组中所有元素且不重复：int nTemp;int nData[10], nTran[10];for(i=0; i&lt;10; i++)   nTran[i]=i;for(i=0; i&lt;10; i++)  {   nTemp	= rand()%(10-i); ...">
+  <meta property="og:title" content="MagicaVoxel">
+  <meta property="og:description" content="Mageric的个人小站.">
   
   <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
   <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="/2015/03/randomsort/">
+  <link rel="canonical" href="/2015-03-08-magicvoxel/">
   <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -154,25 +154,17 @@
             <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
     <div class="post-meta">
-      <time datetime="2015-03-06 22:47:49 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-06</time> &#8226; <span class="post-meta__tags tags">排序</span>
+      <time datetime="2015-03-09 00:20:14 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-09</time> &#8226; <span class="post-meta__tags tags">MagicVoxelVoxel</span>
     </div>
-    <h1 class="post-title">随机数组排序</h1>
+    <h1 class="post-title">MagicaVoxel</h1>
   </header>
 
   <section class="post">
-    <p>如题，对一个数组进行<strong>随机排序</strong>，或者随机完整<strong>输出数组中所有元素且不重复</strong>：</p>
+    <p>star了一个游戏类git总结，其中有Magicavoxel，下载下来试用了一下，感觉这会是没有美工或者另辟蹊径的游戏开发所需必备工具。通过类似“塑泥”过程来创造崭新的3D/2D形象。同时新版本还提供了多种新的功能，比如导入image来生成全新Voxel化的角色/布景等。</p>
 
-<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="n">nTemp</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">nData</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">nTran</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
-<span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-   <span class="n">nTran</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
-<span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-  <span class="p">{</span>
-   <span class="n">nTemp</span>	<span class="o">=</span> <span class="n">rand</span><span class="p">()</span><span class="o">%</span><span class="p">(</span><span class="mi">10</span><span class="o">-</span><span class="n">i</span><span class="p">);</span>
-   <span class="n">nData</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>	<span class="o">=</span> <span class="n">nTran</span><span class="p">[</span><span class="n">nTemp</span><span class="p">];</span>
-   <span class="n">nTran</span><span class="p">[</span><span class="n">nTemp</span><span class="p">]</span>	<span class="o">=</span> <span class="n">nTran</span><span class="p">[</span><span class="mi">9</span><span class="o">-</span><span class="n">i</span><span class="p">];</span>
-  <span class="p">}</span>
-<span class="o">//</span><span class="n">printf</span><span class="p">(</span><span class="n">nData</span><span class="p">);</span></code></pre></figure>
+<p>看来自己又有拿来打发时间的东西了。</p>
+
+<p><a href="http://www.mageric-one.com/wp-content/uploads/2015/03/12.png"><img src="http://www.mageric-one.com/wp-content/uploads/2015/03/12.png" alt="12" /></a></p>
 
 
   </section>
@@ -181,22 +173,6 @@
 <section class="read-more">
    
    
-   <div class="read-more-item">
-       <span class="read-more-item-dim">最近的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2015/03/magicvoxel/" title="link to MagicaVoxel">MagicaVoxel</a></h2>
-       <p class="excerpt">star了一个游戏类git总结，其中有Magicavoxel，下载下来试用了一下，感觉这会是没有美工或者另辟蹊径的游戏开发所需必备工具。通过类似“塑泥”过程来创造崭新的3D/2D形象。同时新版本还提供了多种新的功能，比如导入image来生成全新Voxel化的角色/布景等。看来自己又有拿来打发时间的东西了。&hellip;</p>
-       <div class="post-list__meta"><time datetime="2015-03-09 00:20:14 +0800" class="post-list__meta--date date">2015-03-09</time> &#8226; <span class="post-list__meta--tags tags">MagicVoxel</span><a class="btn-border-small" href=/2015/03/magicvoxel/>继续阅读</a></div>
-   </div>
-   
-   
-   
-   
-   <div class="read-more-item">
-       <span class="read-more-item-dim">更早的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2015/03/yuanxiao/" title="link to 又一年元宵节">又一年元宵节</a></h2>
-       <p class="excerpt">又一年元宵节躺在床上用手机登陆后台更博，突然觉得开通一个网站也不是坏事，最好的自我督促自我检查方式，相比博客记录而言，在个人网站上不断鼓捣东西更能让人自省吧。总结之前的失败，不断进取的样子。  有时很感性的思考问题，承认自己在工科领域的执行力仍然受限，所以长久的停伫。希望以后回头看到这篇散记时，能不再有如此觉悟。  不知道手机编辑出来效果如何，回头在pc上看看吧，希望不要太难看。  还是那句话，希望大家都元宵节快乐，过去也好未来也好，希望一切都好。&hellip;</p>
-       <div class="post-list__meta"><time datetime="2015-03-06 00:59:35 +0800" class="post-list__meta--date date">2015-03-06</time> &#8226; <span class="post-list__meta--tags tags">个人感悟</span><a class="btn-border-small" href=/2015/03/yuanxiao/>继续阅读</a></div>
-   </div>
    
 </section>
 
@@ -206,8 +182,8 @@
     <script>
     
     var disqus_config = function () {
-        this.page.url = "/2015/03/randomsort/";
-        this.page.identifier = "/2015/03/randomsort/";
+        this.page.url = "/2015-03-08-magicvoxel/";
+        this.page.identifier = "/2015-03-08-magicvoxel/";
     };
 
     var disqus_shortname = 'vno-jekyll';

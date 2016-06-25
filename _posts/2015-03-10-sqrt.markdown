@@ -1,0 +1,45 @@
+---
+author: mageric
+comments: true
+date: 2015-03-10 02:49:24+00:00
+layout: post
+title: sqrt函数实现与优化
+categories:
+- 技术博文
+- 算法
+tags:
+- sqrt优化
+---
+片段1，采用**牛顿迭代法**快速寻找平方根：
+{% highlight c %}
+float SqrtByNewton(float x)
+{
+  float val = x;//最终
+  float last;//保存上一个计算的值
+  do
+  {
+    last = val;
+    val =(val + x/val) / 2;
+  }while(abs(val-last)>eps);
+   return val;
+}
+{% endhighlight %}
+片段2，来自quake3，**平方根取倒**：
+{% highlight c %}
+float Sqrt (float x){
+     float xhalf = 0.5f*x;
+     int i = *(int*)&x;
+     i = 0x5f375a86-(i>>1);
+     x = *(float*)&i;
+     x = x*(1.5f - xhalf*x*x);
+  return 1/x;   //返回x为平方根取倒，1/x为平方根
+}
+{% endhighlight %}
+说明：    
+`int i = *(int*)&x`; 这条语句把`x`转成`i=I_x`。`i = 0x5f3759df - (i>>1)`; 这条语句从`I_x`计算`I_{1/sqrt{x}}`。（这里`0x5f3759df`和`0x5f375a86`很接近，前者是原发现者的**Magic Number**，后者是证明优化后的数值，两者其实差距不大）   
+`y = *(float*)&i`; 这条语句将`I_{1/sqrt{x}}`转换为`1/sqrt{x}`。   
+`y = y*(1.5f - xhalf*y*y)`; 这时候的y是近似解；此步就是经典的**牛顿迭代法**。迭代次数越多越准确。    
+关键是第二步`i = 0x5f3759df-(i>>1)`; 这条语句从`I_x`计算`I_{1/sqrt{x}}`，原理:    
+令`y=1/sqrt{x}`，用`x=(1+m_x)2^{e_x}`和`y=(1+m_y)2^{e_y}`带入之后两边取对数，再利用近似表示`log_2(1+z)sim z+delta`，
+得到`I_y = frac{2}{3}(127-delta)2^{23}-I_x/2`。   
+若取`delta=0.0450465679168701171875`，`frac{2}{3}(127-delta)2^{23}`就是程序里所用的常量`0x5f3759df`。至于为何选择这个`delta` ，则应该是曲线拟合实验的结果。

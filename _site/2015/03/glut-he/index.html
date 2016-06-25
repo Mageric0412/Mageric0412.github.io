@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>去年秋天拍的银杏</title>
-  <meta name="description" content="">
+  <title>glut.h函数无法正常连接问题</title>
+  <meta name="description" content="看了一本书《OpenGL三维图形系统开发与应用技术》，但是，其中涉及到glut.h文件的函数无法正常连接，典型的错误如下：------ 已启动生成: 项目: gears, 配置: Debug Win32 ------1&gt;正在链接...1&gt;GEARS.obj : error LNK2019: 无法解析的...">
   <meta name="author" content="Wei Wang">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="去年秋天拍的银杏">
-  <meta name="twitter:description" content="">
+  <meta name="twitter:title" content="glut.h函数无法正常连接问题">
+  <meta name="twitter:description" content="看了一本书《OpenGL三维图形系统开发与应用技术》，但是，其中涉及到glut.h文件的函数无法正常连接，典型的错误如下：------ 已启动生成: 项目: gears, 配置: Debug Win32 ------1&gt;正在链接...1&gt;GEARS.obj : error LNK2019: 无法解析的...">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="去年秋天拍的银杏">
-  <meta property="og:description" content="">
+  <meta property="og:title" content="glut.h函数无法正常连接问题">
+  <meta property="og:description" content="看了一本书《OpenGL三维图形系统开发与应用技术》，但是，其中涉及到glut.h文件的函数无法正常连接，典型的错误如下：------ 已启动生成: 项目: gears, 配置: Debug Win32 ------1&gt;正在链接...1&gt;GEARS.obj : error LNK2019: 无法解析的...">
   
   <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
   <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="/2015/03/uestcphotos/">
+  <link rel="canonical" href="/2015/03/glut-he/">
   <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -154,17 +154,33 @@
             <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
     <div class="post-meta">
-      <time datetime="2015-03-04 18:26:31 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-04</time> &#8226; <span class="post-meta__tags tags">摄影</span>
+      <time datetime="2015-03-15 22:27:29 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-15</time> &#8226; <span class="post-meta__tags tags">opengl</span>
     </div>
-    <h1 class="post-title">去年秋天拍的银杏</h1>
+    <h1 class="post-title">glut.h函数无法正常连接问题</h1>
   </header>
 
   <section class="post">
-    <p><img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/DSC_0392.jpg" alt="DSC_04612" /></p>
+    <p>看了一本书《OpenGL三维图形系统开发与应用技术》，但是，其中涉及到<strong>glut.h文件的函数无法正常连接</strong>，典型的错误如下：</p>
 
-<p><img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/DSC_0482.jpg" alt="DSC_0392" /></p>
+<figure class="highlight"><pre><code class="language-debug" data-lang="debug">------ 已启动生成: 项目: gears, 配置: Debug Win32 ------
+1&gt;正在链接...
+1&gt;GEARS.obj : error LNK2019: 无法解析的外部符号 ___glutInitWithExit@12，该符号在函数 _glutInit_ATEXIT_HACK@8 中被引用
+1&gt;GEARS.obj : error LNK2019: 无法解析的外部符号 ___glutCreateWindowWithExit@8，该符号在函数 _glutCreateWindow_ATEXIT_HACK@4 中被引用
+1&gt;./Debug/gears.exe : fatal error LNK1120: 2 个无法解析的外部命令
+1&gt;生成日志保存在“file://c:/vcprog/OpenGL/book/Chapter03/GEARS/Debug/BuildLog.htm”
+1&gt;gears - 3 个错误，0 个警告
+========== 生成: 0 已成功, 1 已失败, 0 最新, 0 已跳过 ==========</code></pre></figure>
 
-<p><img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/DSC_04612.jpg" alt="DSC_0482" /></p>
+<p>反复思考，也没有找到答案，网上也有说类似问题的，但是竟然没有这方面的解决方案，今天看了glut.h的文件内容，glut.h的注释竟然就写着如下内容：</p>
+
+<figure class="highlight"><pre><code class="language-debug" data-lang="debug">Note that the __glut*WithExit routines should NEVER be called directly.
+To avoid the atexit workaround, #define GLUT_DISABLE_ATEXIT_HACK.</code></pre></figure>
+
+<p>于是，在<code class="highlighter-rouge">#include &lt;GL/glut.h&gt;</code>前面加上了一句：</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#define GLUT_DISABLE_ATEXIT_HACK</span></code></pre></figure>
+
+<p><strong>搞定</strong></p>
 
   </section>
 </article>
@@ -174,9 +190,9 @@
    
    <div class="read-more-item">
        <span class="read-more-item-dim">最近的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2015/03/rvokd-tree/" title="link to RVO的kd-Tree">RVO的kd-Tree</a></h2>
-       <p class="excerpt">以下是RVO种的KD-Tree代码:  {% highlight c++ %}//kdTree.hnamespace RVO {  class KdTree {    private:       class AgentTreeNode {          public:           size_t begin;           size_t end;           size_t left;           float maxX;           float ma...&hellip;</p>
-       <div class="post-list__meta"><time datetime="2015-03-05 00:43:50 +0800" class="post-list__meta--date date">2015-03-05</time> &#8226; <span class="post-list__meta--tags tags">RVO</span><a class="btn-border-small" href=/2015/03/rvokd-tree/>继续阅读</a></div>
+       <h2 class="post-list__post-title post-title"><a href="/2015/03/hamming-weight/" title="link to Hamming Weight在计算数中二进制1个数的应用">Hamming Weight在计算数中二进制1个数的应用</a></h2>
+       <p class="excerpt">hamming-weight{% highlight c %}  //types and constants used in the functions below  typedef unsigned __int64 uint64; //assume this gives 64-bits  const uint64 m1 = 0x5555555555555555; //binary: 0101…  const uint64 m2 = 0x3333333333333333; //binary...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-03-19 21:46:14 +0800" class="post-list__meta--date date">2015-03-19</time> &#8226; <span class="post-list__meta--tags tags">位运算</span><a class="btn-border-small" href=/2015/03/hamming-weight/>继续阅读</a></div>
    </div>
    
    
@@ -184,9 +200,9 @@
    
    <div class="read-more-item">
        <span class="read-more-item-dim">更早的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2015/03/bluesky/" title="link to Blue Sky">Blue Sky</a></h2>
-       <p class="excerpt">&hellip;</p>
-       <div class="post-list__meta"><time datetime="2015-03-04 18:24:36 +0800" class="post-list__meta--date date">2015-03-04</time> &#8226; <span class="post-list__meta--tags tags">摄影</span><a class="btn-border-small" href=/2015/03/bluesky/>继续阅读</a></div>
+       <h2 class="post-list__post-title post-title"><a href="/2015/03/max-points-on-a-line/" title="link to Max Points on a Line">Max Points on a Line</a></h2>
+       <p class="excerpt">给定一些二维平面上的点，求出其中共线点最多时的点个数：  解法：采用暴力枚举，时间复杂度有O（n^2），循环计算两点之间的斜率，构造一个哈希表来存储循环检查的情况，其中key为斜率，value就是共线点的个数。特殊处理：当出现斜率无限大，也就是两点的x轴相同而y轴不同时，记斜率slope为std:numeric_limits&lt;double&gt;::infinity，即无限大。 代码：int maxPoints(vector&lt;Point&gt; &amp;points) {  ...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-03-12 21:52:12 +0800" class="post-list__meta--date date">2015-03-12</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/03/max-points-on-a-line/>继续阅读</a></div>
    </div>
    
 </section>
@@ -197,8 +213,8 @@
     <script>
     
     var disqus_config = function () {
-        this.page.url = "/2015/03/uestcphotos/";
-        this.page.identifier = "/2015/03/uestcphotos/";
+        this.page.url = "/2015/03/glut-he/";
+        this.page.identifier = "/2015/03/glut-he/";
     };
 
     var disqus_shortname = 'vno-jekyll';

@@ -413,6 +413,14 @@
 <section class="read-more">
    
    
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/03/sqrt/" title="link to sqrt函数实现与优化">sqrt函数实现与优化</a></h2>
+       <p class="excerpt">片段1，采用牛顿迭代法快速寻找平方根：{% highlight c %}float SqrtByNewton(float x){  float val = x;//最终  float last;//保存上一个计算的值  do  {    last = val;    val =(val + x/val) / 2;  }while(abs(val-last)&gt;eps);   return val;}{% endhighlight %}片段2，来自quake3，平方根取倒：{% high...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-03-10 10:49:24 +0800" class="post-list__meta--date date">2015-03-10</time> &#8226; <span class="post-list__meta--tags tags">sqrt优化</span><a class="btn-border-small" href=/2015/03/sqrt/>继续阅读</a></div>
+   </div>
+   
+   
    
    
    <div class="read-more-item">
@@ -455,7 +463,7 @@
             <section class="footer">
     <footer>
     	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
-        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-06-24 生成</span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-06-26 生成</span>
         <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
     </footer>
 </section>

@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>去年秋天拍的银杏</title>
-  <meta name="description" content="">
+  <title>Unity5关于android的打包</title>
+  <meta name="description" content="Mageric的个人小站.">
   <meta name="author" content="Wei Wang">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="去年秋天拍的银杏">
-  <meta name="twitter:description" content="">
+  <meta name="twitter:title" content="Unity5关于android的打包">
+  <meta name="twitter:description" content="Mageric的个人小站.">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="去年秋天拍的银杏">
-  <meta property="og:description" content="">
+  <meta property="og:title" content="Unity5关于android的打包">
+  <meta property="og:description" content="Mageric的个人小站.">
   
   <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
   <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="/2015/03/uestcphotos/">
+  <link rel="canonical" href="/2015-04-02-unity5-android/">
   <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -154,17 +154,93 @@
             <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
     <div class="post-meta">
-      <time datetime="2015-03-04 18:26:31 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-04</time> &#8226; <span class="post-meta__tags tags">摄影</span>
+      <time datetime="2015-04-02 13:22:00 +0800" itemprop="datePublished" class="post-meta__date date">2015-04-02</time> &#8226; <span class="post-meta__tags tags">unity3d</span>
     </div>
-    <h1 class="post-title">去年秋天拍的银杏</h1>
+    <h1 class="post-title">Unity5关于android的打包</h1>
   </header>
 
   <section class="post">
-    <p><img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/DSC_0392.jpg" alt="DSC_04612" /></p>
+    <p><a href="http://www.mageric-one.com/wp-content/uploads/2015/04/QQ截图20150402132037.jpg"><img src="http://www.mageric-one.com/wp-content/uploads/2015/04/QQ截图20150402132037.jpg" alt="QQ截图20150402132037" /></a>unity5 打包apk需要将安装SDK升级到android sdk 5.0 api 21。</p>
 
-<p><img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/DSC_0482.jpg" alt="DSC_0392" /></p>
+<p>国内使用SDK Manager.exe更新不了，于是下载sdk包手动更新到sdk 5.0。</p>
 
-<p><img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/DSC_04612.jpg" alt="DSC_0482" /></p>
+<p>下载下面几个包：</p>
+
+<p>https://dl-ssl.google.com/android/repository/sources-21_r01.zip</p>
+
+<p>https://dl-ssl.google.com/android/repository/build-tools_r21.1-windows.zip</p>
+
+<p>https://dl-ssl.google.com/android/repository/tools_r23.0.5-windows.zip</p>
+
+<p>https://dl-ssl.google.com/android/repository/platform-tools_r21-windows.zip</p>
+
+<p>https://dl-ssl.google.com/android/repository/samples-20_r02.zip</p>
+
+<p>https://dl-ssl.google.com/android/repository/support_r21.0.1.zip</p>
+
+<p>使用easygo翻墙下载，配合迅雷速度很快。</p>
+
+<p>下载之后解压到android-sdk目录下，没有就新建，对应解压路径为：</p>
+
+<p>android-21_r01.zip</p>
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <p>E:\android-sdk\platforms\ (将解压后的文件夹名android-5.0 改为 android-21)</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p>sources-21_r01.zip</p>
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <p> E:\android-sdk\sources\ (将解压后的文件夹名rec 改为 android-21)</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p>build-tools_r21.1-windows.zip</p>
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <p> E:\android-sdk\build-tools\ (将解压后的文件夹名android-5.0 改为 android-21)</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p>tools_r23.0.5-windows.zip</p>
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <p>E:\android-sdk\ (覆盖原来的tools文件夹)</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p>platform-tools_r21-windows.zip</p>
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <p>E:\android-sdk\ (覆盖原来的platform-tools文件夹)</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p>samples-20_r02.zip</p>
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <p>E:\android-sdk\samples\support_r21.0.1.zip</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
 
   </section>
 </article>
@@ -172,22 +248,6 @@
 <section class="read-more">
    
    
-   <div class="read-more-item">
-       <span class="read-more-item-dim">最近的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2015/03/rvokd-tree/" title="link to RVO的kd-Tree">RVO的kd-Tree</a></h2>
-       <p class="excerpt">以下是RVO种的KD-Tree代码:  {% highlight c++ %}//kdTree.hnamespace RVO {  class KdTree {    private:       class AgentTreeNode {          public:           size_t begin;           size_t end;           size_t left;           float maxX;           float ma...&hellip;</p>
-       <div class="post-list__meta"><time datetime="2015-03-05 00:43:50 +0800" class="post-list__meta--date date">2015-03-05</time> &#8226; <span class="post-list__meta--tags tags">RVO</span><a class="btn-border-small" href=/2015/03/rvokd-tree/>继续阅读</a></div>
-   </div>
-   
-   
-   
-   
-   <div class="read-more-item">
-       <span class="read-more-item-dim">更早的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2015/03/bluesky/" title="link to Blue Sky">Blue Sky</a></h2>
-       <p class="excerpt">&hellip;</p>
-       <div class="post-list__meta"><time datetime="2015-03-04 18:24:36 +0800" class="post-list__meta--date date">2015-03-04</time> &#8226; <span class="post-list__meta--tags tags">摄影</span><a class="btn-border-small" href=/2015/03/bluesky/>继续阅读</a></div>
-   </div>
    
 </section>
 
@@ -197,8 +257,8 @@
     <script>
     
     var disqus_config = function () {
-        this.page.url = "/2015/03/uestcphotos/";
-        this.page.identifier = "/2015/03/uestcphotos/";
+        this.page.url = "/2015-04-02-unity5-android/";
+        this.page.identifier = "/2015-04-02-unity5-android/";
     };
 
     var disqus_shortname = 'vno-jekyll';

@@ -1,0 +1,33 @@
+---
+author: mageric
+comments: true
+date: 2015-03-15 14:27:29+00:00
+layout: post
+title: glut.h函数无法正常连接问题
+categories:
+- 图形学
+- 技术博文
+tags:
+- opengl
+---
+看了一本书《OpenGL三维图形系统开发与应用技术》，但是，其中涉及到**glut.h文件的函数无法正常连接**，典型的错误如下：   
+{% highlight debug %}
+------ 已启动生成: 项目: gears, 配置: Debug Win32 ------
+1>正在链接...
+1>GEARS.obj : error LNK2019: 无法解析的外部符号 ___glutInitWithExit@12，该符号在函数 _glutInit_ATEXIT_HACK@8 中被引用
+1>GEARS.obj : error LNK2019: 无法解析的外部符号 ___glutCreateWindowWithExit@8，该符号在函数 _glutCreateWindow_ATEXIT_HACK@4 中被引用
+1>./Debug/gears.exe : fatal error LNK1120: 2 个无法解析的外部命令
+1>生成日志保存在“file://c:/vcprog/OpenGL/book/Chapter03/GEARS/Debug/BuildLog.htm”
+1>gears - 3 个错误，0 个警告
+========== 生成: 0 已成功, 1 已失败, 0 最新, 0 已跳过 ==========
+{% endhighlight %}
+反复思考，也没有找到答案，网上也有说类似问题的，但是竟然没有这方面的解决方案，今天看了glut.h的文件内容，glut.h的注释竟然就写着如下内容：   
+{% highlight debug %}
+Note that the __glut*WithExit routines should NEVER be called directly.
+To avoid the atexit workaround, #define GLUT_DISABLE_ATEXIT_HACK.
+{% endhighlight %}    
+于是，在`#include <GL/glut.h>`前面加上了一句：
+{% highlight c %}
+#define GLUT_DISABLE_ATEXIT_HACK
+{% endhighlight %}
+**搞定**

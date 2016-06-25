@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Max Points on a Line</title>
+  <meta name="description" content="给定一些二维平面上的点，求出其中共线点最多时的点个数：  解法：采用暴力枚举，时间复杂度有O（n^2），循环计算两点之间的斜率，构造一个哈希表来存储循环检查的情况，其中key为斜率，value就是共线点的个数。特殊处理：当出现斜率无限大，也就是两点的x轴相同而y轴不同时，记斜率slope为std:numeric_...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Max Points on a Line">
+  <meta name="twitter:description" content="给定一些二维平面上的点，求出其中共线点最多时的点个数：  解法：采用暴力枚举，时间复杂度有O（n^2），循环计算两点之间的斜率，构造一个哈希表来存储循环检查的情况，其中key为斜率，value就是共线点的个数。特殊处理：当出现斜率无限大，也就是两点的x轴相同而y轴不同时，记斜率slope为std:numeric_...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Max Points on a Line">
+  <meta property="og:description" content="给定一些二维平面上的点，求出其中共线点最多时的点个数：  解法：采用暴力枚举，时间复杂度有O（n^2），循环计算两点之间的斜率，构造一个哈希表来存储循环检查的情况，其中key为斜率，value就是共线点的个数。特殊处理：当出现斜率无限大，也就是两点的x轴相同而y轴不同时，记斜率slope为std:numeric_...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="/2015/03/max-points-on-a-line/">
+  <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Mageric 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Mageric logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Mageric" class="blog-button">Mageric</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">42 世界尽头</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Mageric的个人小站.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="http://mageric-one.com" target="_blank" title="My old site">OldSite</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/magericyoung" title="@magericyoung 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Mageric0412" title="@Mageric0412 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- instagram -->
+  <li class="navigation__item">
+   <a href="https://www.instagram.com/mageric0412" title="@mageric0412 的Instagram" target="_blank">
+     <i class='social fa fa-instagram'></i>
+     <span class="label">instagram</span>
+   </a>
+  </li>
+  
+
+<!--
+  
+  <!-- website -->
+  <!--
+  <li class="navigation__item">
+    <a href="https://mageric-one.com" rel="author" title="mageric的小站" target="_blank">
+        <i class='social fa fa-rss'> </i>
+      <span class="label">website</span>
+    </a>
+  </li>
+  
+-->
+
+
+
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:mageric0412@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-03-12 21:52:12 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-12</time> &#8226; <span class="post-meta__tags tags">算法</span>
+    </div>
+    <h1 class="post-title">Max Points on a Line</h1>
+  </header>
+
+  <section class="post">
+    <p>给定一些二维平面上的点，求出其中共线点最多时的点个数：  <br />
+解法：采用<strong>暴力枚举</strong>，时间复杂度有<code class="highlighter-rouge">O（n^2）</code>，循环计算两点之间的斜率，构造一个哈希表来存储循环检查的情况，其中key为斜率，value就是共线点的个数。特殊处理：当出现斜率无限大，也就是两点的x轴相同而y轴不同时，记斜率<strong>slope</strong>为<code class="highlighter-rouge">std:numeric_limits&lt;double&gt;::infinity</code>，即无限大。 <br />
+代码：</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="nf">maxPoints</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">points</span><span class="p">)</span> <span class="p">{</span>
+   <span class="k">if</span> <span class="p">(</span><span class="n">points</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="k">return</span> <span class="n">points</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+   <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">slope_count</span><span class="p">;</span>
+   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">points</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">slope_count</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+      <span class="kt">int</span> <span class="n">samePointNum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 与i 重合的点
+</span>      <span class="kt">int</span> <span class="n">point_max</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 和i 共线的最大点数
+</span>      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">points</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">double</span> <span class="n">slope</span><span class="p">;</span> <span class="c1">// 斜率
+</span>        <span class="k">if</span> <span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="o">==</span> <span class="n">points</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">slope</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;::</span><span class="n">infinity</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">==</span> <span class="n">points</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+                <span class="o">++</span> <span class="n">samePointNum</span><span class="p">;</span>
+                <span class="k">continue</span><span class="p">;</span>
+              <span class="p">}</span>
+           <span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+              <span class="n">slope</span> <span class="o">=</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">*</span> <span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="n">points</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="o">-</span> <span class="n">points</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">x</span><span class="p">);</span>
+           <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">slope_count</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">slope</span><span class="p">)</span> <span class="o">!=</span> <span class="n">slope_count</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="o">++</span><span class="n">slope_count</span><span class="p">[</span><span class="n">slope</span><span class="p">];</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="n">slope_count</span><span class="p">[</span><span class="n">slope</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">point_max</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">)</span> <span class="n">point_max</span> <span class="o">=</span> <span class="n">count</span><span class="p">;</span>
+     <span class="p">}</span>     
+    <span class="n">result</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">point_max</span> <span class="o">+</span> <span class="n">samePointNum</span><span class="p">);</span>
+  <span class="p">}</span>  
+  <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/03/glut-he/" title="link to glut.h函数无法正常连接问题">glut.h函数无法正常连接问题</a></h2>
+       <p class="excerpt">看了一本书《OpenGL三维图形系统开发与应用技术》，但是，其中涉及到glut.h文件的函数无法正常连接，典型的错误如下： {% highlight debug %}—— 已启动生成: 项目: gears, 配置: Debug Win32 ——1&gt;正在链接…1&gt;GEARS.obj : error LNK2019: 无法解析的外部符号 ___glutInitWithExit@12，该符号在函数 _glutInit_ATEXIT_HACK@8 中被引用1&gt;GEARS.obj ...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-03-15 22:27:29 +0800" class="post-list__meta--date date">2015-03-15</time> &#8226; <span class="post-list__meta--tags tags">opengl</span><a class="btn-border-small" href=/2015/03/glut-he/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/03/sqrt/" title="link to sqrt函数实现与优化">sqrt函数实现与优化</a></h2>
+       <p class="excerpt">片段1，采用牛顿迭代法快速寻找平方根：float SqrtByNewton(float x){  float val = x;//最终  float last;//保存上一个计算的值  do  {    last = val;    val =(val + x/val) / 2;  }while(abs(val-last)&gt;eps);   return val;}片段2，来自quake3，平方根取倒：float Sqrt (float x){     float xhalf = 0....&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-03-10 10:49:24 +0800" class="post-list__meta--date date">2015-03-10</time> &#8226; <span class="post-list__meta--tags tags">sqrt优化</span><a class="btn-border-small" href=/2015/03/sqrt/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "/2015/03/max-points-on-a-line/";
+        this.page.identifier = "/2015/03/max-points-on-a-line/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-06-26 生成</span>
+        <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Hamming Weight在计算数中二进制1个数的应用</title>
+  <meta name="description" content="hamming-weight  //types and constants used in the functions below  typedef unsigned __int64 uint64; //assume this gives 64-bits  const uint64 m1 = 0x55555555...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Hamming Weight在计算数中二进制1个数的应用">
+  <meta name="twitter:description" content="hamming-weight  //types and constants used in the functions below  typedef unsigned __int64 uint64; //assume this gives 64-bits  const uint64 m1 = 0x55555555...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Hamming Weight在计算数中二进制1个数的应用">
+  <meta property="og:description" content="hamming-weight  //types and constants used in the functions below  typedef unsigned __int64 uint64; //assume this gives 64-bits  const uint64 m1 = 0x55555555...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="/2015/03/hamming-weight/">
+  <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Mageric 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Mageric logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Mageric" class="blog-button">Mageric</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">42 世界尽头</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Mageric的个人小站.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="http://mageric-one.com" target="_blank" title="My old site">OldSite</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/magericyoung" title="@magericyoung 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Mageric0412" title="@Mageric0412 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- instagram -->
+  <li class="navigation__item">
+   <a href="https://www.instagram.com/mageric0412" title="@mageric0412 的Instagram" target="_blank">
+     <i class='social fa fa-instagram'></i>
+     <span class="label">instagram</span>
+   </a>
+  </li>
+  
+
+<!--
+  
+  <!-- website -->
+  <!--
+  <li class="navigation__item">
+    <a href="https://mageric-one.com" rel="author" title="mageric的小站" target="_blank">
+        <i class='social fa fa-rss'> </i>
+      <span class="label">website</span>
+    </a>
+  </li>
+  
+-->
+
+
+
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:mageric0412@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-03-19 21:46:14 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-19</time> &#8226; <span class="post-meta__tags tags">位运算</span>
+    </div>
+    <h1 class="post-title">Hamming Weight在计算数中二进制1个数的应用</h1>
+  </header>
+
+  <section class="post">
+    <h3 id="hamming-weight">hamming-weight</h3>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">  <span class="c1">//types and constants used in the functions below
+</span>  <span class="k">typedef</span> <span class="kt">unsigned</span> <span class="n">__int64</span> <span class="n">uint64</span><span class="p">;</span> <span class="c1">//assume this gives 64-bits
+</span>  <span class="k">const</span> <span class="n">uint64</span> <span class="n">m1</span> <span class="o">=</span> <span class="mh">0x5555555555555555</span><span class="p">;</span> <span class="c1">//binary: 0101...
+</span>  <span class="k">const</span> <span class="n">uint64</span> <span class="n">m2</span> <span class="o">=</span> <span class="mh">0x3333333333333333</span><span class="p">;</span> <span class="c1">//binary: 00110011..
+</span>  <span class="k">const</span> <span class="n">uint64</span> <span class="n">m4</span> <span class="o">=</span> <span class="mh">0x0f0f0f0f0f0f0f0f</span><span class="p">;</span> <span class="c1">//binary: 4 zeros, 4 ones ...
+</span>  <span class="k">const</span> <span class="n">uint64</span> <span class="n">m8</span> <span class="o">=</span> <span class="mh">0x00ff00ff00ff00ff</span><span class="p">;</span> <span class="c1">//binary: 8 zeros, 8 ones ...
+</span>  <span class="k">const</span> <span class="n">uint64</span> <span class="n">m16</span> <span class="o">=</span> <span class="mh">0x0000ffff0000ffff</span><span class="p">;</span> <span class="c1">//binary: 16 zeros, 16 ones ...
+</span>  <span class="k">const</span> <span class="n">uint64</span> <span class="n">m32</span> <span class="o">=</span> <span class="mh">0x00000000ffffffff</span><span class="p">;</span> <span class="c1">//binary: 32 zeros, 32 ones
+</span>  <span class="k">const</span> <span class="n">uint64</span> <span class="n">hff</span> <span class="o">=</span> <span class="mh">0xffffffffffffffff</span><span class="p">;</span> <span class="c1">//binary: all ones
+</span>  <span class="k">const</span> <span class="n">uint64</span> <span class="n">h01</span> <span class="o">=</span> <span class="mh">0x0101010101010101</span><span class="p">;</span> <span class="c1">//the sum of 256 to the power of 0,1,2,3...
+</span>  <span class="c1">//This is a naive implementation, shown for comparison,
+</span>  <span class="c1">//and to help in understanding the better functions.
+</span>  <span class="c1">//It uses 24 arithmetic operations (shift, add, and).
+</span><span class="kt">int</span> <span class="nf">popcount_1</span><span class="p">(</span><span class="n">uint64</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">m1</span> <span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">m1</span> <span class="p">);</span> <span class="c1">//put count of each 2 bits into those 2 bits
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">m2</span> <span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">m2</span> <span class="p">);</span> <span class="c1">//put count of each 4 bits into those 4 bits
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">m4</span> <span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">m4</span> <span class="p">);</span> <span class="c1">//put count of each 8 bits into those 8 bits
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">m8</span> <span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">m8</span> <span class="p">);</span> <span class="c1">//put count of each 16 bits into those 16 bits
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">m16</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">m16</span><span class="p">);</span> <span class="c1">//put count of each 32 bits into those 32 bits
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">m32</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">32</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">m32</span><span class="p">);</span> <span class="c1">//put count of each 64 bits into those 64 bits
+</span>    <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>原理： <br />
+<strong>第一步</strong>：计算一个数n位的奇偶位上的1的总和表示：m1就是0101 ,收集在偶数位上的1的情况，与奇数位上的情况进行相加，即收集每两位奇偶位。这样，原本n位的数位情况变成n/2位，相当于每两位代表对应奇偶数位上的1的个数，比如0110代表第一组奇偶位上有1个1，第二组奇偶位上有2（二进制10）个1； <br />
+<strong>第二步</strong>：同第一步的思路，将每四位奇偶位上的1进行收集，利用1100、0011进行位计算。收集到的新数字每单元有4位，代表每4位的奇偶位上的1的二进制数目   <br />
+………  <br />
+以此类推，每次收集位数的叠加数量分别为2、4、8、16、32，一般计算机整型表示为32位，那么迭代到32这一组就可以结束。  <br />
+<strong>优点</strong>：32位的数字最多只需要迭代5次，相比位与运算最多需要32次要更快。  <br />
+<strong>缺点</strong>：理解有难点，难以快速编写。</p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/03/animation/" title="link to 《异能系》">《异能系》</a></h2>
+       <p class="excerpt">最近没空，好想再画两幅&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-03-20 15:15:29 +0800" class="post-list__meta--date date">2015-03-20</time> &#8226; <span class="post-list__meta--tags tags">手绘</span><a class="btn-border-small" href=/2015/03/animation/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/03/glut-he/" title="link to glut.h函数无法正常连接问题">glut.h函数无法正常连接问题</a></h2>
+       <p class="excerpt">看了一本书《OpenGL三维图形系统开发与应用技术》，但是，其中涉及到glut.h文件的函数无法正常连接，典型的错误如下：------ 已启动生成: 项目: gears, 配置: Debug Win32 ------1&gt;正在链接...1&gt;GEARS.obj : error LNK2019: 无法解析的外部符号 ___glutInitWithExit@12，该符号在函数 _glutInit_ATEXIT_HACK@8 中被引用1&gt;GEARS.obj : error LNK2...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-03-15 22:27:29 +0800" class="post-list__meta--date date">2015-03-15</time> &#8226; <span class="post-list__meta--tags tags">opengl</span><a class="btn-border-small" href=/2015/03/glut-he/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "/2015/03/hamming-weight/";
+        this.page.identifier = "/2015/03/hamming-weight/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-06-26 生成</span>
+        <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

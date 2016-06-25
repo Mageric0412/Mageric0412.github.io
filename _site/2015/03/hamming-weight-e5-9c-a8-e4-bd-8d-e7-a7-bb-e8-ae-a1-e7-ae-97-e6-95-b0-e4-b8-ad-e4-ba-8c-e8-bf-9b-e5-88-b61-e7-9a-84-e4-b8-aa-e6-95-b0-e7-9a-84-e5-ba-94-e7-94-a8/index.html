@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>去年秋天拍的银杏</title>
-  <meta name="description" content="">
+  <title>Hamming Weight在位移计算数中二进制1的个数的应用</title>
+  <meta name="description" content="//types and constants used in the functions below">
   <meta name="author" content="Wei Wang">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="去年秋天拍的银杏">
-  <meta name="twitter:description" content="">
+  <meta name="twitter:title" content="Hamming Weight在位移计算数中二进制1的个数的应用">
+  <meta name="twitter:description" content="//types and constants used in the functions below">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="去年秋天拍的银杏">
-  <meta property="og:description" content="">
+  <meta property="og:title" content="Hamming Weight在位移计算数中二进制1的个数的应用">
+  <meta property="og:description" content="//types and constants used in the functions below">
   
   <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
   <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="/2015/03/uestcphotos/">
+  <link rel="canonical" href="/2015/03/hamming-weight-e5-9c-a8-e4-bd-8d-e7-a7-bb-e8-ae-a1-e7-ae-97-e6-95-b0-e4-b8-ad-e4-ba-8c-e8-bf-9b-e5-88-b61-e7-9a-84-e4-b8-aa-e6-95-b0-e7-9a-84-e5-ba-94-e7-94-a8/">
   <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -154,17 +154,50 @@
             <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
     <div class="post-meta">
-      <time datetime="2015-03-04 18:26:31 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-04</time> &#8226; <span class="post-meta__tags tags">摄影</span>
+      <time datetime="2015-03-19 21:46:14 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-19</time> &#8226; <span class="post-meta__tags tags">位运算</span>
     </div>
-    <h1 class="post-title">去年秋天拍的银杏</h1>
+    <h1 class="post-title">Hamming Weight在位移计算数中二进制1的个数的应用</h1>
   </header>
 
   <section class="post">
-    <p><img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/DSC_0392.jpg" alt="DSC_04612" /></p>
+    <p>//types and constants used in the functions below</p>
 
-<p><img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/DSC_0482.jpg" alt="DSC_0392" /></p>
+<p>typedef unsigned __int64 uint64; //assume this gives 64-bits
+const uint64 m1 = 0x5555555555555555; //binary: 0101…
+const uint64 m2 = 0x3333333333333333; //binary: 00110011..
+const uint64 m4 = 0x0f0f0f0f0f0f0f0f; //binary: 4 zeros, 4 ones …
+const uint64 m8 = 0x00ff00ff00ff00ff; //binary: 8 zeros, 8 ones …
+const uint64 m16 = 0x0000ffff0000ffff; //binary: 16 zeros, 16 ones …
+const uint64 m32 = 0x00000000ffffffff; //binary: 32 zeros, 32 ones
+const uint64 hff = 0xffffffffffffffff; //binary: all ones
+const uint64 h01 = 0x0101010101010101; //the sum of 256 to the power of 0,1,2,3…</p>
 
-<p><img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/DSC_04612.jpg" alt="DSC_0482" /></p>
+<p>//This is a naive implementation, shown for comparison,
+//and to help in understanding the better functions.
+//It uses 24 arithmetic operations (shift, add, and).
+int popcount_1(uint64 x) {
+x = (x &amp; m1 ) + ((x » 1) &amp; m1 ); //put count of each 2 bits into those 2 bits
+x = (x &amp; m2 ) + ((x » 2) &amp; m2 ); //put count of each 4 bits into those 4 bits
+x = (x &amp; m4 ) + ((x » 4) &amp; m4 ); //put count of each 8 bits into those 8 bits
+x = (x &amp; m8 ) + ((x » 8) &amp; m8 ); //put count of each 16 bits into those 16 bits
+x = (x &amp; m16) + ((x » 16) &amp; m16); //put count of each 32 bits into those 32 bits
+x = (x &amp; m32) + ((x » 32) &amp; m32); //put count of each 64 bits into those 64 bits
+return x;
+}</p>
+
+<p>原理：</p>
+
+<p>第一步：计算一个数n位的奇偶位上的1的总和表示：m1就是0101 ,收集在偶数位上的1的情况，与奇数位上的情况进行相加，即收集每两位奇偶位。这样，原本n位的数位情况变成n/2位，相当于每两位代表对应奇偶数位上的1的个数，比如0110代表第一组奇偶位上有1个1，第二组奇偶位上有2（二进制10）个1；</p>
+
+<p>第二步：同第一步的思路，将每四位奇偶位上的1进行收集，利用1100、0011进行位计算。收集到的新数字每单元有4位，代表每4位的奇偶位上的1的二进制数目；</p>
+
+<p>………</p>
+
+<p>以此类推，每次收集位数的叠加数量分别为2、4、8、16、32，一般计算机整型表示为32位，那么迭代到32这一组就可以结束。</p>
+
+<p>优点：32位的数字最多只需要迭代5次，相比位与运算最多需要32次要更快。</p>
+
+<p>缺点：理解有难点，难以快速编写。</p>
 
   </section>
 </article>
@@ -174,9 +207,9 @@
    
    <div class="read-more-item">
        <span class="read-more-item-dim">最近的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2015/03/rvokd-tree/" title="link to RVO的kd-Tree">RVO的kd-Tree</a></h2>
-       <p class="excerpt">以下是RVO种的KD-Tree代码:  {% highlight c++ %}//kdTree.hnamespace RVO {  class KdTree {    private:       class AgentTreeNode {          public:           size_t begin;           size_t end;           size_t left;           float maxX;           float ma...&hellip;</p>
-       <div class="post-list__meta"><time datetime="2015-03-05 00:43:50 +0800" class="post-list__meta--date date">2015-03-05</time> &#8226; <span class="post-list__meta--tags tags">RVO</span><a class="btn-border-small" href=/2015/03/rvokd-tree/>继续阅读</a></div>
+       <h2 class="post-list__post-title post-title"><a href="/2015/04/unity5/" title="link to Unity5">Unity5</a></h2>
+       <p class="excerpt">今天开始学习Unity5了，发现脚本化游戏逻辑+图形化编程 简直就是游戏开发者的乐园。难点就在于游戏资源的设计以及游戏策划了吧。恩，每次看到Unity的一些设计截图都会让自己内心为之震撼，什么时候自己也能做出如此牛逼的游戏.&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-04-01 22:06:24 +0800" class="post-list__meta--date date">2015-04-01</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2015/04/unity5/>继续阅读</a></div>
    </div>
    
    
@@ -184,9 +217,9 @@
    
    <div class="read-more-item">
        <span class="read-more-item-dim">更早的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2015/03/bluesky/" title="link to Blue Sky">Blue Sky</a></h2>
-       <p class="excerpt">&hellip;</p>
-       <div class="post-list__meta"><time datetime="2015-03-04 18:24:36 +0800" class="post-list__meta--date date">2015-03-04</time> &#8226; <span class="post-list__meta--tags tags">摄影</span><a class="btn-border-small" href=/2015/03/bluesky/>继续阅读</a></div>
+       <h2 class="post-list__post-title post-title"><a href="/2015/03/glut-he/" title="link to glut.h函数无法正常连接问题">glut.h函数无法正常连接问题</a></h2>
+       <p class="excerpt">看了一本书《OpenGL三维图形系统开发与应用技术》，但是，其中涉及到glut.h文件的函数无法正常连接，典型的错误如下：------ 已启动生成: 项目: gears, 配置: Debug Win32 ------1&gt;正在链接...1&gt;GEARS.obj : error LNK2019: 无法解析的外部符号 ___glutInitWithExit@12，该符号在函数 _glutInit_ATEXIT_HACK@8 中被引用1&gt;GEARS.obj : error LNK2...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-03-15 22:27:29 +0800" class="post-list__meta--date date">2015-03-15</time> &#8226; <span class="post-list__meta--tags tags">opengl</span><a class="btn-border-small" href=/2015/03/glut-he/>继续阅读</a></div>
    </div>
    
 </section>
@@ -197,8 +230,8 @@
     <script>
     
     var disqus_config = function () {
-        this.page.url = "/2015/03/uestcphotos/";
-        this.page.identifier = "/2015/03/uestcphotos/";
+        this.page.url = "/2015/03/hamming-weight-e5-9c-a8-e4-bd-8d-e7-a7-bb-e8-ae-a1-e7-ae-97-e6-95-b0-e4-b8-ad-e4-ba-8c-e8-bf-9b-e5-88-b61-e7-9a-84-e4-b8-aa-e6-95-b0-e7-9a-84-e5-ba-94-e7-94-a8/";
+        this.page.identifier = "/2015/03/hamming-weight-e5-9c-a8-e4-bd-8d-e7-a7-bb-e8-ae-a1-e7-ae-97-e6-95-b0-e4-b8-ad-e4-ba-8c-e8-bf-9b-e5-88-b61-e7-9a-84-e4-b8-aa-e6-95-b0-e7-9a-84-e5-ba-94-e7-94-a8/";
     };
 
     var disqus_shortname = 'vno-jekyll';

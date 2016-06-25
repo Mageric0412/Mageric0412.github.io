@@ -9,7 +9,7 @@ categories:
 tags:
 - 位运算
 ---
-### hamming-weight
+代码：    
 {% highlight c %}
   //types and constants used in the functions below
   typedef unsigned __int64 uint64; //assume this gives 64-bits

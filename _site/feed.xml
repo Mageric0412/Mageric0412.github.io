@@ -5,8 +5,8 @@
     <description>Mageric的个人小站.</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 26 Jun 2016 00:33:45 +0800</pubDate>
-    <lastBuildDate>Sun, 26 Jun 2016 00:33:45 +0800</lastBuildDate>
+    <pubDate>Sun, 26 Jun 2016 00:37:46 +0800</pubDate>
+    <lastBuildDate>Sun, 26 Jun 2016 00:37:46 +0800</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
     
       <item>
@@ -79,7 +79,7 @@
     
       <item>
         <title>Hamming Weight在计算数中二进制1个数的应用</title>
-        <description>&lt;h3 id=&quot;hamming-weight&quot;&gt;hamming-weight&lt;/h3&gt;
+        <description>&lt;p&gt;代码：&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;  &lt;span class=&quot;c1&quot;&gt;//types and constants used in the functions below
 &lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;typedef&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;unsigned&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__int64&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;uint64&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//assume this gives 64-bits

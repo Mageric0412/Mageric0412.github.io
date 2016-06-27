@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>unity5中[Serializable]关键字</title>
+  <meta name="description" content="Unity5中脚本C#有关键字[Serializable],从C#的角度讲就是能够对所定义的类进行序列化，经过序列化的对象，可以暂时保存在硬盘上，而不占用内存，等到需要使用时再从硬盘读入。  而Unity5中的[Serializable]接口声明的作用，就是能够将所定义的类在编辑器中实例展现出来。换而言之，就是能...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="unity5中[Serializable]关键字">
+  <meta name="twitter:description" content="Unity5中脚本C#有关键字[Serializable],从C#的角度讲就是能够对所定义的类进行序列化，经过序列化的对象，可以暂时保存在硬盘上，而不占用内存，等到需要使用时再从硬盘读入。  而Unity5中的[Serializable]接口声明的作用，就是能够将所定义的类在编辑器中实例展现出来。换而言之，就是能...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="unity5中[Serializable]关键字">
+  <meta property="og:description" content="Unity5中脚本C#有关键字[Serializable],从C#的角度讲就是能够对所定义的类进行序列化，经过序列化的对象，可以暂时保存在硬盘上，而不占用内存，等到需要使用时再从硬盘读入。  而Unity5中的[Serializable]接口声明的作用，就是能够将所定义的类在编辑器中实例展现出来。换而言之，就是能...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="/2015/04/unity5serializable/">
+  <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Mageric 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Mageric logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Mageric" class="blog-button">Mageric</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">42 世界尽头</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Mageric的个人小站.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="http://mageric-one.com" target="_blank" title="My old site">OldSite</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/magericyoung" title="@magericyoung 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Mageric0412" title="@Mageric0412 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- instagram -->
+  <li class="navigation__item">
+   <a href="https://www.instagram.com/mageric0412" title="@mageric0412 的Instagram" target="_blank">
+     <i class='social fa fa-instagram'></i>
+     <span class="label">instagram</span>
+   </a>
+  </li>
+  
+
+<!--
+  
+  <!-- website -->
+  <!--
+  <li class="navigation__item">
+    <a href="https://mageric-one.com" rel="author" title="mageric的小站" target="_blank">
+        <i class='social fa fa-rss'> </i>
+      <span class="label">website</span>
+    </a>
+  </li>
+  
+-->
+
+
+
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:mageric0412@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-04-09 23:33:00 +0800" itemprop="datePublished" class="post-meta__date date">2015-04-09</time> &#8226; <span class="post-meta__tags tags">unity5</span>
+    </div>
+    <h1 class="post-title">unity5中[Serializable]关键字</h1>
+  </header>
+
+  <section class="post">
+    <p><img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/games/serializable.jpg" alt="" />
+Unity5中脚本C#有关键字<code class="highlighter-rouge">[Serializable]</code>,从C#的角度讲就是能够对所定义的类进行序列化，经过序列化的对象，可以暂时保存在硬盘上，而不占用内存，等到需要使用时再从硬盘读入。  <br />
+而Unity5中的<code class="highlighter-rouge">[Serializable]</code>接口声明的作用，就是能够将所定义的类在编辑器中实例展现出来。换而言之，就是能够通过在编辑器中设置，从而实例化该类。   <br />
+如图所示,官方案例<code class="highlighter-rouge">roguelike</code>中对<code class="highlighter-rouge">foodcount</code>和<code class="highlighter-rouge">wallcount</code>的实现就是通过在脚本中定义<code class="highlighter-rouge">[Serializable]</code>接口的<strong>count</strong>类,从而可以在编辑器界面上对该类进行实例化修改等。</p>
+
+<figure class="highlight"><pre><code class="language-c#" data-lang="c#"><span class="na">[Serializable]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Count</span>
+<span class="p">{</span>
+  <span class="k">public</span> <span class="kt">int</span> <span class="n">minimum</span><span class="p">;</span>
+  <span class="k">public</span> <span class="kt">int</span> <span class="n">maximum</span><span class="p">;</span>
+  <span class="k">public</span> <span class="nf">Count</span> <span class="p">(</span><span class="kt">int</span> <span class="n">min</span><span class="p">,</span> <span class="kt">int</span> <span class="n">max</span><span class="p">)</span>
+ <span class="p">{</span>
+   <span class="n">minimum</span> <span class="p">=</span> <span class="n">min</span><span class="p">;</span>
+   <span class="n">maximum</span> <span class="p">=</span> <span class="n">max</span><span class="p">;</span>
+ <span class="p">}</span>
+<span class="p">}</span>
+<span class="p">..............</span>
+<span class="k">public</span> <span class="n">Count</span> <span class="n">wallCount</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Count</span> <span class="p">(</span><span class="m">5</span><span class="p">,</span> <span class="m">9</span><span class="p">);</span>
+<span class="k">public</span> <span class="n">Count</span> <span class="n">foodCount</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Count</span> <span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">5</span><span class="p">);</span></code></pre></figure>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/04/offer/" title="link to 剑指offer面试题43：n个筛子的点数">剑指offer面试题43：n个筛子的点数</a></h2>
+       <p class="excerpt">考虑两个数组来存储骰子点数的每一个总数出现的次数。 在一次循环中，第一个数组中的第n个数字表示骰子和为n的出现的次数，在下次循环中，我们加上一个新的骰子，此时和为n的骰子出现的次数应该等于上次循环中骰子点数为n-1，n-2，n-3,n-4,n-5,n-6次数的总和（比如2个筛子，当出现总数3的时候是可能筛子1出现1，筛子2出现2，或者筛子1出现2，筛子2出现1，筛子前后出现的组合影响着出现的总数）。  所以我们把另一个数组的第n个数字设为前一个数对应的第n-1,n-2,n-3,n-4,n-...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-04-10 16:17:29 +0800" class="post-list__meta--date date">2015-04-10</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/04/offer/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/04/unity5-android/" title="link to Unity5关于android的打包">Unity5关于android的打包</a></h2>
+       <p class="excerpt">unity5打包apk需要将安装SDK升级到android sdk 5.0 api 21。  国内使用SDK Manager.exe更新不了，于是下载sdk包手动更新到sdk 5.0。  下载下面几个包：   https://dl-ssl.google.com/android/repository/sources-21_r01.zip   https://dl-ssl.google.com/android/repository/build-tools_r21.1-windows.zip  ...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-04-02 13:22:00 +0800" class="post-list__meta--date date">2015-04-02</time> &#8226; <span class="post-list__meta--tags tags">unity5</span><a class="btn-border-small" href=/2015/04/unity5-android/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "/2015/04/unity5serializable/";
+        this.page.identifier = "/2015/04/unity5serializable/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-06-27 生成</span>
+        <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

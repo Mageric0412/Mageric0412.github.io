@@ -1,0 +1,54 @@
+---
+author: mageric
+comments: true
+date: 2015-04-14 13:17:05+00:00
+layout: post
+title: 字符串的排列
+categories:
+- 算法
+tags:
+- 算法
+---
+剑指offer28,字符串的全排列，若提出可以重复字符串，则代码如下：
+{% highlight c %}
+vector<string> Permutation(string str) {
+  vector<string> sv;
+  permutation(str,0,sv);
+  return sv;
+}
+void permutation(string str, int i,vector<string> &sv){
+  if(str.length()==0)
+  return;
+  if(str.length()==1)
+  {
+   sv.push_back(str);
+   return;
+  }
+  if(i==str.length())
+   sv.push_back(str);
+  else{
+   for(int j=i;j<str.length();j++)
+   {
+    if(j!=i&&str[j]==str[j-1])
+    continue;
+    char temp=str[j];
+    for(int z=j-1;z>=i;z--)
+      str[z+1]=str[z];
+    str[i]=temp;
+    permutation(str,i+1,sv);
+    temp=str[i];
+    for(int z=i+1;z<=j;z++)
+      str[z-1]=str[z];
+    str[j]=temp;
+   }
+  }
+ }
+ int main()
+{
+string str="aba";
+sort(str.begin(),str.end());
+vector<string> sr= Permutation(str) ;
+system("pause");
+return 0;
+}
+{%  endhighlight %}

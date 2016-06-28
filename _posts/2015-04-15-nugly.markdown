@@ -1,0 +1,44 @@
+---
+author: mageric
+comments: true
+date: 2015-04-15 08:59:00+00:00
+layout: post
+title: 第n个丑数
+categories:
+- 算法
+tags:
+- 算法
+---
+**丑数**，是分解因子仅为**2、3、5**的数，从小到大排序，求第n个丑数：
+{% highlight c %}
+class Solution {
+public:
+  int min1(int n1,int n2,int n3){
+  int min=n1>n2?n2:n1;
+  min=min>n3?n3:min;
+  return min;
+ }
+ int GetUglyNumber_Solution(int index) {
+  if(index<=0)
+  return 0;
+  int set[index];
+  for(int i=0;i<index;i++)
+   set[i]=1;
+  int next=1;
+  int i=0,j=0,k=0;
+  while(next<index){
+   int min=min1(set[i]*2,set[j]*3,set[k]*5);
+   set[next]=min;
+   next++;
+   if(set[i]*2==min)
+    i++;
+   if(set[j]*3==min)
+    j++;
+   if(set[k]*5==min)
+    k++;
+  }
+  int result=set[next-1];
+  return result;
+ }
+};
+{% endhighlight %}

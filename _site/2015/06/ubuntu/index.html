@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>好天气</title>
-  <meta name="description" content="MX4 Pro拍摄，摄像头感光真不是一般的差。">
+  <title>ubuntu下设置gedit文本字符编码格式方法汇总</title>
+  <meta name="description" content="ubuntu 下gedit默认编码为UTF-8，而在windows下编写得txt默认编码为GBK，所以在windows下面的txt用getdit打开则为乱码。">
   <meta name="author" content="Wei Wang">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="好天气">
-  <meta name="twitter:description" content="MX4 Pro拍摄，摄像头感光真不是一般的差。">
+  <meta name="twitter:title" content="ubuntu下设置gedit文本字符编码格式方法汇总">
+  <meta name="twitter:description" content="ubuntu 下gedit默认编码为UTF-8，而在windows下编写得txt默认编码为GBK，所以在windows下面的txt用getdit打开则为乱码。">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="好天气">
-  <meta property="og:description" content="MX4 Pro拍摄，摄像头感光真不是一般的差。">
+  <meta property="og:title" content="ubuntu下设置gedit文本字符编码格式方法汇总">
+  <meta property="og:description" content="ubuntu 下gedit默认编码为UTF-8，而在windows下编写得txt默认编码为GBK，所以在windows下面的txt用getdit打开则为乱码。">
   
   <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
   <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="/2015/05/newsky/">
+  <link rel="canonical" href="/2015/06/ubuntu/">
   <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -154,16 +154,25 @@
             <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
     <div class="post-meta">
-      <time datetime="2015-05-29 23:10:12 +0800" itemprop="datePublished" class="post-meta__date date">2015-05-29</time> &#8226; <span class="post-meta__tags tags">摄影</span>
+      <time datetime="2015-06-09 10:37:42 +0800" itemprop="datePublished" class="post-meta__date date">2015-06-09</time> &#8226; <span class="post-meta__tags tags">Ubuntu</span>
     </div>
-    <h1 class="post-title">好天气</h1>
+    <h1 class="post-title">ubuntu下设置gedit文本字符编码格式方法汇总</h1>
   </header>
 
   <section class="post">
-    <p>MX4 Pro拍摄，摄像头感光真不是一般的差。
-<img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/P50529-112448-001.jpg" alt="" />
-<img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/P50529-190500-001.jpg" alt="" />
-<img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/P50529-190652-001.jpg" alt="" /></p>
+    <p><strong>ubuntu</strong> 下<strong>gedit</strong>默认编码为<code class="highlighter-rouge">UTF-8</code>，而在windows下编写得txt默认编码为<code class="highlighter-rouge">GBK</code>，所以在windows下面的txt用getdit打开则为乱码。</p>
+
+<p><strong>解决方案</strong>：  <br />
+1. 安装<code class="highlighter-rouge">dconf-editor</code>，在<code class="highlighter-rouge">apps/gedit-2/preferences/encodings</code>下修改<code class="highlighter-rouge">auto_detected和shown_in_menu</code>的默认格式，添加<code class="highlighter-rouge">'GB18030', 'GB2312', 'GBK'</code>等支持中文的格式。注意<code class="highlighter-rouge">GB18030</code>格式要位于最上方。 <br />
+2. 如果<code class="highlighter-rouge">apps</code>中没有<code class="highlighter-rouge">gedit-2</code>这个分支树，那么可以在终端中输入<code class="highlighter-rouge">dconf-editor</code>，在<code class="highlighter-rouge">org/ghome/gedit/preferences/encodings</code>下执行1中所用方法，注意<code class="highlighter-rouge">GB18030</code>要放在首位。
+<img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/Linux/2015-06-09-ubuntu.png" alt="" /></p>
+
+<p>如果1、2方法都不行，则在终端下做如下操作：</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">gsettings <span class="nb">set </span>org.gnome.gedit.preferences.encodings auto-detected <span class="s2">"['GB18030', 'GB2312', 'GBK', 'UTF-8', 'BIG5', 'CURRENT', 'UTF-16']"</span>
+gsettings <span class="nb">set </span>org.gnome.gedit.preferences.encodings shown-in-menu <span class="s2">"['GB18030', 'GB2312', 'GBK', 'UTF-8', 'BIG5', 'CURRENT', 'UTF-16']"</span></code></pre></figure>
+
+<p><strong>三种方法至少能有一种成功</strong>。</p>
 
   </section>
 </article>
@@ -171,21 +180,13 @@
 <section class="read-more">
    
    
-   <div class="read-more-item">
-       <span class="read-more-item-dim">最近的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2015/06/ubuntu/" title="link to ubuntu下设置gedit文本字符编码格式方法汇总">ubuntu下设置gedit文本字符编码格式方法汇总</a></h2>
-       <p class="excerpt">ubuntu 下gedit默认编码为UTF-8，而在windows下编写得txt默认编码为GBK，所以在windows下面的txt用getdit打开则为乱码。解决方案：  1. 安装dconf-editor，在apps/gedit-2/preferences/encodings下修改auto_detected和shown_in_menu的默认格式，添加'GB18030', 'GB2312', 'GBK'等支持中文的格式。注意GB18030格式要位于最上方。 2. 如果apps中没有gedi...&hellip;</p>
-       <div class="post-list__meta"><time datetime="2015-06-09 10:37:42 +0800" class="post-list__meta--date date">2015-06-09</time> &#8226; <span class="post-list__meta--tags tags">Ubuntu</span><a class="btn-border-small" href=/2015/06/ubuntu/>继续阅读</a></div>
-   </div>
-   
-   
    
    
    <div class="read-more-item">
        <span class="read-more-item-dim">更早的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2015/05/designmodel/" title="link to 设计模式个人总结">设计模式个人总结</a></h2>
-       <p class="excerpt">  简单工厂方法： 对具体方法进行类封装，把封装好的各类方法用类似switch的办法来初始化；这样可以在调用的时候去动态的选择我们所需要使用的方法  策略模式： 声明一个策略基类，每种策略都继承自这个基类，同时声明一个管理类，实现两个方法，一个是产生一个策略的具体引用，一个是实现具体的策略类      装饰模式：一个抽象类，我们所需要装饰的对象继承自这个抽象类，装饰基类也继承这个抽象类，同时创造一些具体的装饰类，调用时候采用装饰类1装饰（装饰类2装饰（装饰类装饰（对象）））这样的顺序，最后...&hellip;</p>
-       <div class="post-list__meta"><time datetime="2015-05-29 09:52:50 +0800" class="post-list__meta--date date">2015-05-29</time> &#8226; <span class="post-list__meta--tags tags">设计模式</span><a class="btn-border-small" href=/2015/05/designmodel/>继续阅读</a></div>
+       <h2 class="post-list__post-title post-title"><a href="/2015/05/newsky/" title="link to 好天气">好天气</a></h2>
+       <p class="excerpt">MX4 Pro拍摄，摄像头感光真不是一般的差。&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-05-29 23:10:12 +0800" class="post-list__meta--date date">2015-05-29</time> &#8226; <span class="post-list__meta--tags tags">摄影</span><a class="btn-border-small" href=/2015/05/newsky/>继续阅读</a></div>
    </div>
    
 </section>
@@ -196,8 +197,8 @@
     <script>
     
     var disqus_config = function () {
-        this.page.url = "/2015/05/newsky/";
-        this.page.identifier = "/2015/05/newsky/";
+        this.page.url = "/2015/06/ubuntu/";
+        this.page.identifier = "/2015/06/ubuntu/";
     };
 
     var disqus_shortname = 'vno-jekyll';

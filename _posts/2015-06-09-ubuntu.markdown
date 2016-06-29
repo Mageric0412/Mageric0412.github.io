@@ -1,0 +1,25 @@
+---
+author: mageric
+comments: true
+date: 2015-06-09 02:37:42+00:00
+layout: post
+title: ubuntu下设置gedit文本字符编码格式方法汇总
+categories:
+- ubuntu
+tags:
+- Ubuntu
+---
+**ubuntu** 下**gedit**默认编码为`UTF-8`，而在windows下编写得txt默认编码为`GBK`，所以在windows下面的txt用getdit打开则为乱码。    
+
+**解决方案**：    
+1. 安装`dconf-editor`，在`apps/gedit-2/preferences/encodings`下修改`auto_detected和shown_in_menu`的默认格式，添加`'GB18030', 'GB2312', 'GBK'`等支持中文的格式。注意`GB18030`格式要位于最上方。   
+2. 如果`apps`中没有`gedit-2`这个分支树，那么可以在终端中输入`dconf-editor`，在`org/ghome/gedit/preferences/encodings`下执行1中所用方法，注意`GB18030`要放在首位。
+![](http://7xvk1t.com1.z0.glb.clouddn.com/image/Linux/2015-06-09-ubuntu.png)    
+
+如果1、2方法都不行，则在终端下做如下操作：    
+
+{% highlight bash %}
+gsettings set org.gnome.gedit.preferences.encodings auto-detected "['GB18030', 'GB2312', 'GBK', 'UTF-8', 'BIG5', 'CURRENT', 'UTF-16']"
+gsettings set org.gnome.gedit.preferences.encodings shown-in-menu "['GB18030', 'GB2312', 'GBK', 'UTF-8', 'BIG5', 'CURRENT', 'UTF-16']"
+{% endhighlight %}
+**三种方法至少能有一种成功**。

@@ -156,6 +156,34 @@
   <ol class="post-list">
     
     <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/05/newsky/" title="访问 好天气">好天气</a></h2>
+      <p class="excerpt">MX4 Pro拍摄，摄像头感光真不是一般的差。&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-05-29 23:10:12 +0800" class="post-list__meta--date date">2015-05-29</time> &#8226; <span class="post-list__meta--tags tags">摄影</span><a class="btn-border-small" href=/2015/05/newsky/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/05/designmodel/" title="访问 设计模式个人总结">设计模式个人总结</a></h2>
+      <p class="excerpt">  简单工厂方法： 对具体方法进行类封装，把封装好的各类方法用类似switch的办法来初始化；这样可以在调用的时候去动态的选择我们所需要使用的方法  策略模式： 声明一个策略基类，每种策略都继承自这个基类，同时声明一个管理类，实现两个方法，一个是产生一个策略的具体引用，一个是实现具体的策略类      装饰模式：一个抽象类，我们所需要装饰的对象继承自这个抽象类，装饰基类也继承这个抽象类，同时创造一些具体的装饰类，调用时候采用装饰类1装饰（装饰类2装饰（装饰类装饰（对象）））这样的顺序，最后...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-05-29 09:52:50 +0800" class="post-list__meta--date date">2015-05-29</time> &#8226; <span class="post-list__meta--tags tags">设计模式</span><a class="btn-border-small" href=/2015/05/designmodel/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/04/serial/" title="访问 二叉树的序列化">二叉树的序列化</a></h2>
+      <p class="excerpt">            序列化（由树序列化为字串）      逆序列化（由字串序列化为树）      char* Serialize(TreeNode *root) {  string s=e_Serialize(root);  char* c=new char[s.length()+1];  for(int i=0;i&lt;;s.length();i++)    c[i]=s[i];  c[s.length()]='\0';  return c;}string e_Serialize(...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-04-20 22:54:06 +0800" class="post-list__meta--date date">2015-04-20</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/04/serial/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/04/offer36/" title="访问 剑指offer 36 逆序对问题">剑指offer 36 逆序对问题</a></h2>
+      <p class="excerpt">逆序对问题，用归并思想求解。  在参考多个博客内容后，终于得到正确的书写过程：int InversePairs(vector data) {  if(data.size()&lt;2)    return 0;  int count=0;  int length=data.size();  int temp[1000];  int arr[1000];  for(int i=0;i&lt;length;i++)  arr[i]=data[i];  inverse_pair(arr,0,le...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-04-16 01:00:18 +0800" class="post-list__meta--date date">2015-04-16</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/04/offer36/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
       <h2 class="post-list__post-title post-title"><a href="/2015/04/nugly/" title="访问 第n个丑数">第n个丑数</a></h2>
       <p class="excerpt">丑数，是分解因子仅为2、3、5的数，从小到大排序，求第n个丑数：class Solution {public:  int min1(int n1,int n2,int n3){  int min=n1&gt;n2?n2:n1;  min=min&gt;n3?n3:min;  return min; } int GetUglyNumber_Solution(int index) {  if(index&lt;=0)  return 0;  int set[index];  for(int i...&hellip;</p>
       <div class="post-list__meta"><time datetime="2015-04-15 16:59:00 +0800" class="post-list__meta--date date">2015-04-15</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/04/nugly/>继续阅读</a></div>
@@ -197,34 +225,6 @@
       <hr class="post-list__divider" />
     </li>
     
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/03/animation/" title="访问 《异能系》">《异能系》</a></h2>
-      <p class="excerpt">最近没空，好想再画两幅&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-03-20 15:15:29 +0800" class="post-list__meta--date date">2015-03-20</time> &#8226; <span class="post-list__meta--tags tags">手绘</span><a class="btn-border-small" href=/2015/03/animation/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/03/hamming-weight/" title="访问 Hamming Weight在计算数中二进制1个数的应用">Hamming Weight在计算数中二进制1个数的应用</a></h2>
-      <p class="excerpt">代码：  //types and constants used in the functions below  typedef unsigned __int64 uint64; //assume this gives 64-bits  const uint64 m1 = 0x5555555555555555; //binary: 0101...  const uint64 m2 = 0x3333333333333333; //binary: 00110011..  const uint64...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-03-19 21:46:14 +0800" class="post-list__meta--date date">2015-03-19</time> &#8226; <span class="post-list__meta--tags tags">位运算</span><a class="btn-border-small" href=/2015/03/hamming-weight/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/03/glut-he/" title="访问 glut.h函数无法正常连接问题">glut.h函数无法正常连接问题</a></h2>
-      <p class="excerpt">看了一本书《OpenGL三维图形系统开发与应用技术》，但是，其中涉及到glut.h文件的函数无法正常连接，典型的错误如下：------ 已启动生成: 项目: gears, 配置: Debug Win32 ------1&gt;正在链接...1&gt;GEARS.obj : error LNK2019: 无法解析的外部符号 ___glutInitWithExit@12，该符号在函数 _glutInit_ATEXIT_HACK@8 中被引用1&gt;GEARS.obj : error LNK2...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-03-15 22:27:29 +0800" class="post-list__meta--date date">2015-03-15</time> &#8226; <span class="post-list__meta--tags tags">opengl</span><a class="btn-border-small" href=/2015/03/glut-he/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/03/max-points-on-a-line/" title="访问 Max Points on a Line">Max Points on a Line</a></h2>
-      <p class="excerpt">给定一些二维平面上的点，求出其中共线点最多时的点个数：  解法：采用暴力枚举，时间复杂度有O（n^2），循环计算两点之间的斜率，构造一个哈希表来存储循环检查的情况，其中key为斜率，value就是共线点的个数。特殊处理：当出现斜率无限大，也就是两点的x轴相同而y轴不同时，记斜率slope为std:numeric_limits&lt;double&gt;::infinity，即无限大。 代码：int maxPoints(vector&lt;Point&gt; &amp;points) {  ...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-03-12 21:52:12 +0800" class="post-list__meta--date date">2015-03-12</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/03/max-points-on-a-line/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
   </ol>
 
   <hr class="post-list__divider " />
@@ -243,7 +243,7 @@
             <section class="footer">
     <footer>
     	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
-        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-06-28 生成</span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-06-29 生成</span>
         <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
     </footer>
 </section>

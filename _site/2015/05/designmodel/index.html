@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>设计模式个人总结</title>
+  <meta name="description" content="  简单工厂方法： 对具体方法进行类封装，把封装好的各类方法用类似switch的办法来初始化；这样可以在调用的时候去动态的选择我们所需要使用的方法  策略模式： 声明一个策略基类，每种策略都继承自这个基类，同时声明一个管理类，实现两个方法，一个是产生一个策略的具体引用，一个是实现具体的策略类  装饰模式：一个抽象...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="设计模式个人总结">
+  <meta name="twitter:description" content="  简单工厂方法： 对具体方法进行类封装，把封装好的各类方法用类似switch的办法来初始化；这样可以在调用的时候去动态的选择我们所需要使用的方法  策略模式： 声明一个策略基类，每种策略都继承自这个基类，同时声明一个管理类，实现两个方法，一个是产生一个策略的具体引用，一个是实现具体的策略类  装饰模式：一个抽象...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="设计模式个人总结">
+  <meta property="og:description" content="  简单工厂方法： 对具体方法进行类封装，把封装好的各类方法用类似switch的办法来初始化；这样可以在调用的时候去动态的选择我们所需要使用的方法  策略模式： 声明一个策略基类，每种策略都继承自这个基类，同时声明一个管理类，实现两个方法，一个是产生一个策略的具体引用，一个是实现具体的策略类  装饰模式：一个抽象...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="/2015/05/designmodel/">
+  <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Mageric 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Mageric logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Mageric" class="blog-button">Mageric</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">42 世界尽头</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Mageric的个人小站.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="http://mageric-one.com" target="_blank" title="My old site">OldSite</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/magericyoung" title="@magericyoung 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Mageric0412" title="@Mageric0412 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- instagram -->
+  <li class="navigation__item">
+   <a href="https://www.instagram.com/mageric0412" title="@mageric0412 的Instagram" target="_blank">
+     <i class='social fa fa-instagram'></i>
+     <span class="label">instagram</span>
+   </a>
+  </li>
+  
+
+<!--
+  
+  <!-- website -->
+  <!--
+  <li class="navigation__item">
+    <a href="https://mageric-one.com" rel="author" title="mageric的小站" target="_blank">
+        <i class='social fa fa-rss'> </i>
+      <span class="label">website</span>
+    </a>
+  </li>
+  
+-->
+
+
+
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:mageric0412@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-05-29 09:52:50 +0800" itemprop="datePublished" class="post-meta__date date">2015-05-29</time> &#8226; <span class="post-meta__tags tags">设计模式</span>
+    </div>
+    <h1 class="post-title">设计模式个人总结</h1>
+  </header>
+
+  <section class="post">
+    <ol>
+  <li><strong>简单工厂方法</strong>： 对具体方法进行类封装，把封装好的各类方法用类似switch的办法来初始化；这样可以在调用的时候去动态的选择我们所需要使用的方法</li>
+  <li><strong>策略模式</strong>： 声明一个策略基类，每种策略都继承自这个基类，同时声明一个管理类，实现两个方法，一个是产生一个策略的具体引用，一个是实现具体的策略类</li>
+  <li>
+    <p><strong>装饰模式</strong>：一个抽象类，我们所需要装饰的对象继承自这个抽象类，装饰基类也继承这个抽象类，同时创造一些具体的装饰类，调用时候采用<code class="highlighter-rouge">装饰类1装饰（装饰类2装饰（装饰类装饰（对象）））</code>这样的顺序，最后只用实现一次最外层装饰类的方法即可完成嵌套装饰</p>
+  </li>
+  <li>
+    <p><strong>代理模式</strong>：在代理类中动态实现我们所需代理的对象，并实现对象的具体方法</p>
+  </li>
+  <li>
+    <p><strong>工厂方法模式</strong>：定义一个用于创建对象的接口，让子类决定实例化哪个类，类的实例化延迟到子类中（<code class="highlighter-rouge">return new Operation;</code>）</p>
+  </li>
+  <li>
+    <p><strong>原型模式</strong>：原型实例指定创建对象的种类，并通过拷贝这些原型创建新的对象，具体原型类的拷贝操作采用浅拷贝<code class="highlighter-rouge">MemberwiseClone（引用同一ICloneable</code>）  <br />
+<strong>浅复制</strong>：仅仅复制内容本身，不复制引用的对象（<code class="highlighter-rouge">MemberwiseClone</code>），引用都指向同一对象   <br />
+<strong>深复制</strong>：引用也复制过去，可以生成不同的克隆个体  <br />
+<strong>深复制实现</strong>：克隆类属性以及引用之后，对相关字段再次赋值，返回一个深复制对象</p>
+  </li>
+  <li>
+    <p><strong>模板方法模式</strong>：采用模板的方式声明一些抽象类，在具体的类中进行实现（把能用模板代替的共同方法用模板代替）</p>
+  </li>
+  <li>
+    <p><strong>外观模式</strong>：为一组接口提供一致的界面，定义一个高层接口，去统一/部分实现其下的接口们</p>
+  </li>
+  <li><strong>建造者模式</strong>：将复杂对象的构造与表示分离，每次建造类建造就对展示产生一次注册，使用一个调度者来进行装配，同时可以返回我们的展示方法，提高耦合</li>
+  <li>
+    <p><strong>观察者模式</strong>：让多个观察者监听同一主题，每次主题发生变化，则通知所有注册了该主题的观察者。主题类，提供方法来添加注册观察者们，另一方法调用观察者的更新方法通知所有注册观察者。观察者类，提供更新方法相应主题的通知。通过事件委托的方式可以让观察者本不相同的各种方法类型放在一个通知体内，满足观察通知的模式</p>
+  </li>
+  <li>
+    <p><strong>抽象工厂方法</strong>：抽象实现各种new对象的方法，采用上行转换基类，调用基类的实现方法来实例化具体的不同的工厂方法。（提供一个创建一系列相关或相互依赖对象的接口而无需指定具体的类）</p>
+  </li>
+  <li>
+    <p><strong>状态模式</strong>：类的方法里实现满足某一条件，“递归”实现新的状态类并继续进行这样的判断，这样判断状态的方式就会在类内部进行递归判断</p>
+  </li>
+  <li>
+    <p><strong>适配器模式</strong>：将类的接口包装为另一个接口。提供一个中立的翻译类，来翻译一个方法在另一种说明下的不同名称</p>
+  </li>
+  <li>
+    <p><strong>备忘录模式</strong>：在不破坏封装性的前提下，捕捉一个对象的内部变量，保存在该对象的外部，以后遇到恢复情况时再加载该保存变量类</p>
+  </li>
+  <li>
+    <p><strong>组合模式</strong>：将对象组合成树结构，即对象中可以add多个其他对象，产生一含多的组合形式。满足对同一组对象的统一操作性</p>
+  </li>
+  <li>
+    <p><strong>迭代器模式</strong>：提供一种方法顺序访问一个聚合对象中的各个元素而不暴露该对象的内部表示，类似STL中的迭代器操作，实现获取头元素、尾元素、元素个数等操作。将STL遍历运用到聚集对象中</p>
+  </li>
+  <li>
+    <p><strong>单例模式</strong>：保证类的单一实例，并提供一个全局访问点。一般采用<code class="highlighter-rouge">static Singleton instance</code>的写法。如果该<code class="highlighter-rouge">static</code>变量没有实现，则new一个Instance，否则就返回该static类  <br />
+<strong>多线程单例</strong>：采用两次判断，如果instance为空则加一次锁，再一次进行instance判断。最终返回实例（多线程操作问题主要出现在是否对多次new一个新实例上，因此一定要设置锁进行多次实例判断）</p>
+  </li>
+  <li>
+    <p><strong>桥接模式</strong>：将抽象部分与实现部分分离，抽象类中的方法是一些抽象的实现方法，每次实现抽象类的具体类，调用对应的抽象方法去实现具体方法。把抽象分离出来到最外层，内部实现的都是具体的方法（手机品牌与手机软件）</p>
+  </li>
+  <li>
+    <p><strong>命令模式</strong>：将请求封装为对象，从而对请求排队进行处理（类似WIN32的消息队列），命令基类中存在执行方法、以及接收者，具体命令类指定接收者，唤醒类中实现了命令的执行方法</p>
+  </li>
+  <li>
+    <p><strong>职责链模式</strong>：使多个对象都有机会处理请求，形成链式传递请求直到完成。类似状态模式，“递归”的设置消息传递的继承者，只用传递消息给链的开端对象就能处理这个消息，完成处理则“断链”</p>
+  </li>
+  <li>
+    <p><strong>中介者模式</strong>：用中立对象来封装对象间的交互（<strong>迪米特法则</strong>），中立对象保存交互的两个对象，如果对象1发送消息则给对象2接收，反之亦然。两个对象内实现一个对中立对象发送消息的方法，对象本身来实现之前这个中立对象发送信息的方法，就能通过中立对象进行发送</p>
+  </li>
+  <li>
+    <p><strong>享元模式</strong>：共享使用。类似采用Hashtable的办法保存每次新生成的对象，如果下一次遇到已经保存过的对象内容需要生成，则无需再生成新的对象，直接调用已经生成对象的相应展示方法即可</p>
+  </li>
+  <li>
+    <p><strong>解释器模式</strong>：定义多个语言的文法以及解释器，来解释同一文件中的同一句子中的不同文法。定义一个抽象解释器，有抽象解释方法，从而继承实现不同的解释器以及不同的解释方法。从而可以通过在List中添加实现多个解释器的方式，来批量循环调用解释器列表，进行批量解释。（乐谱音符，多态）</p>
+  </li>
+  <li><strong>访问者模式</strong>：作用于某对象结构中的各元素的操作，在不改变各元素类的前提下定义这些新操作。抽象访问者类，之后具体的访问者要实现他们的抽象访问方法。抽象元素类，之后的具体类要实现获得具体访问者的元素。通过访问元素的多次具体封装，让我们的访问者可以根据不同的访问元素去具体实现各自访问者内对应该元素的具体反应。（将访问者进行入队，模式根据访问者的类别，针对不同的状态生成访问者的反应）</li>
+</ol>
+
+<h3 id="section">设计原则</h3>
+<p><strong>单一职责（SRP）</strong>：一个类只有一个引起变化的原因  <br />
+<strong>开放封闭</strong>：类模块函数可以扩展，但不可修改   <br />
+<strong>依赖倒转</strong>：高层不依赖底层、抽象不依赖细节，两者都依赖于抽象   <br />
+<strong>里氏代换（LSP）</strong>：子类需要能够替换父类  <br />
+<strong>迪米特法则（LoD）</strong>：其中一个类需要调用另一个的方法，使用间接通信而非直接   <br />
+<strong>合成/聚合复用原则（CARP）</strong>：尽量使用合成聚合，少使用类继承</p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/05/newsky/" title="link to 好天气">好天气</a></h2>
+       <p class="excerpt">MX4 Pro拍摄，摄像头感光真不是一般的差。&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-05-29 23:10:12 +0800" class="post-list__meta--date date">2015-05-29</time> &#8226; <span class="post-list__meta--tags tags">摄影</span><a class="btn-border-small" href=/2015/05/newsky/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/04/serial/" title="link to 二叉树的序列化">二叉树的序列化</a></h2>
+       <p class="excerpt">            序列化（由树序列化为字串）      逆序列化（由字串序列化为树）      char* Serialize(TreeNode *root) {  string s=e_Serialize(root);  char* c=new char[s.length()+1];  for(int i=0;i&lt;;s.length();i++)    c[i]=s[i];  c[s.length()]='\0';  return c;}string e_Serialize(...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-04-20 22:54:06 +0800" class="post-list__meta--date date">2015-04-20</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/04/serial/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "/2015/05/designmodel/";
+        this.page.identifier = "/2015/05/designmodel/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-06-29 生成</span>
+        <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

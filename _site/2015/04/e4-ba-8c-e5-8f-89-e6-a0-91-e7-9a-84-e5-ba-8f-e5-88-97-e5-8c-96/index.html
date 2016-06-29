@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>又一年元宵节</title>
-  <meta name="description" content="又一年元宵节躺在床上用手机登陆后台更博，突然觉得开通一个网站也不是坏事，最好的自我督促自我检查方式，相比博客记录而言，在个人网站上不断鼓捣东西更能让人自省吧。总结之前的失败，不断进取的样子。  有时很感性的思考问题，承认自己在工科领域的执行力仍然受限，所以长久的停伫。希望以后回头看到这篇散记时，能不再有如此觉悟。...">
+  <title>二叉树的序列化</title>
+  <meta name="description" content="序列化（由树序列化为字串）逆序列化（由字串序列化为树）">
   <meta name="author" content="Wei Wang">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="又一年元宵节">
-  <meta name="twitter:description" content="又一年元宵节躺在床上用手机登陆后台更博，突然觉得开通一个网站也不是坏事，最好的自我督促自我检查方式，相比博客记录而言，在个人网站上不断鼓捣东西更能让人自省吧。总结之前的失败，不断进取的样子。  有时很感性的思考问题，承认自己在工科领域的执行力仍然受限，所以长久的停伫。希望以后回头看到这篇散记时，能不再有如此觉悟。...">
+  <meta name="twitter:title" content="二叉树的序列化">
+  <meta name="twitter:description" content="序列化（由树序列化为字串）逆序列化（由字串序列化为树）">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="又一年元宵节">
-  <meta property="og:description" content="又一年元宵节躺在床上用手机登陆后台更博，突然觉得开通一个网站也不是坏事，最好的自我督促自我检查方式，相比博客记录而言，在个人网站上不断鼓捣东西更能让人自省吧。总结之前的失败，不断进取的样子。  有时很感性的思考问题，承认自己在工科领域的执行力仍然受限，所以长久的停伫。希望以后回头看到这篇散记时，能不再有如此觉悟。...">
+  <meta property="og:title" content="二叉树的序列化">
+  <meta property="og:description" content="序列化（由树序列化为字串）逆序列化（由字串序列化为树）">
   
   <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
   <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="/2015/03/yuanxiao/">
+  <link rel="canonical" href="/2015/04/e4-ba-8c-e5-8f-89-e6-a0-91-e7-9a-84-e5-ba-8f-e5-88-97-e5-8c-96/">
   <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -154,18 +154,63 @@
             <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
     <div class="post-meta">
-      <time datetime="2015-03-06 00:59:35 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-06</time> &#8226; <span class="post-meta__tags tags">个人感悟</span>
+      <time datetime="2015-04-20 22:54:06 +0800" itemprop="datePublished" class="post-meta__date date">2015-04-20</time> &#8226; <span class="post-meta__tags tags">算法</span>
     </div>
-    <h1 class="post-title">又一年元宵节</h1>
+    <h1 class="post-title">二叉树的序列化</h1>
   </header>
 
   <section class="post">
-    <h4 id="section">又一年元宵节</h4>
-<p>躺在床上用手机登陆后台更博，突然觉得开通一个网站也不是坏事，最好的自我督促自我检查方式，相比博客记录而言，在个人网站上不断鼓捣东西更能让人自省吧。总结之前的失败，不断进取的样子。  <br />
-有时很感性的思考问题，承认自己在工科领域的执行力仍然受限，所以长久的停伫。希望以后回头看到这篇散记时，能不再有如此觉悟。  <br />
-不知道手机编辑出来效果如何，回头在pc上看看吧，希望不要太难看。  <br />
-还是那句话，希望大家都元宵节快乐，过去也好未来也好，希望一切都好。
-<img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/sky.jpg" alt="sky" /></p>
+    <p>序列化（由树序列化为字串）
+逆序列化（由字串序列化为树）</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>char* Serialize(TreeNode *root) {
+string s=e_Serialize(root);
+char* c=new char[s.length()+1];
+for(int i=0;i&lt;;s.length();i++) 
+c[i]=s[i]; 
+c[s.length()]='\0';
+ return c; } 
+string e_Serialize(TreeNode* root){ if(root==NULL) return "#"; 
+else{ int val=root-&amp;gt;val;
+char* t=new char[5];
+sprintf(t,"%d",val);
+string s=t;
+TreeNode* left=root-&gt;;left;
+TreeNode* right=root-&gt;;right;
+return s+','+e_Serialize(left)+e_Serialize(right);
+}
+}
+
+TreeNode* Deserialize(char *str) {
+string s=str;
+int index=0;
+return e_Deserialize(s,index);
+
+}
+TreeNode* e_Deserialize(string s,int &amp;amp;index){
+if(s[index]=='#'){ index++;return NULL;}
+else{
+int val=pTrunc(s,index);
+TreeNode* root=new TreeNode(val);
+root-&gt;left=e_Deserialize(s,index);
+root-&gt;right=e_Deserialize(s,index);
+return root;
+}
+}
+int pTrunc(string s, int &amp;index){
+int i=index;
+for(;i&lt;s.length();i++){
+if(s[i]==',') break;
+
+}
+string c=s.substr(index,i-index);
+index=i+1;
+int val=atoi(c.c_str());
+return val;
+}
+</code></pre>
+</div>
+
 
   </section>
 </article>
@@ -175,9 +220,9 @@
    
    <div class="read-more-item">
        <span class="read-more-item-dim">最近的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2015/03/randomsort/" title="link to 随机数组排序">随机数组排序</a></h2>
-       <p class="excerpt">如题，对一个数组进行随机排序，或者随机完整输出数组中所有元素且不重复： {% highlight c %}int nTemp;int nData[10], nTran[10];for(i=0; i&lt;10; i++)   nTran[i]=i;for(i=0; i&lt;10; i++)  {   nTemp	= rand()%(10-i);   nData[i]	= nTran[nTemp];   nTran[nTemp]	= nTran[9-i];  }//printf(nData...&hellip;</p>
-       <div class="post-list__meta"><time datetime="2015-03-06 22:47:49 +0800" class="post-list__meta--date date">2015-03-06</time> &#8226; <span class="post-list__meta--tags tags">排序</span><a class="btn-border-small" href=/2015/03/randomsort/>继续阅读</a></div>
+       <h2 class="post-list__post-title post-title"><a href="/2015/05/e8-ae-be-e8-ae-a1-e6-a8-a1-e5-bc-8f-e4-b8-aa-e4-ba-ba-e6-80-bb-e7-bb-93/" title="link to 设计模式个人总结">设计模式个人总结</a></h2>
+       <p class="excerpt">1.简单工厂方法： 对具体方法进行类封装，把封装好的各类方法用类似switch的办法来初始化；这样可以在调用的时候去动态的选择我们所需要使用的方法2.策略模式： 声明一个策略基类，每种策略都继承自这个基类，同时声明一个管理类，实现两个方法，一个是产生一个策略的具体引用，一个是实现具体的策略类。3.装饰模式：一个抽象类，我们所需要装饰的对象继承自这个抽象类，装饰基类也继承这个抽象类，同时创造一些具体的装饰类，调用时候采用   装饰类1装饰（装饰类2装饰（装饰类装饰（对象）））这样的顺序，最后...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-05-29 09:52:50 +0800" class="post-list__meta--date date">2015-05-29</time> &#8226; <span class="post-list__meta--tags tags">设计模式</span><a class="btn-border-small" href=/2015/05/e8-ae-be-e8-ae-a1-e6-a8-a1-e5-bc-8f-e4-b8-aa-e4-ba-ba-e6-80-bb-e7-bb-93/>继续阅读</a></div>
    </div>
    
    
@@ -185,9 +230,9 @@
    
    <div class="read-more-item">
        <span class="read-more-item-dim">更早的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2015/03/onenumbers/" title="link to 编程之美--求二进制中1的个数">编程之美--求二进制中1的个数</a></h2>
-       <p class="excerpt">求二进制中1的个数对于一个字节（8bit）的变量，求其二进制表示中”1”的个数，要求算法的执行效率尽可能的高。 先来看看样章上给出的几个算法：解法一：每次除二，看是否为奇数，是的话就累计加一，最后这个结果就是二进制表示中1的个数。 解法二：同样用到一个循环，只是里面的操作用位移操作简化了。  int Count(int v)    {   int num = 0;   while (v) {    num += v &amp; 0x01;    v &gt;&gt;= 1;   }   r...&hellip;</p>
-       <div class="post-list__meta"><time datetime="2015-03-05 00:50:52 +0800" class="post-list__meta--date date">2015-03-05</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/03/onenumbers/>继续阅读</a></div>
+       <h2 class="post-list__post-title post-title"><a href="/2015/04/offer36/" title="link to 剑指offer 36 逆序对问题">剑指offer 36 逆序对问题</a></h2>
+       <p class="excerpt">逆序对问题，用归并思想求解。  在参考多个博客内容后，终于得到正确的书写过程：int InversePairs(vector data) {  if(data.size()&lt;2)    return 0;  int count=0;  int length=data.size();  int temp[1000];  int arr[1000];  for(int i=0;i&lt;length;i++)  arr[i]=data[i];  inverse_pair(arr,0,le...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-04-16 01:00:18 +0800" class="post-list__meta--date date">2015-04-16</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/04/offer36/>继续阅读</a></div>
    </div>
    
 </section>
@@ -198,8 +243,8 @@
     <script>
     
     var disqus_config = function () {
-        this.page.url = "/2015/03/yuanxiao/";
-        this.page.identifier = "/2015/03/yuanxiao/";
+        this.page.url = "/2015/04/e4-ba-8c-e5-8f-89-e6-a0-91-e7-9a-84-e5-ba-8f-e5-88-97-e5-8c-96/";
+        this.page.identifier = "/2015/04/e4-ba-8c-e5-8f-89-e6-a0-91-e7-9a-84-e5-ba-8f-e5-88-97-e5-8c-96/";
     };
 
     var disqus_shortname = 'vno-jekyll';

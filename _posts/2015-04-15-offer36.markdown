@@ -1,0 +1,61 @@
+---
+author: mageric
+comments: true
+date: 2015-04-15 17:00:18+00:00
+layout: post
+title: 剑指offer 36 逆序对问题
+categories:
+- 算法
+tags:
+- 算法
+---
+**逆序对问题**，用**归并思想**求解。    
+在参考多个博客内容后，终于得到正确的书写过程：
+{% highlight c %}
+int InversePairs(vector data) {
+  if(data.size()<2)
+    return 0;
+  int count=0;
+  int length=data.size();
+  int temp[1000];
+  int arr[1000];
+  for(int i=0;i<length;i++)
+  arr[i]=data[i];
+  inverse_pair(arr,0,length,&count,temp);
+  return count;
+}
+void inverse_pair(int *A, int x, int y, int* cnt, int *T)
+  {
+    if(y - x > 1)
+    {
+      int m = x + (y - x) / 2;
+      int p = x, q = m, i = x;
+      inverse_pair(A, x, m, cnt, T);
+      inverse_pair(A, m, y, cnt, T);
+      while(p < m || q < y)
+      {
+        if(q >= y || (p < m && A[p] <= A[q]))
+          T[i++] = A[p++];
+        else {
+          T[i++] = A[q++];
+          *cnt += m-p;
+        }
+      }
+      for(i = x; i < y; ++i)
+        A[i] = T[i];
+    }
+  }
+int main()
+{
+  vector sv;
+  sv.push_back(1);
+  sv.push_back(2);
+  sv.push_back(1);
+  sv.push_back(2);
+  sv.push_back(1);
+  int count3=InversePairs(sv);
+  system("pause");
+  return 0;
+}
+{% endhighlight %}
+对于有重复数字的逆序对数组，仍然正确

@@ -1,0 +1,60 @@
+---
+author: mageric
+comments: true
+date: 2015-04-20 14:54:06+00:00
+layout: post
+title: 二叉树的序列化
+categories:
+- 算法
+tags:
+- 算法
+---
+**序列化**（由树序列化为字串）|**逆序列化**（由字串序列化为树）
+{% highlight c %}
+char* Serialize(TreeNode *root) {
+  string s=e_Serialize(root);
+  char* c=new char[s.length()+1];
+  for(int i=0;i<;s.length();i++)
+    c[i]=s[i];
+  c[s.length()]='\0';
+  return c;
+}
+string e_Serialize(TreeNode* root){
+  if(root==NULL)
+    return "#";
+  else{
+    int val=root-&gt;val;
+    char* t=new char[5];
+    sprintf(t,"%d",val);
+    string s=t;
+    TreeNode* left=root->;left;
+    TreeNode* right=root->;right;
+    return s+','+e_Serialize(left)+e_Serialize(right);
+    }
+}
+TreeNode* Deserialize(char *str) {
+  string s=str;
+  int index=0;
+  return e_Deserialize(s,index);
+}
+TreeNode* e_Deserialize(string s,int &amp;index){
+  if(s[index]=='#'){ index++;return NULL;}
+  else{
+    int val=pTrunc(s,index);
+    TreeNode* root=new TreeNode(val);
+    root->left=e_Deserialize(s,index);
+    root->right=e_Deserialize(s,index);
+    return root;
+  }
+}
+int pTrunc(string s, int &index){
+    int i=index;
+    for(;i<s.length();i++){
+     if(s[i]==',') break;
+    }
+    string c=s.substr(index,i-index);
+    index=i+1;
+    int val=atoi(c.c_str());
+    return val;
+}
+{% endhighlight %}

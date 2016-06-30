@@ -162,7 +162,7 @@
   <section class="post">
     <p><strong>Typeid操作</strong>返回指针或引用所指对象的实际类型。
 如果一个基类中没有虚函数被实现，那么就算派生类中有同样的成员函数，指向派生类的指针的<strong>Typeid</strong>仍然是基类的类别；如果派生类重写了基类中虚函数，那么指向派生类的指针就是派生类的类。   <br />
-如有<code class="highlighter-rouge">class B</code>继承于<code class="highlighter-rouge">A</code>，<code class="highlighter-rouge">A* pA=new B()</code>;<code class="highlighter-rouge">typeid(pA)</code>就是<code class="highlighter-rouge">class *A</code>，`typeid(*pA)是指向<strong>派生类的指针</strong>，所以要<strong>根据派生情况来RTTI他的类型</strong>。</p>
+如有<code class="highlighter-rouge">class B</code>继承于<code class="highlighter-rouge">A</code>，<code class="highlighter-rouge">A* pA=new B()</code>;<code class="highlighter-rouge">typeid(pA)</code>就是<code class="highlighter-rouge">class *A</code>，<code class="highlighter-rouge">typeid(*pA)</code>是指向<strong>派生类的指针</strong>，所以要<strong>根据派生情况来RTTI他的类型</strong>。</p>
 
   </section>
 </article>

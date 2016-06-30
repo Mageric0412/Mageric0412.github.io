@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>Blue Sky</title>
-  <meta name="description" content="">
+  <title>RTTI与typeid</title>
+  <meta name="description" content="Typeid操作返回指针或引用所指对象的实际类型。">
   <meta name="author" content="Wei Wang">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Blue Sky">
-  <meta name="twitter:description" content="">
+  <meta name="twitter:title" content="RTTI与typeid">
+  <meta name="twitter:description" content="Typeid操作返回指针或引用所指对象的实际类型。">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Blue Sky">
-  <meta property="og:description" content="">
+  <meta property="og:title" content="RTTI与typeid">
+  <meta property="og:description" content="Typeid操作返回指针或引用所指对象的实际类型。">
   
   <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
   <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="/2015/03/bluesky/">
+  <link rel="canonical" href="/2015/07/rtti-e4-b8-8etypeid/">
   <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -154,17 +154,18 @@
             <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
     <div class="post-meta">
-      <time datetime="2015-03-04 18:24:36 +0800" itemprop="datePublished" class="post-meta__date date">2015-03-04</time> &#8226; <span class="post-meta__tags tags">摄影</span>
+      <time datetime="2015-07-02 21:26:20 +0800" itemprop="datePublished" class="post-meta__date date">2015-07-02</time> &#8226; <span class="post-meta__tags tags">C++</span>
     </div>
-    <h1 class="post-title">Blue Sky</h1>
+    <h1 class="post-title">RTTI与typeid</h1>
   </header>
 
   <section class="post">
-    <p><img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/DSC_0452.jpg" alt="DSC_0488" /></p>
+    <p>Typeid操作返回指针或引用所指对象的实际类型。</p>
 
-<p><img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/DSC_0488.jpg" alt="DSC_0452" /></p>
+<p>如果一个基类中没有虚函数被实现，那么就算派生类中有同样的成员函数，指向派生类的指针的Typeid仍然是基类的类别；如果派生类重写了基类中虚函数，那么指向派生类的指针就是派生类的类。</p>
 
-<p><img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/photos/DSC_0492.jpg" alt="DSC_0492" /></p>
+<p>如有class B继承于A，A* pA=new B();typeid(pA)就是class <em>A，typeid(</em>pA)是指向派生类的指针，所以要根据派生情况来RTTI他的类型。</p>
+
 
   </section>
 </article>
@@ -174,9 +175,9 @@
    
    <div class="read-more-item">
        <span class="read-more-item-dim">最近的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2015/03/uestcphotos/" title="link to 去年秋天拍的银杏">去年秋天拍的银杏</a></h2>
-       <p class="excerpt">&hellip;</p>
-       <div class="post-list__meta"><time datetime="2015-03-04 18:26:31 +0800" class="post-list__meta--date date">2015-03-04</time> &#8226; <span class="post-list__meta--tags tags">摄影</span><a class="btn-border-small" href=/2015/03/uestcphotos/>继续阅读</a></div>
+       <h2 class="post-list__post-title post-title"><a href="/2015/07/jvm-e7-9b-b8-e5-85-b3-e7-9f-a5-e8-af-86-e6-95-b4-e7-90-86-ef-bc-88-e8-bd-ac-ef-bc-89/" title="link to JVM相关知识整理（转）">JVM相关知识整理（转）</a></h2>
+       <p class="excerpt">JVM是虚拟机，也是一种规范，他遵循着冯·诺依曼体系结构的设计原理。冯·诺依曼体系结构中，指出计算机处理的数据和指令都是二进制数，采用存储程序方式不加区分的存储在同一个存储器里，并且顺序执行，指令由操作码和地址码组成，操作码决定了操作类型和所操作的数的数字类型，地址码则指出地址码和操作数。从dos到window8，从unix到ubuntu和CentOS，还有MAC OS等等，不同的操作系统指令集以及数据结构都有着差异，而JVM通过在操作系统上建立虚拟机，自己定义出来的一套统一的数据结构和操...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-07-30 22:25:54 +0800" class="post-list__meta--date date">2015-07-30</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2015/07/jvm-e7-9b-b8-e5-85-b3-e7-9f-a5-e8-af-86-e6-95-b4-e7-90-86-ef-bc-88-e8-bd-ac-ef-bc-89/>继续阅读</a></div>
    </div>
    
    
@@ -184,9 +185,9 @@
    
    <div class="read-more-item">
        <span class="read-more-item-dim">更早的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2015/03/this-is-mageric/" title="link to This is Mageric">This is Mageric</a></h2>
-       <p class="excerpt">这是小M崭新的一天，设立了自己的小站，希望在今后可以不断更新站上的内容，在技术上不断进步。同时，也希望以此自我鼓励，在人生道路上不断前进。&hellip;</p>
-       <div class="post-list__meta"><time datetime="2015-03-02 14:47:10 +0800" class="post-list__meta--date date">2015-03-02</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2015/03/this-is-mageric/>继续阅读</a></div>
+       <h2 class="post-list__post-title post-title"><a href="/2015/06/dxut-e8-ae-be-e8-ae-a1-e6-8c-87-e5-8d-97-ef-bc-88-e8-bd-ac-ef-bc-89/" title="link to DXUT设计指南（转）">DXUT设计指南（转）</a></h2>
+       <p class="excerpt">#DXUT是一个建立在Direct3D API之上的，被大部分Direct3D指南和例子所使用的层。它的目标是创建Direct3D例子、原型、工具，更容易的建立坚固、专业的游戏。      DXUT概观        初始化DXUT        使用基于DXUT的程序窗口        使用DXUT设备        使用DXUT主循环        处理DXUT的错误        DXUT高级设备选择        DXUT高级功能  See also: DXUT参考.DXUT概观本...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-06-14 23:48:58 +0800" class="post-list__meta--date date">2015-06-14</time> &#8226; <span class="post-list__meta--tags tags">DXUT</span><a class="btn-border-small" href=/2015/06/dxut-e8-ae-be-e8-ae-a1-e6-8c-87-e5-8d-97-ef-bc-88-e8-bd-ac-ef-bc-89/>继续阅读</a></div>
    </div>
    
 </section>
@@ -197,8 +198,8 @@
     <script>
     
     var disqus_config = function () {
-        this.page.url = "/2015/03/bluesky/";
-        this.page.identifier = "/2015/03/bluesky/";
+        this.page.url = "/2015/07/rtti-e4-b8-8etypeid/";
+        this.page.identifier = "/2015/07/rtti-e4-b8-8etypeid/";
     };
 
     var disqus_shortname = 'vno-jekyll';

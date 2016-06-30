@@ -1,0 +1,3421 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>DXUT设计指南（转）</title>
+  <meta name="description" content="#">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="DXUT设计指南（转）">
+  <meta name="twitter:description" content="#">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="DXUT设计指南（转）">
+  <meta property="og:description" content="#">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="/2015/06/dxut-e8-ae-be-e8-ae-a1-e6-8c-87-e5-8d-97-ef-bc-88-e8-bd-ac-ef-bc-89/">
+  <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Mageric 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Mageric logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Mageric" class="blog-button">Mageric</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">42 世界尽头</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Mageric的个人小站.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="http://mageric-one.com" target="_blank" title="My old site">OldSite</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/magericyoung" title="@magericyoung 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Mageric0412" title="@Mageric0412 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- instagram -->
+  <li class="navigation__item">
+   <a href="https://www.instagram.com/mageric0412" title="@mageric0412 的Instagram" target="_blank">
+     <i class='social fa fa-instagram'></i>
+     <span class="label">instagram</span>
+   </a>
+  </li>
+  
+
+<!--
+  
+  <!-- website -->
+  <!--
+  <li class="navigation__item">
+    <a href="https://mageric-one.com" rel="author" title="mageric的小站" target="_blank">
+        <i class='social fa fa-rss'> </i>
+      <span class="label">website</span>
+    </a>
+  </li>
+  
+-->
+
+
+
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:mageric0412@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-06-14 23:48:58 +0800" itemprop="datePublished" class="post-meta__date date">2015-06-14</time> &#8226; <span class="post-meta__tags tags">DXUT</span>
+    </div>
+    <h1 class="post-title">DXUT设计指南（转）</h1>
+  </header>
+
+  <section class="post">
+    <p>#</p>
+
+<p>DXUT是一个建立在Direct3D API之上的，被大部分Direct3D指南和例子所使用的层。它的目标是创建Direct3D例子、原型、工具，更容易的建立坚固、专业的游戏。</p>
+
+<ul>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_DXUT概览">DXUT概观</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_初始化DXUT">初始化DXUT</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_Using_Application_Windows">使用基于DXUT的程序窗口</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_使用DXUT设备">使用DXUT设备</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_使用DXUT主循环">使用DXUT主循环</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_Error_Handling_with">处理DXUT的错误</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_Advanced_Device_Selection">DXUT高级设备选择</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_Additional_DXUT_Functions">DXUT高级功能</a></p>
+  </li>
+</ul>
+
+<p>See also: <a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_DXUT_Reference">DXUT参考</a>.</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+</td>
+</tr>
+</tbody>
+</table>
+
+<h1 id="dxut">DXUT概观</h1>
+
+<p>本主题提供对DXUT概观的高级介绍。</p>
+
+<ul>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_Overview">概观</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_Features">特点</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_Limitations">局限性</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_启动新工程">启动一个新工程</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_DXUT_Improvements_in">DirectX April 2005 SDK中DXUT的改进</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_DXUT_Changes_from">自DirectX Summer 2003 SDK以来DXUT的变化</a></p>
+  </li>
+</ul>
+
+<h2 id="section">概观</h2>
+
+<p>DXUT框架的设计是为了帮助开发者在创建窗口、设备，处理窗口消息和设备事件时，更有效率(消耗较少的时间)。</p>
+
+<p>这是使用该框架的应用程序的主函数：</p>
+<table cellpadding="0" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="540" valign="top">
+
+
+INT WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, INT
+)
+
+
+
+
+{
+
+
+
+
+    // 设置回调函数，这些函数允许DXUT通知应用程序更换设备，用户输入和窗口消息。
+
+
+
+
+    // 回调函数是可选的，因此你要做的仅是设置你感兴趣的事件的回调函数。
+
+
+
+
+DXUTSetCallbackDeviceCreated( OnCreateDevice );
+
+
+
+
+DXUTSetCallbackDeviceReset( OnResetDevice );
+
+
+
+
+DXUTSetCallbackDeviceLost( OnLostDevice );
+
+
+
+
+DXUTSetCallbackDeviceDestroyed( OnDestroyDevice );
+
+
+
+
+DXUTSetCallbackFrameRender( OnFrameRender );
+
+
+
+
+DXUTSetCallbackFrameMove( OnFrameMove );
+
+
+
+
+    // 初始化DXUT并创建想要的Win32窗口和应用程序的Direct3D设备。调用这些
+
+
+
+
+// 可选函数中的每一个，此外它们允许你设置几个选项来控制框架的行为。
+
+
+
+
+   DXUTInit( TRUE, TRUE, TRUE );
+
+
+
+
+DXUTCreateWindow( L"BasicHLSL" );
+
+
+
+
+DXUTCreateDevice( D3DADAPTER_DEFAULT, TRUE, 640, 480 );
+
+
+
+
+    // 通过DXUT来处理消息循环并分派渲染调用。当在空闲时间和处理窗口消息的
+
+
+
+
+// 时间间隔时，框架将调用OnFrameMove和OnFrameRender回调函数。
+
+
+
+
+DXUTMainLoop();
+
+
+
+
+    return
+DXUTGetExitCode();
+
+
+
+
+}
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>在例子代码中，框架做了大部分的工作。它创建窗口、设备，处理主消息循环，当应用程序事件触发时，提供相应的回调函数，例如：在设备重置或渲染每帧时。DXUT框架是组件化的，应用程序可以使用框架的全部功能或部分功能。
+这个设计指南的其他部分详细的包括了这些步骤，并着重于应用程序可选择的控制或可替代的步骤。
+更详细的语法和函数的使用，回调函数，结构，列举和常量等信息可以在<a href="file:///D:/Documents%20and%20SettingsAdministratorLocal%20SettingsTempCyberArticlemk:@MSITStore:E:DXSDK%20(April%202006)DocumentationDirectX9directx9_c.chm::dx9_graphics_reference_dxut.htm">DXUT参考</a>中找到。</p>
+
+<h2 id="section-1">特点</h2>
+
+<p>为了帮助你创建一个应用程序，框架提供下列服务：</p>
+
+<ul>
+  <li>
+    <p>简单的窗口和设备的创建。</p>
+  </li>
+  <li>
+    <p>设备事件 (created, reset, lost, destroyed) 和窗口事件
+(messages, keyboard, mouse)的通知。</p>
+  </li>
+  <li>
+    <p>窗口模式与全屏模式之间的转换, 硬件设备和软件设备之间的转换。</p>
+  </li>
+  <li>
+    <p>精确的计时器。</p>
+  </li>
+  <li>
+    <p>命令行支持和自动化测试。</p>
+  </li>
+  <li>
+    <p>使用对话框或API的设备选择。</p>
+  </li>
+  <li>
+    <p>一套纹理化的GUI控件，包括一个可使用输入法编辑器的编辑框。</p>
+  </li>
+  <li>
+    <p>各种扩展类，例如简单的摄像机类型。</p>
+  </li>
+</ul>
+
+<h2 id="section-2">局限性</h2>
+
+<p>为了便于使用，框架只支持绑定一个设备的窗口。需要同时使用多个设备，或显示多个Direct3D窗口的高级程序，是本框架不支持的，大部分类型的应用程序将能够使用本框架来实现。</p>
+
+<h2 id="section-3">启动一个新工程</h2>
+
+<p>最简单的方法，启动一个使用新的Visual Studio .NET中的DXUT开发的项目：</p>
+
+<ol>
+  <li>
+    <p>启动例子浏览器（SampleBrowser.exe），在下面位置找到DirectX
+SDK：(SDK
+root)\Samples\SampleBrowser\</p>
+  </li>
+  <li>
+    <p>在例子浏览器里，选择一个已有的Direct3D
+例子项目，将从这开始。</p>
+  </li>
+  <li>
+    <p>点击 “安装项目”(“Install
+Project”)链接，然后拷贝Visual Studio
+.NET项目文件到一个新的本地目录。</p>
+  </li>
+  <li>
+    <p>你可以给项目重命名，这时浏览器将根据提供的新工程名，去更改相应的文件和源代码。</p>
+  </li>
+</ol>
+
+<h1 id="dxut-1">初始化DXUT</h1>
+
+<p>使用DXUT的第一步是初始化。可以简单的用<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTInit.htm">DXUTInit</a>
+函数：</p>
+<table cellpadding="0" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="541" valign="top">
+
+
+HRESULT DXUTInit (
+
+
+
+
+    BOOL
+bParseCommandLine     = TRUE,
+
+
+
+
+    BOOL
+bHandleDefaultHotkeys = TRUE,
+
+
+
+
+    BOOL
+bShowMsgBoxOnError    = TRUE
+
+
+
+
+);
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>你将在应用程序的 WinMain 函数开始后不远的地方调用<strong>DXUTInit</strong>。如果<strong>DXUTInit</strong>没有在应用程序中调用，它将使用默认的参数在框架中自动调用。
+如果第一个参数bParseCommandLine为TRUE，框架将对命令行参数做出响应。例如，运行<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/BasicHLSL_Sample.htm">BasicHLSL
+Sample</a>执行下列命令行参数：</p>
+<table cellpadding="0" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="541" valign="top">
+
+
+BasicHLSL.exe -windowed -width:600
+-height:600
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>DXUT框架将尝试执行这些窗口设定，对于命令行支持参数的全部列表，请查看<strong>DXUTInit</strong>函数部分的帮助。
+第二个参数bHandleDefaultHotkeys通知DXUT框架对一些预先执行的击键做出响应，例如：ALT+ENTER。再说一次，全部的列表请查看<strong>DXUTInit</strong>函数部分的帮助。如果这个参数为FALSE，程序将不做响应。
+最后一个参数bShowMsgBoxOnError，当框架发现一个错误时，显示一个消息框。设置它为FALSE则运行自动测试或完全由用户经验控制的专业程序。</p>
+
+<h1 id="dxut-2">使用基于DXUT的程序窗口</h1>
+
+<p>你的程序可以只使用一个新的DXUT函数，来处理大部分窗口管理的任务。</p>
+
+<ul>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_创建一个窗口">创建窗口</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_使用你自己的窗口">使用你自己的窗口</a></p>
+  </li>
+</ul>
+
+<h2 id="section-4">创建窗口</h2>
+
+<p>创建一个Direct3D应用程序窗口包括下列步骤：</p>
+
+<ol>
+  <li>
+    <p>定义一个响应窗口的消息。</p>
+  </li>
+  <li>
+    <p>创建。</p>
+  </li>
+  <li>
+    <p>使用。</p>
+  </li>
+  <li>
+    <p>使用。</p>
+  </li>
+</ol>
+
+<p>这些步骤如果没做正确将会引起bugs。虽然它对于一个Direct3D程序员来说，这可能很没劲，但却是每个程序所必需的。DXUT框架使用<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTCreateWindow.htm">DXUTCreateWindow</a>函数来简单化这个过程：</p>
+<table cellpadding="0" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="553" valign="top">
+
+
+HRESULT DXUTCreateWindow(
+
+
+
+
+    const
+WCHAR *strWindowTitle = L"Direct3D Window",
+
+
+
+
+    HINSTANCE
+hInstance         = NULL,
+
+
+
+
+    HICON
+hIcon                 = NULL,
+
+
+
+
+    HMENU
+hMenu                 = NULL,
+
+
+
+
+    INT
+x                       =
+CW_USEDEFAULT,
+
+
+
+
+    INT
+y                       =
+CW_USEDEFAULT
+
+
+
+
+);
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>所有参数都是可选的：</p>
+
+<ul>
+  <li>
+    <p>strWindowTitle是窗口标题，也显示在任务栏，它表示工程名称。</p>
+  </li>
+  <li>
+    <p>hInstance是应用程序实例的句柄。大部分程序的默认值为NULL。</p>
+  </li>
+  <li>
+    <p>hIcon是应用程序的图标。如果为NULL，则应用程序的可执行文件里包含的第一个图标将被使用，所以NULL值也能很好的工作。</p>
+  </li>
+  <li>
+    <p>hMenu
+处理菜单，如果想的话可以设置它，大部分游戏无论无何不能使用标准菜单，但作为替代，可以用自己定制的游戏类界面来创建它们。</p>
+  </li>
+  <li>
+    <p>最后2个参数描述窗口位置。如果应用程序运行在全屏模式，则忽视这2个参数。</p>
+  </li>
+</ul>
+
+<p>最简单的调用方法，程序可以像下面这样调用<strong>DXUTCreateWindow</strong>：</p>
+<table cellpadding="0" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="541" valign="top">
+
+
+DXUTCreateWindow( L"My New Game" );
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>只用一个参数来调用这个函数，strWindowTitle将促使DXUT框架去创建窗口，并自动处理重要的窗口消息。如果需要重新取得窗口的句柄，可以调用<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetHWND.htm">DXUTGetHWND</a>。
+如果想让程序响应窗口消息，可以用<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetCallbackMsgProc.htm">DXUTSetCallbackMsgProc</a>
+去设置回调函数：</p>
+<table cellpadding="0" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="541" valign="top">
+
+
+void DXUTSetCallbackMsgProc( LPDXUTCALLBACKMSGPROC
+pCallbackMsgProc,
+
+
+
+
+  void*
+pUserContext = NULL );
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>PCallbackMsgProc参数是一个<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/LPDXUTCALLBACKMSGPROC.htm">LPDXUTCALLBACKMSGPROC</a>类型的回调函数，下面是定义:</p>
+<table cellpadding="0" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="541" valign="top">
+
+
+LRESULT CALLBACK FUNCTION MsgProc(
+
+
+
+
+    HWND   hWnd,
+
+
+
+
+    UINT   uMsg,
+
+
+
+
+    WPARAM
+wParam,
+
+
+
+
+    LPARAM
+lParam,
+
+
+
+
+BOOL*
+pbNoFurtherProcessing,
+
+
+
+
+void*  pUserContext
+
+
+
+
+)
+
+
+
+
+{
+
+
+
+
+    return
+0;
+
+
+
+
+}
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>在这个回调函数里，程序不需要去响应任何消息，因为所有重要的消息将被DXUT框架处理。为了阻止DXUT框架处理消息，应用程序可以设置*pbNoFurtherProcessing为TRUE。（查看<strong>LPDXUTCALLBACKMSGPROC</strong>），然而，当使用这个设置时要小心，因为它可能会阻止DXUT框架的正确行为。</p>
+
+<h2 id="section-5">使用自己的窗口</h2>
+
+<p>如果你想让程序去创建自己的窗口，并且和框架一起使用，而不是让DXUT处理窗口的操作，那么你可以使用<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetWindow.htm">DXUTSetWindow</a>函数：</p>
+<table cellpadding="0" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="541" valign="top">
+
+
+HRESULT DXUTSetWindow(
+
+
+
+
+    HWND
+hWndFocus,
+
+
+
+
+    HWND
+hWndDeviceFullScreen,
+
+
+
+
+    HWND
+hWndDeviceWindowed,
+
+
+
+
+    BOOL
+bHandleMessages = TRUE
+
+
+
+
+);
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>这个函数带有3个窗口句柄，它们是完全相同的，除非程序在窗口模式和全屏模式中使用不同的窗口。当应用程序因按ALT+TAB、鼠标点击、或其他用户输入，而转到后台时，将提供焦点窗口的句柄通知给Direct3D。应用程序应该经常传递焦点窗口的句柄给DXUTSetWindow函数，不管它创建多少个Direct3D设备。
+除了用一个窗口初始化框架之外，应用程序需要用窗口消息通知框架，窗口接收有序的消息给正确的框架行为处理。如果框架创建了窗口，窗口消息是自动处理的。否则，应用程序可以使用DXUTStaticWndProc函数，从内部的窗口<a href="http://msdn.microsoft.com/library/en-us/winui/WinUI/WindowsUserInterface/Windowing/WindowProcedures/WindowProcedureReference/WindowProcedureFunctions/WindowProc.asp">WindowProc</a>回调函数传递窗口消息给框架，下面是定义：</p>
+<table cellpadding="0" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="553" valign="top">
+
+
+LRESULT CALLBACK DXUTStaticWndProc(
+
+
+
+
+    HWND
+hWnd,
+
+
+
+
+    UINT
+uMsg,
+
+
+
+
+    WPARAM
+wParam,
+
+
+
+
+    LPARAM
+lParam
+
+
+
+
+);
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>如果你不想让应用程序使用<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTStaticWndProc.htm">DXUTStaticWndProc</a>，你可以交替复制在函数中的功能，尽管它是不被推荐的。</p>
+
+<h1 id="dxut-3">使用DXUT设备</h1>
+
+<p>使用最新版的DXUT创建DirectX设备。它可以代替你用应用程序直接创建设备，而框架的其他功能仍然可用。</p>
+
+<ul>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_创建设备">创建设备</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_选择最好的设备设定">选择最佳设备设定</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_修改可用的设备设定">更改可用的设备设定</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_软件顶点处理">软件顶点处理 Fallback
+to Software Vertex Processing</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_使用你自己的设备">使用你自己的设备</a></p>
+  </li>
+</ul>
+
+<h2 id="section-6">创建设备</h2>
+
+<p>下面是用标准的Direct3D方法创建设备，<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/IDirect3D9__CreateDevice.htm">CreateDevice</a>：</p>
+<table cellpadding="0" cellspacing="0" align="left" border="1">
+<tbody>
+<tr>
+
+<td width="541" valign="top">
+
+
+HRESULT CreateDevice(
+
+
+
+
+    UINT                  Adapter,
+
+
+
+
+D3DDEVTYPE
+DeviceType,
+
+
+
+
+    HWND                  hFocusWindow,
+
+
+
+
+    DWORD                 BehaviorFlags,
+
+
+
+
+D3DPRESENT_PARAMETERS *pPresentationParameters,
+
+
+
+
+IDirect3DDevice9
+**ppReturnedDeviceInterface
+
+
+
+
+);
+
+
+
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>这个方法需要正确的adapter(适配器)，设备类型(hal or
+reference)，窗口句柄，行为标记(软件/硬件顶点处理和其他设备标记)，和一个表达参数(一个<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/D3DPRESENT_PARAMETERS.htm">D3DPRESENT_PARAMETERS</a>结构的参数)。此外，<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/D3DPRESENT_PARAMETERS.htm">D3DPRESENT_PARAMETERS</a>结构有众多成员，它们是：特定的后备缓存区设置，采样器设备，swap效果，窗口模式，深度模版缓存区设置，刷新速度等等。
+给所有这些参数选择有效的设定就是个挑战，那么DXUT框架的<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTCreateDevice.htm">DXUTCreateDevice</a>函数简化了这一过程：</p>
+<table cellpadding="0" cellspacing="0" align="left" border="1">
+<tbody>
+<tr>
+
+<td width="541" valign="top">
+
+
+HRESULT DXUTCreateDevice(
+
+
+
+
+    UINT
+AdapterOrdinal  =
+D3DADAPTER_DEFAULT,
+
+
+
+
+    BOOL
+bWindowed       = TRUE,
+
+
+
+
+    INT
+nSuggestedWidth  = 640,
+
+
+
+
+    INT
+nSuggestedHeight = 480,
+
+
+
+
+LPDXUTCALLBACKISDEVICEACCEPTABLE pCallbackIsDeviceAcceptable     = NULL,
+
+
+
+
+LPDXUTCALLBACKMODIFYDEVICESETTINGS pCallbackModifyDeviceSettings =
+NULL
+
+
+
+
+);
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>大多数基本用法是很简单的，使用默认的参数调用函数：</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+
+
+DXUTCreateDevice();
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+
+<p>对于这个简单的调用，框架创建设备的默认设定，它可以工作在大部分情况下。下面是设备创建的默认设定：</p>
+<table cellpadding="0" width="599" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="196" valign="top">
+
+
+**Direct3D创建标记**
+
+
+
+</td>
+
+<td width="168" valign="top">
+
+
+**描述**
+
+
+
+</td>
+
+<td width="234" valign="top">
+
+
+**DXUTCreateDevice的默认值**
+
+
+
+</td>
+</tr>
+<tr>
+
+<td width="196" valign="top">AdapterFormat parameter of [CheckDeviceFormat](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/IDirect3D9__CheckDeviceFormat.htm)
+</td>
+
+<td width="168" valign="top">适配器表面格式
+</td>
+
+<td width="234" valign="top">Desktop display mode, or[D3DFMT_X8R8G8B8](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/D3DFORMAT.htm)
+if the desktop display mode is less than 32 bits.
+</td>
+</tr>
+<tr>
+
+<td width="196" valign="top">Adapter parameter of
+**IDirect3D9::CreateDevice**
+</td>
+
+<td width="168" valign="top">显示适配器的序号
+</td>
+
+<td width="234" valign="top">[D3DADAPTER_DEFAULT](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/D3DADAPTER_DEFAULT.htm)
+</td>
+</tr>
+<tr>
+
+<td width="196" valign="top">**D3DPRESENT_PARAMETERS**. BackBufferCount
+</td>
+
+<td width="168" valign="top">后备缓冲区数量
+</td>
+
+<td width="234" valign="top">2, indicating triple buffering.
+</td>
+</tr>
+<tr>
+
+<td width="196" valign="top">**D3DPRESENT_PARAMETERS**. BackBufferFormat
+</td>
+
+<td width="168" valign="top">缓冲区格式
+</td>
+
+<td width="234" valign="top">Desktop display mode, or
+**D3DFMT_X8R8G8B8** if the
+desktop display mode is less than 32 bits.
+</td>
+</tr>
+<tr>
+
+<td width="196" valign="top">**D3DPRESENT_PARAMETERS**. AutoDepthStencilFormat
+</td>
+
+<td width="168" valign="top">设备将创建表面的深度缓冲区格式
+</td>
+
+<td width="234" valign="top">**D3DFMT_D16** if
+the backbuffer format is 16 bits or less, or **D3DFMT_D32**
+otherwise.
+</td>
+</tr>
+<tr>
+
+<td width="196" valign="top">The DeviceType parameter of
+**IDirect3D9::CreateDevice**
+</td>
+
+<td width="168" valign="top">设备的列举类型
+</td>
+
+<td width="234" valign="top">D3DDEVTYPE_HAL if available, otherwise
+D3DDEVTYPE_REF or failure code if neither is available.
+</td>
+</tr>
+<tr>
+
+<td width="196" valign="top">**D3DPRESENT_PARAMETERS**. MultiSampleQuality
+</td>
+
+<td width="168" valign="top">品质级别
+</td>
+
+<td width="234" valign="top">MultiSampleQuality = 0, indicating
+multisampling is disabled.
+</td>
+</tr>
+<tr>
+
+<td width="196" valign="top">**D3DPRESENT_PARAMETERS**. Flags
+</td>
+
+<td width="168" valign="top">Presentation parameters flags.
+</td>
+
+<td width="234" valign="top">[D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/D3DPRESENTFLAG.htm)
+</td>
+</tr>
+<tr>
+
+<td width="196" valign="top">**D3DPRESENT_PARAMETERS**. PresentationInterval
+</td>
+
+<td width="168" valign="top">Presentation interval.
+</td>
+
+<td width="234" valign="top">[D3DPRESENT_INTERVAL_IMMEDIATE](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/D3DPRESENT.htm)
+for windowed mode, or**D3DPRESENT_INTERVAL_DEFAULT** for full-screen
+mode.
+</td>
+</tr>
+<tr>
+
+<td width="196" valign="top">**D3DPRESENT_PARAMETERS**. FullScreen_RefreshRateInHz
+</td>
+
+<td width="168" valign="top">显示器的刷新速度
+</td>
+
+<td width="234" valign="top">0, indicating windowed mode.
+</td>
+</tr>
+<tr>
+
+<td width="196" valign="top">**D3DPRESENT_PARAMETERS**. BackBufferWidth and .BackBufferHeight
+</td>
+
+<td width="168" valign="top">显示模式
+</td>
+
+<td width="234" valign="top">640 x 480 pixels for windowed mode, or the
+desktop resolution for full-screen mode.
+</td>
+</tr>
+<tr>
+
+<td width="196">**D3DPRESENT_PARAMETERS**. AutoDepthStencilFormat
+</td>
+
+<td width="168">设备将创建表面的模版缓冲区格式
+</td>
+
+<td width="234">**D3DFMT_D16** if
+the backbuffer format is 16 bits or less, or **D3DFMT_D32**
+otherwise.
+</td>
+</tr>
+<tr>
+
+<td width="196">**D3DPRESENT_PARAMETERS**. SwapEffect
+</td>
+
+<td width="168">交换效果.
+</td>
+
+<td width="234">D3DSWAPEFFECT_DISCARD
+</td>
+</tr>
+<tr>
+
+<td width="196">BehaviorFlags parameter of
+**IDirect3D9::CreateDevice**
+</td>
+
+<td width="168">顶点处理标记
+</td>
+
+<td width="234">[D3DCREATE_HARDWARE_VERTEXPROCESSING](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/D3DCREATE.htm)
+if supported, otherwise**D3DCREATE_SOFTWARE_VERTEXPROCESSING**.
+</td>
+</tr>
+<tr>
+
+<td width="196">**D3DPRESENT_PARAMETERS**. Windowed
+</td>
+
+<td width="168">窗口或全屏模式
+</td>
+
+<td width="234">true, indicating windowed mode.
+</td>
+</tr>
+<tr>
+
+<td width="196">hFocusWindow parameter of
+**CreateDevice**
+</td>
+
+<td width="168">处理创建的窗口 (查看[使用基于DXUT的程序窗口](http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_使用基于DXUT的程序窗口)).
+</td>
+
+<td width="234">hWndFocus parameter of[DXUTSetWindow](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetWindow.htm)
+</td>
+</tr>
+<tr>
+
+<td width="196">**D3DPRESENT_PARAMETERS**. hDeviceWindow
+</td>
+
+<td width="168">设备窗口的处理
+</td>
+
+<td width="234">hWndDeviceFullScreen or hWndDeviceWindowed
+parameters of **DXUTSetWindow**
+</td>
+</tr>
+<tr>
+
+<td width="196">**D3DPRESENT_PARAMETERS**. EnableAutoDepthStencil
+</td>
+
+<td width="168">深度/模版缓冲区的创建标记
+</td>
+
+<td width="234">true.
+</td>
+</tr>
+</tbody>
+</table>
+<p>比使用一个设备创建很多默认设定更好的方法是，应用程序能够通过传递给<strong>CreateDevice</strong>函数的参数来使设备应用更多的控制。例如，你可能通过SuggestedWidth和nSuggestedHeight参数改变窗口的尺寸:</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+
+
+DXUTCreateDevice(
+
+
+
+
+D3DADAPTER_DEFAULT,
+
+
+
+
+false,
+
+
+
+
+1024,
+
+
+
+
+768,
+
+
+
+
+NULL,
+
+
+
+
+NULL,
+
+
+
+
+NULL
+
+
+
+
+);
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>为了取得更多的控制，应用程序可以使用2个可选的回调函数： <a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/LPDXUTCALLBACKISDEVICEACCEPTABLE.htm">LPDXUTCALLBACKISDEVICEACCEPTABLE</a>和<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/LPDXUTCALLBACKMODIFYDEVICESETTINGS.htm">LPDXUTCALLBACKMODIFYDEVICESETTINGS</a>.</p>
+
+<h2 id="section-7">选择最佳设备设定</h2>
+
+<p>你可以在程序里使用IsDeviceAcceptable回调函数来帮助框架选择佳的设备设定，请看下列代码：</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+
+
+bool CALLBACK IsDeviceAcceptable(
+
+
+
+
+D3DCAPS9*
+pCaps,
+
+
+
+
+D3DFORMAT
+AdapterFormat,
+
+
+
+
+D3DFORMAT
+BackBufferFormat,
+
+
+
+
+bool
+bWindowed,
+
+
+
+
+void*
+pUserContext )
+
+
+
+
+{
+
+
+
+
+    // TODO: 可接受的设定返回true，否则返回false
+
+
+
+
+    return
+true;
+
+
+
+
+}
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>这个回调函数的原型是<strong>LPDXUTCALLBACKISDEVICEACCEPTABLE</strong>。框架为下列5个设定中每个唯一有效的组合，一次性的调用这个函数：</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+
+
+D3DDEVTYPE DeviceType;
+
+
+
+
+UINT
+AdapterOrdinal;
+
+
+
+
+D3DFORMAT
+AdapterFormat;
+
+
+
+
+D3DFORMAT
+BackBufferFormat;
+
+
+
+
+bool
+Windowed;
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong><em>注意</em></strong>：适配器序号和设备类型不直接传递给回调函数，而是分别的传递，<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/D3DCAPS9.htm">D3DCAPS9</a>结构中的设备类型(DeviceType)和设备序号(AdapterOrdinal)成员。
+在这个回调函数里，应用程序可以拒绝它不支持的或接受任何组合。举个例子，程序可以使用下列代码拒绝16-bit格式的后备缓冲区，并且让所有设备不支持像素着色器<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/dx9_graphics_reference_asm_ps_2_0.htm">ps_2_0</a>以下的版本：</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+
+
+bool CALLBACK IsDeviceAcceptable(
+
+
+
+
+D3DCAPS9*     pCaps,
+
+
+
+
+D3DFORMAT
+AdapterFormat,
+
+
+
+
+D3DFORMAT
+BackBufferFormat,
+
+
+
+
+    bool          bWindowed )
+
+
+
+
+{
+
+
+
+
+    if(
+pCaps-&gt;PixelShaderVersion &lt; D3DPS_VERSION(2,0) )
+
+
+
+
+        return false;
+
+
+
+
+    if(
+BackBufferFormat == D3DFMT_X1R5G5B5 || BackBufferFormat == D3DFMT_R5G6B5 )
+
+
+
+
+return false;
+
+
+
+
+    return
+true;
+
+
+
+
+}
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>回调函数调用设定中每个唯一的组合以后，框架队列保存可接受的组合并选择他们中最好的之一。排名较高的组合包括下面这些：</p>
+
+<ul>
+  <li>
+    <p>D3DDEVTYPE_HAL, 为了取得硬件的加速度。</p>
+  </li>
+  <li>
+    <p>如果程序在全屏模式下显示，框架默认的格式是与桌面适配器匹配的,所以从窗口向全屏的模式转换是很快的。如果桌面显示模式小于32bits时会触发异常，在这种情况下框架默认<strong>D3DFMT_X8R8G8B8格式</strong>。</p>
+  </li>
+  <li>
+    <p>后备缓冲区格式，它与适配器格式相匹配。</p>
+  </li>
+</ul>
+
+<p>对于这些选择的设定中最高级别的组合，行为标记和表达参数在创建设备时仍然是必需的，对于这些设定，Direct3D使用上表所示的默认值。</p>
+
+<h2 id="section-8">修改可用的设备设定</h2>
+
+<p>应用程序可以修改框架的可选项，使用第2个回调函数：ModifyDeviceSettings，类似下面这样：</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+
+
+bool CALLBACK ModifyDeviceSettings(
+
+
+
+
+DXUTDeviceSettings* pDeviceSettings,
+
+
+
+
+    const
+D3DCAPS9*     pCaps )
+
+
+
+
+{
+
+
+
+
+    // TODO: Include device creation requirements here.
+
+
+
+
+    // 创建设备返回true，保持当前设备返回false
+
+
+
+
+    return
+true;
+
+
+
+
+}
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>这个回调函数的方法原型是：<strong>LPDXUTCALLBACKMODIFYDEVICESETTINGS</strong>。<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTDeviceSettings.htm">DXUTDeviceSettings</a>结构在框架中是这样定义的：</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+
+
+struct DXUTDeviceSettings
+
+
+
+
+{
+
+
+
+
+    UINT       AdapterOrdinal;
+
+
+
+
+D3DDEVTYPE DeviceType;
+
+
+
+
+D3DFORMAT
+AdapterFormat;
+
+
+
+
+DWORD
+BehaviorFlags;
+
+
+
+
+D3DPRESENT_PARAMETERS pp;
+
+
+
+
+};
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+
+<p>这个结构包括了创建设备所需要的所有东西（除了窗口句柄），假定早就创建了窗口句柄。框架用有效的值填充这个结构，并允许程序通过ModifyDeviceSettings回调函数去更改设备(创建选择的设备)。
+在这个回调函数中程序可以更改行为标记，像<strong>DXUTDeviceSettings</strong>结构中的表达参数一样好用。如果应用程序在回调函数里没有更改任何东西，设备将创建成功。然而，任何设备设定的更改都需要应用程序对设备的支持，否则设备创建可能会失败。</p>
+
+<p>例如，如果应用程序需要一个<strong>D3DFMT_D24S8</strong>格式的深度模版，将检查设备是否支持它，使用下面的代码：</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+
+
+bool CALLBACK ModifyDeviceSettings(
+
+
+
+
+DXUTDeviceSettings* pDeviceSettings,
+
+
+
+
+    const
+D3DCAPS9*     pCaps )
+
+
+
+
+{
+
+
+
+
+IDirect3D9* pD3D = DXUTGetD3DObject();
+
+
+
+
+    if(
+SUCCEEDED( pD3D-&gt;CheckDeviceFormat(
+
+
+
+
+pDeviceSettings-&gt;AdapterOrdinal,
+
+
+
+
+pDeviceSettings-&gt;DeviceType,
+
+
+
+
+pDeviceSettings-&gt;AdapterFormat,
+
+
+
+
+            D3DUSAGE_DEPTHSTENCIL,
+
+
+
+
+            D3DRTYPE_SURFACE,
+
+
+
+
+            D3DFMT_D24S8 ) ) )
+
+
+
+
+{
+
+
+
+
+        if( SUCCEEDED(
+pD3D-&gt;CheckDepthStencilMatch(
+
+
+
+
+pDeviceSettings-&gt;AdapterOrdinal,
+
+
+
+
+pDeviceSettings-&gt;DeviceType,
+
+
+
+
+pDeviceSettings-&gt;AdapterFormat,
+
+
+
+
+pDeviceSettings-&gt;pp.BackBufferFormat,
+
+
+
+
+                D3DFMT_D24S8 ) ) )
+
+
+
+
+         {
+
+
+
+
+pDeviceSettings-&gt;pp.AutoDepthStencilFormat = D3DFMT_D24S8;
+
+
+
+
+         }
+
+
+
+
+}
+
+
+
+
+    return
+true;
+
+
+
+
+}
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+
+<p>作为替代, 回调函数也可以使用框架的CD3DEnumeration 对象去检查是否支持<strong>D3DFMT_D24S8</strong>格式：</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+
+
+bool CALLBACK ModifyDeviceSettings(
+
+
+
+
+DXUTDeviceSettings* pDeviceSettings,
+
+
+
+
+    const
+D3DCAPS9*     pCaps )
+
+
+
+
+{
+
+
+
+
+CD3DEnumeration *pEnum = DXUTGetEnumeration();
+
+
+
+
+CD3DEnumDeviceSettingsCombo *pCombo;
+
+
+
+
+    pCombo =
+pEnum-&gt;GetDeviceSettingsCombo( pDeviceSettings );
+
+
+
+
+    if(
+pCombo-&gt;depthStencilFormatList.Contains( D3DFMT_D24S8 ) )
+
+
+
+
+pDeviceSettings-&gt;pp.AutoDepthStencilFormat = D3DFMT_D24S8;
+
+
+
+
+    return
+true;
+
+
+
+
+}
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>应用程序更改设备设定后，框架用新的设定创建设备。
+这个回调函数返回bool值。如果应用程序返回TRUE，框架将创建标准设备。如果返回FALSE，如果有设备存在的话，框架不更改设备，保持当前的设备。这样就允许应用程序拒绝框架的请求(更改应用程序所不支持的设备)。例如，在一个多显示器的结构里，默认在显示器间拖曳窗口将导致框架更改设备，然而如果应用程序不能使用另一个设备，它必须能够拒绝更改，并继续使用当前的设备。</p>
+
+<h2 id="section-9">软件顶点处理</h2>
+
+<p>如果我在硬件上创建一个Direct3D设备，它支持硬件像素处理，但不支持硬件顶点处理，那么你需要设置行为标记。在IsDeviceAcceptable回调函数里，为了确保正确的回调给软件顶点处理，当IsDeviceAcceptable回调函数里不能拒绝基于顶点着色器版本的设备时，你要采取防备措施；并确保行为标记在ModifyDeviceSettings回调函数里被正确的调用。这里有一个例子：</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+
+
+bool CALLBACK ModifyDeviceSettings(
+DXUTDeviceSettings* pDeviceSettings,
+
+
+
+
+                                    const D3DCAPS9* pCaps )
+
+
+
+
+{
+
+
+
+
+    // 如果设备不支持硬件的T&amp;L 或硬件的顶点着色器版本1.1，那么转换到SWVP(软件顶点处理).
+
+
+
+
+    if(
+(pCaps-&gt;DevCaps &amp; D3DDEVCAPS_HWTRANSFORMANDLIGHT) == 0 ||
+
+
+
+
+pCaps-&gt;VertexShaderVersion &lt; D3DVS_VERSION(1,1) )
+
+
+
+
+{
+
+
+
+
+pDeviceSettings-&gt;BehaviorFlags =
+D3DCREATE_SOFTWARE_VERTEXPROCESSING;
+
+
+
+
+}
+
+
+
+
+    else
+// 支持
+
+
+
+
+{
+
+
+
+
+pDeviceSettings-&gt;BehaviorFlags =
+D3DCREATE_HARDWARE_VERTEXPROCESSING;
+
+
+
+
+}
+
+
+
+
+    return
+true;
+
+
+
+
+}
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="section-10">使用你自己的设备</h2>
+
+<p>你可以不必依赖框架创建Direct3D设备，替代的方法是，用程序自己创建设备，并且传递它给框架使用。类似的方法是应用程序可以覆盖框架的<strong>window creation</strong>设定。用所有想要的设定简单的创建一个设备，然后调用<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetDevice.htm">DXUTSetDevice</a>函数使框架能够在设备上进行渲染。
+<strong><em>注意</em></strong>    如果应用程序创建了独立于框架的设备，在主循环执行完毕之后清除资源时，程序必须释放设备接口。</p>
+
+<h1 id="dxut-4">使用DXUT主循环</h1>
+
+<p>在窗口和设备创建后，程序需要使用主循环(调用一个渲染循环或消息循环)来响应窗口消息。更新并渲染场景，处理设备事件。程序可以自己实现主循环，也使用DXUT实现。回调函数的注册允许DXUT去处理设备、框架和事件消息。</p>
+
+<h2 id="section-11">进入主消息循环</h2>
+
+<p>要使用框架的主循环，简单的调用<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTMainLoop.htm">DXUTMainLoop</a>，唯一的参数设置为NULL。
+尽管用框架去处理消息循环相当容易，对于一些高级程序，定制主循环是更好的设计。使用<strong>DXUTMainLoop</strong>函数定制的主循环是可能的，但需要在程序中写更多的代码，下面是例子代码：</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+
+
+INT WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, INT
+)
+
+
+
+
+{
+
+
+
+
+DXUTSetCallbackDeviceCreated( OnCreateDevice );
+
+
+
+
+DXUTSetCallbackDeviceReset( OnResetDevice );
+
+
+
+
+DXUTSetCallbackDeviceLost( OnLostDevice );
+
+
+
+
+DXUTSetCallbackDeviceDestroyed( OnDestroyDevice );
+
+
+
+
+DXUTSetCallbackFrameRender( OnFrameRender );
+
+
+
+
+DXUTSetCallbackFrameMove( OnFrameMove );
+
+
+
+
+    DXUTInit(
+TRUE, TRUE, TRUE );
+
+
+
+
+DXUTCreateWindow( L"BasicHLSL" );
+
+
+
+
+DXUTCreateDevice( D3DADAPTER_DEFAULT, TRUE, 640, 480 );
+
+
+
+
+    //
+------------------------------------------------
+
+
+
+
+    // 定制主循环
+
+
+
+
+    HWND hWnd
+= DXUTGetHWND();
+
+
+
+
+    BOOL
+bGotMsg;
+
+
+
+
+    MSG  msg;
+
+
+
+
+msg.message = WM_NULL;
+
+
+
+
+PeekMessage( &amp;msg, NULL, 0U, 0U, PM_NOREMOVE );
+
+
+
+
+    while(
+WM_QUIT != msg.message )
+
+
+
+
+{
+
+
+
+
+        //
+使用PeekMessage()，因为我们使用空闲时间渲染场景
+
+
+
+
+        bGotMsg = ( PeekMessage( &amp;msg, NULL,
+0U, 0U, PM_REMOVE ) != 0 );
+
+
+
+
+        if( bGotMsg )
+
+
+
+
+        {
+
+
+
+
+           //
+转换并分派消息
+
+
+
+
+            if( 0 == TranslateAccelerator( hWnd, NULL,
+&amp;msg ) )
+
+
+
+
+            {
+
+
+
+
+                 TranslateMessage( &amp;msg
+);
+
+
+
+
+                 DispatchMessage( &amp;msg
+);
+
+
+
+
+            }
+
+
+
+
+}
+
+
+
+
+        else
+
+
+
+
+         {
+
+
+
+
+            //
+在空闲时间渲染一帧
+(没有消息则等待ing)
+
+
+
+
+            DXUTRender3DEnvironment();
+
+
+
+
+         }
+
+
+
+
+}
+
+
+
+
+//
+定制主循环结束
+
+
+
+
+    //
+------------------------------------------------
+
+
+
+
+    return
+DXUTGetExitCode();
+
+
+
+
+}
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>在这个例子代码中，程序调用<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTRender3DEnvironment.htm">DXUTRender3DEnvironment</a>函数来进行每帧的更新、渲染场景和处理设备事件。在程序中完全的复制这个函数是可行的，但我们不推荐这样做。</p>
+
+<h2 id="section-12">处理事件</h2>
+
+<p>该框架使用回调函数机制来实现程序对事件的响应。应用程序只需要注册或设置一个框架的函数指针，当事件触发时框架将调用这个函数。框架不需要注册所有回调函数，因此应用程序仅释放因需要而注册的回调函数就行了。在DirectX April 2005 SDK中，回调函数从void*
+pUserContext类型的函数中传递一个void*
+pUserContext来完成回调。这样允许回调函数接收应用程序的上下文，例如类的指针。在框架中触发的3种类型的事件：</p>
+
+<ul>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_设备事件">设备事件</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_框架事件">框架事件</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_消息事件">消息事件</a></p>
+  </li>
+</ul>
+
+<h3 id="section-13">设备事件</h3>
+
+<p>当应用程序在渲染Direct3D设备时，设备的丢弃(lost)是有可能的。导致这样事情的发生有很多原因，比如当用户按ALT+TAB键离开全屏程序时，当用户按CTRL+ALT+DEL，或者当用户运行其他全屏的3D应用程序时。当调用特定的函数时，例如<strong>Present</strong>，这时就会返回一个<strong>D3DERR_DEVICELOST</strong>值，这时Direct3D
+API会通知应用程序。
+当设备丢弃时，释放所有Direct3D对象是应用程序的责任，但当设备丢弃时就不可挽回了，例如在D3DPOOL_DEFAULT类型的内存中创建的对象。如果对象没有被释放，那么它从丢弃的状态返回时，设备将不能重置(reset)。
+当设备丢弃时应用程序必须等待。当设备返回时，程序必须调用<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/IDirect3DDevice9__Reset.htm">Reset</a>，并重新创建所有设备对象，重置设备将无法找回丢弃的设备对象。
+使用DXUT框架，在程序中使用回调函数去处理不同的事件是很简单的：设备更改，创建，重置，丢弃或释放。当设备丢弃时框架将会记录下来，当它从丢弃状态返回时框架将全部重置设备。框架在适当的时候使用程序的回调函数去释放和重建设备对象。下列是所有需要应用程序实现的回调函数：图表略。</p>
+<table cellpadding="0" width="684" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="238" valign="top">
+
+
+回调注册函数
+
+
+
+</td>
+
+<td width="263" valign="top">
+
+
+应用程序回调函数
+
+
+
+</td>
+
+<td width="183" valign="top">
+
+
+框架调用的时间
+
+
+
+</td>
+</tr>
+<tr>
+
+<td width="238" valign="top">[DXUTSetCallbackDeviceChanging](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetCallbackDeviceChanging.htm)
+</td>
+
+<td width="263" valign="top">[LPDXUTCALLBACKMODIFYDEVICESETTINGS](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/LPDXUTCALLBACKMODIFYDEVICESETTINGS.htm)
+</td>
+
+<td width="183" valign="top">在Direct3D设备创建以后调用。它给了程序一个阻止设备更改的机会。
+</td>
+</tr>
+<tr>
+
+<td width="238">[DXUTSetCallbackDeviceCreated](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetCallbackDeviceCreated.htm)
+</td>
+
+<td width="263">[LPDXUTCALLBACKDEVICECREATED](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/LPDXUTCALLBACKDEVICECREATED.htm)
+</td>
+
+<td width="183" valign="top">在Direct3D设备创建后被调用，通常发生在应用程序初始化和设备重建期间。
+</td>
+</tr>
+<tr>
+
+<td width="238">[DXUTSetCallbackDeviceReset](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetCallbackDeviceReset.htm)
+</td>
+
+<td width="263">[LPDXUTCALLBACKDEVICERESET](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/LPDXUTCALLBACKDEVICERESET.htm)
+</td>
+
+<td width="183">在Direct3D设备重置以后调用，通常发生在设备丢弃之后。
+</td>
+</tr>
+<tr>
+
+<td width="238">[DXUTSetCallbackDeviceLost](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetCallbackDeviceLost.htm)
+</td>
+
+<td width="263">[LPDXUTCALLBACKDEVICELOST](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/LPDXUTCALLBACKDEVICELOST.htm)
+</td>
+
+<td width="183">在Direct3D 设备进入丢弃状态和设备重置期间。
+</td>
+</tr>
+<tr>
+
+<td width="238">[DXUTSetCallbackDeviceDestroyed](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetCallbackDeviceDestroyed.htm)
+</td>
+
+<td width="263">[LPDXUTCALLBACKDEVICEDESTROYED](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/LPDXUTCALLBACKDEVICEDESTROYED.htm)
+</td>
+
+<td width="183">在Direct3D 毁坏后调用，通常发生应用程序终止或设备重建时。
+</td>
+</tr>
+</tbody>
+</table>
+<p>当在窗口与全屏模式之间切换设备时, 它通常会执行设备重置(reset)，但有时它必须重建Direct3D 。
+这些回调注册函数是可选的。然而，如果程序释放了没有注册设备，并且设备使用：<strong>DXUTSetCallbackDeviceDestroyed和DXUTSetCallbackDeviceCreated</strong>创建了的回调函数，那么框架不能够重建设备，因为它将没有办法通知应用程序，设备被释放或重建了。在这种情况下，更改设备或在hal和reference devices之间转换将无法工作。
+同样，如果程序没有注册丢弃的设备并且设备调用：<strong>DXUTSetCallbackDeviceLost</strong>和<strong>DXUTSetCallbackDeviceReset</strong>重置回调函数。那么当设备丢弃和重置时，框架将没有办法通知程序。在这种情况下，如果所有的设备对象不在D3DPOOL_MANAGED类型的内存里，重置设备将导致Direct3D失败。
+同样<strong><em>注意</em></strong>，如果应用程序使用<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTCreateDevice.htm">DXUTCreateDevice</a>函数，它不需要调用<strong>DXUTSetCallbackDeviceChanging</strong>，因为框架将会记得<strong>LPDXUTCALLBACKMODIFYDEVICESETTINGS</strong>函数。</p>
+
+<h3 id="section-14">框架事件</h3>
+
+<p>DXUT框架同样提供框架事件，它在渲染过程期间的每帧中调用。应用程序将注册并实现下列的回调函数：</p>
+<table cellpadding="0" width="641" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="180">
+
+
+**应用程序回调函数**** **
+
+
+
+</td>
+
+<td width="192">
+
+
+**回调注册函数**** **
+
+
+
+</td>
+
+<td width="84">
+
+
+**框架调用的时间**** **
+
+
+
+</td>
+
+<td width="185">
+
+
+**场景渲染**** **
+
+
+
+</td>
+</tr>
+<tr>
+
+<td width="180">[LPDXUTCALLBACKFRAMEMOVE](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/LPDXUTCALLBACKFRAMEMOVE.htm)
+</td>
+
+<td width="192">[DXUTSetCallbackFrameMove](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetCallbackFrameMove.htm)
+</td>
+
+<td width="84">每帧开始的时候调用一次
+</td>
+
+<td width="185">这个回调函数是程序更新场景最好的地方, 但它不包括实际的渲染调用, 它在框架的渲染回调函数 ([LPDXUTCALLBACKFRAMERENDER](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/LPDXUTCALLBACKFRAMERENDER.htm))
+里。
+</td>
+</tr>
+<tr>
+
+<td width="180">**LPDXUTCALLBACKFRAMERENDER**
+</td>
+
+<td width="192">[DXUTSetCallbackFrameRender](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetCallbackFrameRender.htm)
+</td>
+
+<td width="84">如果窗口需要重画时，在每帧结束的时候调用。
+</td>
+
+<td width="185">将在这个回调函数里执行所有场景的渲染调用。 这个回调函数返回后，框架将调用**Present** 来显示在交换链中的下个缓冲区的内容。
+</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="section-15">消息事件</h3>
+
+<p>框架通过回调函数和相应的注册函数传递窗口消息，键盘事件和鼠标事件。编写程序以提供响应事件。</p>
+<table cellpadding="0" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="190">
+
+
+**应用程序回调函数**** **
+
+
+
+</td>
+
+<td width="190">
+
+
+**回调注册函数**** **
+
+
+
+</td>
+
+<td width="190">
+
+
+**描述**** **
+
+
+
+</td>
+</tr>
+<tr>
+
+<td width="190">[LPDXUTCALLBACKMSGPROC](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/LPDXUTCALLBACKMSGPROC.htm)
+</td>
+
+<td width="190">[DXUTSetCallbackMsgProc](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetCallbackMsgProc.htm)
+</td>
+
+<td width="190">从DXUT消息队列中处理窗口消息。
+</td>
+</tr>
+<tr>
+
+<td width="190">[LPDXUTCALLBACKKEYBOARD](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/LPDXUTCALLBACKKEYBOARD.htm)
+</td>
+
+<td width="190">[DXUTSetCallbackKeyboard](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetCallbackKeyboard.htm)
+</td>
+
+<td width="190">从DXUT消息队列中处理键盘消息。
+</td>
+</tr>
+<tr>
+
+<td width="190">[LPDXUTCALLBACKMOUSE](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/LPDXUTCALLBACKMOUSE.htm)
+</td>
+
+<td width="190">[DXUTSetCallbackMouse](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetCallbackMouse.htm)
+</td>
+
+<td width="190">从DXUT消息队列中处理鼠标消息。
+</td>
+</tr>
+</tbody>
+</table>
+
+<h1 id="dxut-5">处理DXUT的错误</h1>
+
+<p>本主题包括被推荐的过程，该过程处理从DXUT程序中返回的错误。</p>
+
+<ul>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_错误处理效率">错误处理效率</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_Error_Messages">错误消息</a></p>
+  </li>
+</ul>
+
+<h2 id="section-16">错误处理效率</h2>
+
+<p>Direct3D API的设计使处理失败更容易。即使大部分基本的Direct3D API函数返回HRESULTs值，API被设计成只有少数的方法和函数返回设备错误，如：D3DERR_DEVICELOST或D3DERR_DRIVERINTERNALERROR。然而，一个典型的Direct3D应用程序将使用许多不同的API方法和函数，当传递了错误的参数会返回D3DERR_INVALIDCALL。
+当一个Direct3D应用程序开发时，应该检测所有的API调用是否失败，如果失败发生那么函数将是无法预期的，程序应该设计成立即通知开发者或记录错误。这样当API函数调用出错时，开发者可以很快捕捉到出错位置。然而对于一个稳定的程序，大多数Direct3D API函数能够正确的调用并安全的忽略错误代码，在一些关键API函数中返回错误并处理异常，例如：<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/IDirect3DDevice9__Present.htm">Present</a>
+或 <a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/IDirect3DDevice9__TestCooperativeLevel.htm">TestCooperativeLevel</a>。
+因为只有少数代码需要进行错误处理，因此在处理大部分重要的Direct3D函数时，你能够改善执行速度并使程序代码更有预见性、更强壮。在其他少数的API函数中必须对失败进行正确的处理，例如：<strong>Present</strong>，它是在框架内部处理的。</p>
+
+<h2 id="section-17">错误消息</h2>
+
+<p>框架中的错误处理，在Direct3D
+API的设计中是如何匹配错误处理的(Error handling in the framework
+matches how error handling in the Direct3D API was
+designed.)。对于严重的错误，例如：缺少媒体资源，程序会通知用户并终止。对于在每一帧中调用的大多数API函数，错误处理仅仅是在<strong>debug编译版本</strong>中给开发者显示一个错误对话框。对于更详细的builds，这些错误是被忽视的。框架用在Dxstdafx.h中定义的几个宏来完成：</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+
+
+#if defined(DEBUG) | defined(_DEBUG)
+
+
+
+
+    #define
+V(x)
+
+
+
+
+{
+
+
+
+
+        hr =
+x;
+
+
+
+
+        if(
+FAILED(hr) )
+
+
+
+
+{
+
+
+
+
+DXUTTrace( __FILE__, (DWORD)__LINE__, hr, L#x, TRUE );
+
+
+
+
+}
+
+
+
+
+}
+
+
+
+
+    #define
+V_RETURN(x)
+
+
+
+
+{
+
+
+
+
+        hr =
+x;
+
+
+
+
+        if(
+FAILED(hr) )
+
+
+
+
+{
+
+
+
+
+return DXUTTrace( __FILE__, (DWORD)__LINE__, hr, L#x, TRUE );
+
+
+
+
+}
+
+
+
+
+}
+
+
+
+
+#else
+
+
+
+
+    #define
+V(x)
+
+
+
+
+{
+
+
+
+
+        hr =
+x;
+
+
+
+
+{
+
+
+
+
+    #define
+V_RETURN(x)
+
+
+
+
+{
+
+
+
+
+        hr =
+x;
+
+
+
+
+        if(
+FAILED(hr) )
+
+
+
+
+{
+
+
+
+
+return hr;
+
+
+
+
+}
+
+
+
+
+}
+
+
+
+
+#endif
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>一个典型的程序可以像下面这样使用V()宏：</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+
+
+V( g_pEffect-&gt;BeginPass( iPass ) );
+
+
+
+
+V( g_pEffect-&gt;CommitChanges() );
+
+
+
+
+V( g_pMesh-&gt;DrawSubset( 0 ) );
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>每个调用都使用V()宏，<strong>release编译版本</strong>将忽视API返回的代码。对于<strong>debug编译版本</strong>，宏将显示一个错误消息，类似下面这样：</p>
+
+<p>图 1.  V()宏返回错误消息给<strong>debug编译版本</strong></p>
+
+<p>编译器的debug输出窗口将显示类似下面这样的消息框：</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+</td>
+</tr>
+<tr>
+
+<td width="588" valign="top">
+
+
+c:\basichlsl\basichlsl.cpp(242):
+
+
+
+
+D3DXCreateFont( pd3dDevice, 15, 0, FW_BOLD, 1,
+FALSE, DEFAULT_CHARSET,
+
+
+
+
+OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
+L"Arial",
+
+
+
+
+    NULL )
+hr=D3DERR_INVALIDCALL (0x8876086c)
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>当使用Visual Studio .NET时，只要在debug输出窗口上简单的双击这一行，就会跳过发生错误的那行代码。</p>
+
+<p>应用程序可以像下面这样使用V_RETURN()宏：</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+
+
+V_RETURN( D3DXCreateEffectFromFile( pd3dDevice,
+str,
+
+
+
+
+                                    NULL, NULL,
+dwShaderFlags,
+
+
+
+
+                                    NULL,
+&amp;g_pEffect, NULL ) );
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>这个宏将在debug编译版本中显示一个类似的错误消息，但对于release编译版本将同样返回任何失败的HRESULT类型给调用函数。这些错误消息的显示，能够避开一个对<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTInit.htm">DXUTInit</a>的调用或下面的命令行参数：
+-noerrormsgboxes
+要了解更多宏的用法，请查看 <a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/dx9_graphics_tutorials_and_samples.htm">Tutorials
+and Samples</a>部分。</p>
+
+<h1 id="dxut-6">DXUT高级设备选择</h1>
+
+<p>本主题包括控制使用DXUT创建Direct3D设备的高级细节。</p>
+
+<ul>
+  <li>
+    <p>选择最佳的设备</p>
+  </li>
+  <li>
+    <p><a href="http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#Controlling_the_Device_Selection_Dialog">控制设备选择对话框</a></p>
+  </li>
+</ul>
+
+<h2 id="best-available-device">选择最佳设备(Best Available Device)</h2>
+
+<p>DXUT使用高度灵活的方法从列表中选择最佳的设备，这个设备列表和队列系统可以独立的使用，在每帧的空闲期间(rest of the framework)调用<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTFindValidDeviceSettings.htm">DXUTFindValidDeviceSettings</a>函数：</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+
+
+HRESULT DXUTFindValidDeviceSettings(
+
+
+
+
+DXUTDeviceSettings* pOut,
+
+
+
+
+DXUTDeviceSettings* pIn,
+
+
+
+
+DXUTMatchOptions*   pMatchOptions
+)
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+<p>PIn参数是一个已有的<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTDeviceSettings.htm">DXUTDeviceSettings</a>结构的指针。PMatchOptions参数描述保存的是哪个输入设备的设定，哪个最接近的有效设定将被匹配，当选择当前最佳的设备时哪个设定将被忽视。
+举个例子，假如调用函数想有一个<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/D3DFORMAT.htm">D3DFMT_A2B10G10R10</a>格式的hal设备的后备缓冲区。如果系统中的hal设备不支持这个后备缓冲区格式，但reference设备已经安装，函数在reference设备和更改为与reference设备兼容的后备缓冲格式中做出选择。匹配的选择在<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUT_MATCH_TYPE.htm">DXUT_MATCH_TYPE</a>列举中，让调用者控制如何选择这些模式。
+每个匹配的选项(查看<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTMatchOptions.htm">DXUTMatchOptions</a>)
+必须是下列类型之一：</p>
+<table cellpadding="0" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="285">
+
+
+**DXUT_MATCH_TYPE 值**** **
+
+
+
+</td>
+
+<td width="285">
+
+
+**描述**** **
+
+
+
+</td>
+</tr>
+<tr>
+
+<td width="285">DXUTMT_IGNORE_INPUT
+</td>
+
+<td width="285">为默认的设备设定使用最接近有效值的值。
+</td>
+</tr>
+<tr>
+
+<td width="285">DXUTMT_PRESERVE_INPUT
+</td>
+
+<td width="285">使用没改变的输入参数，没有找到有效的设备是可能的。
+</td>
+</tr>
+<tr>
+
+<td width="285">DXUTMT_CLOSEST_TO_INPUT
+</td>
+
+<td width="285">为输入使用最接近有效值的值。
+</td>
+</tr>
+</tbody>
+</table>
+<p>如果pMatchOptions为NULL，那么所有匹配选项是DXUTMT_IGNORE_INPUT。如果没能找到有效的设备设定，<strong>DXUTFindValidDeviceSettings</strong>返回一个失败的代码；否则，函数返回成功的代码，有效的设备设定被写到pOut参数里。</p>
+
+<h2 id="section-18">控制设备选择对话框</h2>
+
+<p>你可能想完全控制DXUT设备选择对话框中列出的，选项列表中选择的项目。例如，可能是通知设备选择对话框，程序需要一个模版缓冲。
+在框架的设备选择对话框中控制选项的列表，可以使用<a href="file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/LPDXUTCALLBACKISDEVICEACCEPTABLE.htm">LPDXUTCALLBACKISDEVICEACCEPTABLE</a>回调函数。将允许你去控制设备设定的哪个组合(adapter ordinal, device type, adapter format, back buffer format,
+and windowed)。在设备选择对话框中控制其他设定，你可以使用CD3Denumeration类的成员函数，它定义在DXUTenum.cpp文件中，公布在下面的头文件中：
+(<em>SDK
+root</em>)\Samples\C++\Common\DXUTenum.h
+举个例子，在对话框中控制深度缓冲区格式，你可以使用下列代码：</p>
+<table cellpadding="0" width="588" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="588" valign="top">
+
+
+CGrowableArray<D3DFORMAT>* pDSList;
+
+
+
+
+pDSList =
+DXUTGetEnumeration()-&gt;GetPossibleDepthStencilFormatList();
+
+
+
+
+nIndex = pDSList-&gt;IndexOf( D3DFMT_D16
+);
+
+
+
+
+if( nIndex &gt;= 0 ) pDSList-&gt;Remove( nIndex
+);
+
+
+
+
+nIndex = pDSList-&gt;IndexOf( D3DFMT_D24X8
+);
+
+
+
+
+if( nIndex &gt;= 0 ) pDSList-&gt;Remove( nIndex
+);
+
+
+
+
+nIndex = pDSList-&gt;IndexOf( D3DFMT_D24S8
+);
+
+
+
+
+if( nIndex &gt;= 0 ) pDSList-&gt;Remove( nIndex
+);
+
+
+
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+调用CD3Denumeratio类的函数，像这个例子代码，必须在设备创建以前使用。
+<table cellpadding="0" cellspacing="0" border="1">
+<tbody>
+<tr>
+
+<td width="285">
+
+
+**Function**** **
+
+
+
+</td>
+
+<td width="285">
+
+
+**Description**** **
+
+
+
+</td>
+</tr>
+<tr>
+
+<td width="285">
+
+
+**Window Management**** **
+
+
+
+</td>
+
+<td width="285">
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetHINSTANCE](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetHINSTANCE.htm)
+</td>
+
+<td width="285">取得应用程序实例的句柄。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetHWND](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetHWND.htm)
+</td>
+
+<td width="285">取得当前设备窗口的句柄。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetHWNDFocus](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetHWNDFocus.htm)
+</td>
+
+<td width="285">取得焦点窗口的句柄。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetHWNDDeviceFullScreen](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetHWNDDeviceFullScreen.htm)
+</td>
+
+<td width="285">取得全屏模式设备窗口的句柄。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetHWNDDeviceWindowed](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetHWNDDeviceWindowed.htm)
+</td>
+
+<td width="285">取得窗口模式设备窗口的句柄。.
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetWindowClientRect](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetWindowClientRect.htm)
+</td>
+
+<td width="285">取得应用程序设备窗口的矩形客户区。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetWindowTitle](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetWindowTitle.htm)
+</td>
+
+<td width="285">取得应用程序窗口标题的指针。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTIsWindowed](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTIsWindowed.htm)
+</td>
+
+<td width="285">应用程序是否在窗口模式。
+</td>
+</tr>
+<tr>
+
+<td width="285">
+
+
+**Device
+Management**** **
+
+
+
+</td>
+
+<td width="285">
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTSetCursorSettings](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetCursorSettings.htm)
+</td>
+
+<td width="285">在全屏模式下为鼠标的用法设置可选项。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTSetMultimonSettings](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetMultimonSettings.htm)
+</td>
+
+<td width="285">在多显示器下设置框架函数的行为选项。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTToggleFullscreen](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTToggleFullscreen.htm)
+</td>
+
+<td width="285">应用程序的窗口和全屏模式间的转换。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTToggleREF](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTToggleREf.htm)
+</td>
+
+<td width="285">应用程序在 hal 和 reference
+devices间的转换。
+</td>
+</tr>
+<tr>
+
+<td width="285">
+
+
+**DXUT Framework
+Management**** **
+
+
+
+</td>
+
+<td width="285">
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTResetFrameworkState](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTResetFrameworkState.htm)
+</td>
+
+<td width="285">丢失所有先前的框架状态，重置框架状态（初始化默认状态）。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTShutdown](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTShutdown.htm)
+</td>
+
+<td width="285">引发程序终止和框架的清除。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetExitCode](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetExitCode.htm)
+</td>
+
+<td width="285">取得框架出口代码。
+</td>
+</tr>
+<tr>
+
+<td width="285">
+
+
+**Direct3D Variable
+Retrieval**** **
+
+
+
+</td>
+
+<td width="285">
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetD3DObject](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetD3DObject.htm)
+</td>
+
+<td width="285">取得
+[IDirect3D9](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/IDirect3D9.htm)对象的指针。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetD3DDevice](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetD3DDevice.htm)
+</td>
+
+<td width="285">取得[IDirect3DDevice9](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/IDirect3DDevice9.htm)接口指针，描述当前设备。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetDeviceSettings](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetDeviceSettings.htm)
+</td>
+
+<td width="285">取得[DXUTDeviceSettings](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTDeviceSettings.htm)结构用来创建当前设备。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetPresentParameters](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetPresentParameters.htm)
+</td>
+
+<td width="285">取得当前设备的表示参数。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetBackBufferSurfaceDesc](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetBackBufferSurfaceDesc.htm)
+</td>
+
+<td width="285">取得[D3DSURFACE_DESC](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/D3DSURFACE_DESC.htm)
+接口的指针，描述当前适配器的后备缓冲区。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetDeviceCaps](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetDeviceCaps.htm)
+</td>
+
+<td width="285">取得当前设备能力的[D3DCAPS9](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/D3DCAPS9.htm)
+指针。
+</td>
+</tr>
+<tr>
+
+<td width="285">
+
+
+**Statistics**** **
+
+
+
+</td>
+
+<td width="285">
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetFPS](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetFPS.htm)
+</td>
+
+<td width="285">取得当前每秒的帧数。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetFrameStats](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetFrameStats.htm)
+</td>
+
+<td width="285">取得一个字符串指针，包含当前每秒帧数，resolution，后备缓冲区格式，深度/模版缓冲区格式。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetDeviceStats](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetDeviceStats.htm)
+</td>
+
+<td width="285">取得一个字符串指针，包含当前设备类型，顶点处理行为，设备名称。
+</td>
+</tr>
+<tr>
+
+<td width="285">
+
+
+**Time**** **
+
+
+
+</td>
+
+<td width="285">
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetTime](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetTime.htm)
+</td>
+
+<td width="285">取得当前时间(秒)
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTGetElapsedTime](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTGetElapsedTime.htm)
+</td>
+
+<td width="285">取得上一帧到现在所消耗的帧数。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTSetConstantFrameTime](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetConstantFrameTime.htm)
+</td>
+
+<td width="285">使用或禁用一个帧与帧间的常量时间。
+</td>
+</tr>
+<tr>
+
+<td width="285">
+
+
+**Timer**** **
+
+
+
+</td>
+
+<td width="285">
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTSetTimer](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTSetTimer.htm)
+</td>
+
+<td width="285">初始化一个新的时间器。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTKillTimer](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTKillTimer.htm)
+</td>
+
+<td width="285">卸载一个已有的时间器。
+</td>
+</tr>
+<tr>
+
+<td width="285">
+
+
+**Pause**** **
+
+
+
+</td>
+
+<td width="285">
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTPause](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTPause.htm)
+</td>
+
+<td width="285">设置帧间时间并且/或者渲染过程的暂停状态。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTIsRenderingPaused](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTIsRenderingPaused.htm)
+</td>
+
+<td width="285">在当前的设备上是否渲染已经暂停。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTIsTimePaused](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTIsTimePaused.htm)
+</td>
+
+<td width="285">在当前的设备上是否时间已经暂停。
+</td>
+</tr>
+<tr>
+
+<td width="285">
+
+
+**User Input**** **
+
+
+
+</td>
+
+<td width="285">
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTIsKeyDown](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTIsKeyDown.htm)
+</td>
+
+<td width="285">当函数被调用时，指定的一个键盘键是否处在弹起或按下状态。
+</td>
+</tr>
+<tr>
+
+<td width="285">[DXUTIsMouseButtonDown](file:///C:/Documents%20and%20Settings/%E6%9E%97%E5%BE%B7%E8%BE%89/%E6%A1%8C%E9%9D%A2/DXUTIsMouseButtonDown.htm)
+</td>
+
+<td width="285">当函数被调用时，指定的一个鼠标键是否处在弹起或按下状态。
+</td>
+</tr>
+</tbody>
+</table>
+
+
+# DXUT参考
+
+
+这节包含了在DXUT的dxut.h头文件中提供的基本的参考信息。DXUT创建Direct3D例子、原型、工具，并更容易的建立坚固、专业的游戏。它简化了窗口和Direct3D API的使用。
+参考内容分为下列部分：
+
+
+
+	
+  * [函数](http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_函数(functions))
+
+	
+  * [回调函数](http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_回调函数(structures))
+
+	
+  * [结构](http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_结构(structures))
+
+	
+  * [列举](http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_列举(Enumerations))
+
+	
+  * [常量](http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_常量(Constants))
+
+
+See
+Also
+[DXUT概观](http://www.cnblogs.com/doublesnke/archive/2011/06/09/2076664.html#_DXUT概观)
+
+
+## 函数(functions)
+
+
+DXUT提供下列函数给应用程序使用：
+
+
+
+
+
+
+
+
+
+
+
+</D3DFORMAT></td></tr></tbody></table>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/07/rtti-e4-b8-8etypeid/" title="link to RTTI与typeid">RTTI与typeid</a></h2>
+       <p class="excerpt">Typeid操作返回指针或引用所指对象的实际类型。如果一个基类中没有虚函数被实现，那么就算派生类中有同样的成员函数，指向派生类的指针的Typeid仍然是基类的类别；如果派生类重写了基类中虚函数，那么指向派生类的指针就是派生类的类。如有class B继承于A，A* pA=new B();typeid(pA)就是class A，typeid(pA)是指向派生类的指针，所以要根据派生情况来RTTI他的类型。&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-07-02 21:26:20 +0800" class="post-list__meta--date date">2015-07-02</time> &#8226; <span class="post-list__meta--tags tags">C++</span><a class="btn-border-small" href=/2015/07/rtti-e4-b8-8etypeid/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/06/directx-11-shade/" title="link to DirectX 11 SDK的一些问题">DirectX 11 SDK的一些问题</a></h2>
+       <p class="excerpt">由于项目需要，学习英伟达的D3D11新技术Sample。在一个使用fx渲染器的案例中，提示unrecognized complier target " fx_5_0",网上搜索后得知，该fx_5_0新特性必须使用最新的SDK11才能编译。  最后通过fxc.exe的命令支持发现，只有DirectX SDK (June)2010才提供fx_5_0的编译需求。  所以推荐使用D3D11较新技术的时候，都将DX SDK更新到（June）2010版本（大概500多MB的），同时认真读取每份Samp...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-06-12 19:47:33 +0800" class="post-list__meta--date date">2015-06-12</time> &#8226; <span class="post-list__meta--tags tags">DX</span><a class="btn-border-small" href=/2015/06/directx-11-shade/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "/2015/06/dxut-e8-ae-be-e8-ae-a1-e6-8c-87-e5-8d-97-ef-bc-88-e8-bd-ac-ef-bc-89/";
+        this.page.identifier = "/2015/06/dxut-e8-ae-be-e8-ae-a1-e6-8c-87-e5-8d-97-ef-bc-88-e8-bd-ac-ef-bc-89/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-06-30 生成</span>
+        <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

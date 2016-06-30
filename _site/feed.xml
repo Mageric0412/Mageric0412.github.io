@@ -5,9 +5,299 @@
     <description>Mageric的个人小站.</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 29 Jun 2016 22:55:56 +0800</pubDate>
-    <lastBuildDate>Wed, 29 Jun 2016 22:55:56 +0800</lastBuildDate>
+    <pubDate>Thu, 30 Jun 2016 23:42:50 +0800</pubDate>
+    <lastBuildDate>Thu, 30 Jun 2016 23:42:50 +0800</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
+    
+      <item>
+        <title>JVM相关知识整理（转）</title>
+        <description>&lt;p&gt;       &lt;strong&gt;JVM&lt;/strong&gt;是虚拟机，也是一种规范，他遵循着&lt;strong&gt;冯·诺依曼&lt;/strong&gt;体系结构的设计原理。冯·诺依曼体系结构中，指出计算机处理的数据和指令都是二进制数，采用存储程序方式不加区分的存储在同一个存储器里，并且顺序执行，指令由操作码和地址码组成，操作码决定了操作类型和所操作的数的数字类型，地址码则指出地址码和操作数。    &lt;br /&gt;
+       从&lt;strong&gt;dos&lt;/strong&gt;到&lt;strong&gt;window8&lt;/strong&gt;，从&lt;strong&gt;unix&lt;/strong&gt;到&lt;strong&gt;ubuntu&lt;/strong&gt;和&lt;strong&gt;CentOS&lt;/strong&gt;，还有&lt;strong&gt;MAC OS&lt;/strong&gt;等等，不同的操作系统指令集以及数据结构都有着差异，而&lt;strong&gt;JVM&lt;/strong&gt;通过在操作系统上建立虚拟机，自己定义出来的一套统一的数据结构和操作指令，把同一套语言翻译给各大主流的操作系统，实现了跨平台运行，可以说&lt;strong&gt;JVM&lt;/strong&gt;是java的核心，是java可以一次编译到处运行的本质所在。    &lt;br /&gt;
+我研究学习了JVM的组成和运行原理，JVM的统一数据格式规范、字节码文件结构，JVM关于内存的管理。&lt;/p&gt;
+
+&lt;h3 id=&quot;jvm&quot;&gt;JVM的组成和运行原理&lt;/h3&gt;
+&lt;p&gt;       JVM毕竟是个虚拟机，是一种规范，虽说符合冯诺依曼的计算机设计理念，但是他并不是实体计算机，所以他的组成也不是什么存储器，控制器，运算器，输入输出设备。在我看来，JVM放在运行在真实的操作系统中表现的更像应用或者说是进程，他的组成可以理解为JVM这个进程有哪些功能模块，而这些功能模块的运作可以看做是JVM的运行原理。JVM有多种实现，例如Oracle的JVM，HP的JVM和IBM的JVM等，而在本文中研究学习的则是使用最广泛的Oracle的HotSpot JVM。&lt;/p&gt;
+
+&lt;h4 id=&quot;jvmjdk&quot;&gt;JVM在JDK中的位置&lt;/h4&gt;
+&lt;p&gt;       JDK是java开发的必备工具箱，JDK其中有一部分是JRE，JRE是JAVA运行环境，JVM则是JRE最核心的部分。我从oracle.com截取了一张关于JDK Standard Edtion的组成图:
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/JDK.jpg&quot; alt=&quot;&quot; /&gt;
+       从最底层的位置可以看出来JVM有多重要，而实际项目中JAVA应用的性能优化，OOM等异常的处理最终都得从JVM这儿来解决。HotSpot是Oracle关于JVM的商标，区别于IBM，HP等厂商开发的JVM。Java HotSpot Client VM和Java HotSpot Server VM是JDK关于JVM的两种不同的实现，前者可以减少启动时间和内存占用，而后者则提供更加优秀的程序运行速度（参考自：&lt;a href=&quot;http://docs.oracle.com/javase/8/docs/technotes/guides/vm/index.html&quot;&gt;http://docs.oracle.com/javase/8/docs/technotes/guides/vm/index.html&lt;/a&gt; ，该文档有关于各个版本的JVM的介绍）。在命令行，通过java -version可以查看关于当前机器JVM的信息，下面是我在Win8系统上执行命令的截图:
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard.png&quot; alt=&quot;&quot; /&gt;
+可以看出我装的是build 20.13-b02版本，HotSpot 类型Server模式的JVM。&lt;/p&gt;
+
+&lt;h4 id=&quot;jvm-1&quot;&gt;JVM的组成&lt;/h4&gt;
+&lt;p&gt;       JVM由4大部分组成：&lt;strong&gt;ClassLoader&lt;/strong&gt;，&lt;strong&gt;Runtime Data Area&lt;/strong&gt;，&lt;strong&gt;Execution Engine&lt;/strong&gt;，&lt;strong&gt;Native Interface&lt;/strong&gt;。
+我从CSDN找了一张描述JVM大致结构的图：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%281%29.png&quot; alt=&quot;&quot; /&gt;
+1. &lt;strong&gt;ClassLoader&lt;/strong&gt; 是负责加载class文件，class文件在文件开头有特定的文件标示，并且ClassLoader只负责class文件的加载，至于它是否可以运行，则由Execution Engine决定。  &lt;br /&gt;
+2. &lt;strong&gt;Native Interface&lt;/strong&gt; 是负责调用本地接口的。他的作用是调用不同语言的接口给JAVA用，他会在Native Method Stack中记录对应的本地方法，然后调用该方法时就通过Execution Engine加载对应的本地lib。原本多于用一些专业领域，如JAVA驱动，地图制作引擎等，现在关于这种本地方法接口的调用已经被类似于Socket通信，WebService等方式取代。  &lt;br /&gt;
+3. &lt;strong&gt;Execution Engine&lt;/strong&gt; 是执行引擎，也叫Interpreter。Class文件被加载后，会把指令和数据信息放入内存中，Execution Engine则负责把这些命令解释给操作系统。   &lt;br /&gt;
+4. &lt;strong&gt;Runtime Data Area&lt;/strong&gt; 则是存放数据的，分为五部分：Stack，Heap，Method Area，PC Register，Native Method Stack。几乎所有的关于java内存方面的问题，都是集中在这块。下图是javapapers.com上关于Run-time Data Areas的描述：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%282%29.png&quot; alt=&quot;&quot; /&gt;
+       可以看出它把Method Area化为了Heap的一部分，javapapers.com中认为Method Area是Heap的逻辑区域，但这取决于JVM的实现者，而HotSpot JVM中把Method Area划分为非堆内存，显然是不包含在Heap中的。下图是javacodegeeks.com中，2014年9月刊出的一片博文中关于Runtime Data Area的划分，其中指出，NonHeap包含PermGen和Code Cache，PermGen包含Method Area,而且PermGen在JAVA SE 8中已经不再用了。   &lt;br /&gt;
+查阅资料（&lt;a href=&quot;https://abhirockzz.wordpress.com/2014/03/18/java-se-8-is-knocking-are-you-there/&quot;&gt;https://abhirockzz.wordpress.com/2014/03/18/java-se-8-is-knocking-are-you-there/&lt;/a&gt;）得知，java8中PermGen已经从JVM中移除并被MetaSpace取代，java8中也不会见到OOM:PermGen Space的异常。目前Runtime Data Area可以用下图描述它的组成：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%283%29.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;4.1  Stack 是java栈内存，它等价于C语言中的栈，栈的内存地址是不连续的，每个线程都拥有自己的栈。 栈里面存储着的是StackFrame，在《JVM Specification》中文版中被译作java虚拟机框架，也叫做栈帧。   &lt;br /&gt;
+       StackFrame包含三类信息：局部变量，执行环境，操作数栈。局部变量用来存储一个类的方法中所用到的局部变量。执行环境用于保存解析器对于java字节码进行解释过程中需要的信息，包括：上次调用的方法、局部变量指针和操作数栈的栈顶和栈底指针。操作数栈用于存储运算所需要的操作数和结果。StackFrame在方法被调用时创建，在某个线程中，某个时间点上，只有一个框架是活跃的，该框架被称为Current Frame，而框架中的方法被称为Current Method，其中定义的类为Current Class。局部变量和操作数栈上的操作总是引用当前框架。当Stack Frame中方法被执行完之后，或者调用别的StackFrame中的方法时，则当前栈变为另外一个StackFrame。Stack的大小是由两种类型，固定和动态的，动态类型的栈可以按照线程的需要分配。 下面两张图是关于栈之间关系以及栈和非堆内存的关系基本描述（来自 &lt;a href=&quot;http://www.programering.com/a/MzM3QzNwATA.html&quot;&gt;http://www.programering.com/a/MzM3QzNwATA.html&lt;/a&gt; ）：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%284%29.png&quot; alt=&quot;&quot; /&gt;
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%285%29.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;4.2 Heap 是用来存放对象信息的，和Stack不同，Stack代表着一种运行时的状态。换句话说，栈是运行时单位，解决程序该如何执行的问题，而堆是存储的单位，解决数据存储的问题。Heap是伴随着JVM的启动而创建，负责存储所有对象实例和数组的。堆的存储空间和栈一样是不需要连续的，它分为Young Generation和Old Generation（也叫Tenured Generation ）两大部分。Young Generation分为Eden和Survivor，Survivor又分为From Space和 ToSpace。   &lt;br /&gt;
+       和Heap经常一起提及的概念是PermanentSpace，它是用来加载类对象的专门的内存区，是非堆内存，和Heap一起组成JAVA内存，它包含MethodArea区（在没有CodeCache的HotSpotJVM实现里，则MethodArea就相当于GenerationSpace）。 在JVM初始化的时候，我们可以通过参数来分别指定，PermanentSpace的大小、堆的大小、以及Young Generation和Old Generation的比值、Eden区和From Space的比值，从而来细粒度的适应不同JAVA应用的内存需求。&lt;/p&gt;
+
+&lt;p&gt;4.3 PC Register 是程序计数寄存器，每个JAVA线程都有一个单独的PC Register，他是一个指针，由Execution Engine读取下一条指令。如果该线程正在执行java方法，则PC Register存储的是 正在被执行的指令的地址，如果是本地方法，PC Register的值没有定义。PC寄存器非常小，只占用一个字宽，可以持有一个returnAdress或者特定平台的一个指针。&lt;/p&gt;
+
+&lt;p&gt;4.4 Method Area 在HotSpot JVM的实现中属于非堆区，非堆区包括两部分：Permanet Generation和Code Cache，而Method Area属于Permanert Generation的一部分。Permanent Generation用来存储类信息，比如说：class definitions，structures，methods， field， method (data and code) 和 constants。Code Cache用来存储Compiled Code，即编译好的本地代码，在HotSpot JVM中通过&lt;code class=&quot;highlighter-rouge&quot;&gt;JIT(Just In Time) Compiler&lt;/code&gt;生成，JIT是即时编译器，他是为了提高指令的执行效率，把字节码文件编译成本地机器代码，如下图：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%286%29.png&quot; alt=&quot;&quot; /&gt;    &lt;br /&gt;
+       引用一个经典的案例来理解Stack，Heap和Method Area的划分，就是&lt;code class=&quot;highlighter-rouge&quot;&gt;Sring a=&quot;xx&quot;；Stirng b=&quot;xx&quot;&lt;/code&gt;，问是否a==b? 首先==符号是用来判断两个对象的引用地址是否相同，而在上面的题目中，a和b按理来说申请的是Stack中不同的地址，但是他们指向Method Area中Runtime Constant Pool的同一个地址，按照网上的解释，在a赋值为“xx”时，会在Runtime Contant Pool中生成一个String Constant，当b也赋值为“xx”时，那么会在常量池中查看是否存在值为“xx”的常量，存在的话，则把b的指针也指向“xx”的地址，而不是新生成一个String Constant。我查阅了网络上大家关于String Constant的存储的说说法，存在略微差别的是，它存储在哪里，有人说Heap中会分配出一个常量池，用来存储常量，所有线程共享它。而有人说常量池是Method Area的一部分，而Method Area属于非堆内存，那怎么能说常量池存在于堆中？    &lt;br /&gt;
+       我认为，其实两种理解都没错。Method Area的确从逻辑上讲可以是Heap的一部分，在某些JVM实现里从堆上开辟一块存储空间来记录常量是符合JVM常量池设计目的的，所以前一种说法没问题。对于后一种说法，HotSpot JVM的实现中的确是把方法区划分为了非堆内存，意思就是它不在堆上。我在HotSpot JVM做了个简单的实验，定义多个常量之后，程序抛出OOM：PermGen Space异常，印证了JVM实现中常量池是在Permanent Space中的说法。但是，我的JDK版本是1.6的。查阅资料，JDK1.7中InternedStrings已经不再存储在PermanentSpace中，而是放到了Heap中；JDK8中PermanentSpace已经被完全移除，InternedStrings也被放到了MetaSpace中（如果出现内存溢出，会报OOM:MetaSpace，这里有个关于两者性能对比的文章： &lt;a href=&quot;http://blog.csdn.net/zhyhang/article/details/17246223&quot;&gt;http://blog.csdn.net/zhyhang/article/details/17246223&lt;/a&gt;）    所以，仁者见仁，智者见智，一个馒头足以引发血案，就算是同一个商家的JVM，毕竟JDK版本在更新，或许正如StackOverFlow上大神们所说，对于理解JVM Runtime Data Area这一部分的划分逻辑，还是去看对应版本的JDK源码比较靠谱，或者是参考不同的版本JVM Specification（ &lt;a href=&quot;http://docs.oracle.com/javase/specs/&quot;&gt;http://docs.oracle.com/javase/specs/&lt;/a&gt; ）。&lt;/p&gt;
+
+&lt;p&gt;4.5 Native Method Stack 是供本地方法（非java）使用的栈。每个线程持有一个Native Method Stack。&lt;/p&gt;
+
+&lt;h4 id=&quot;jvm-2&quot;&gt;JVM的运行原理简介&lt;/h4&gt;
+&lt;p&gt;       Java 程序被javac工具编译为.class字节码文件之后，我们执行java命令，该class文件便被JVM的Class Loader加载，可以看出JVM的启动是通过JAVA Path下的java.exe或者java进行的。JVM的初始化、运行到结束大概包括这么几步：
+       调用操作系统API判断系统的CPU架构，根据对应CPU类型寻找位于JRE目录下的&lt;code class=&quot;highlighter-rouge&quot;&gt;/lib/jvm.cfg&lt;/code&gt;文件，然后通过该配置文件找到对应的&lt;code class=&quot;highlighter-rouge&quot;&gt;jvm.dll&lt;/code&gt;文件（如果我们参数中有&lt;code class=&quot;highlighter-rouge&quot;&gt;-server&lt;/code&gt;或者&lt;code class=&quot;highlighter-rouge&quot;&gt;-client&lt;/code&gt;， 则加载对应参数所指定的&lt;code class=&quot;highlighter-rouge&quot;&gt;jvm.dll&lt;/code&gt;，启动指定类型的JVM），初始化&lt;code class=&quot;highlighter-rouge&quot;&gt;jvm.dll&lt;/code&gt;并且挂接到JNIENV结构的实例上，之后就可以通过JNIENV实例装载并且处理class文件了。class文件是字节码文件，它按照JVM的规范，定义了变量，方法等的详细信息，JVM管理并且分配对应的内存来执行程序，同时管理垃圾回收。直到程序结束，一种情况是JVM的所有非守护线程停止，一种情况是程序调用&lt;code class=&quot;highlighter-rouge&quot;&gt;System.exit()&lt;/code&gt;，JVM的生命周期也结束。  &lt;br /&gt;
+       关于JVM如何管理分配内存，我通过class文件和垃圾回收两部分进行了学习。&lt;/p&gt;
+
+&lt;h3 id=&quot;jvm-3&quot;&gt;JVM的内存管理和垃圾回收&lt;/h3&gt;
+&lt;p&gt;       JVM中的内存管理主要是指JVM对于Heap的管理，这是因为Stack，PC Register和Native Method Stack都是和线程一样的生命周期，在线程结束时自然可以被再次使用。虽然说，Stack的管理不是重点，但是也不是完全不讲究的。&lt;/p&gt;
+
+&lt;h4 id=&quot;section&quot;&gt;栈的管理&lt;/h4&gt;
+&lt;p&gt;       JVM允许栈的大小是固定的或者是动态变化的。在Oracle的关于参数设置的官方文档中有关于Stack的设置（&lt;a href=&quot;http://docs.oracle.com/cd/E13150_01/jrockit_jvm/jrockit/jrdocs/refman/optionX.html#wp1024112&quot;&gt;http://docs.oracle.com/cd/E13150_01/jrockit_jvm/jrockit/jrdocs/refman/optionX.html#wp1024112&lt;/a&gt;），是通过&lt;code class=&quot;highlighter-rouge&quot;&gt;-Xss&lt;/code&gt;来设置其大小。关于Stack的默认大小对于不同机器有不同的大小，并且不同厂商或者版本号的jvm的实现其大小也不同，如下表是HotSpot的默认大小：  &lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;Windows IA32: 64KB&lt;/code&gt;   &lt;code class=&quot;highlighter-rouge&quot;&gt;Linux IA32: 128KB&lt;/code&gt; &lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;Windows X86_64: 128KB&lt;/code&gt;   &lt;code class=&quot;highlighter-rouge&quot;&gt;Linux X86_64: 256KB&lt;/code&gt; &lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;Windows IA64: 320KB&lt;/code&gt;   &lt;code class=&quot;highlighter-rouge&quot;&gt;Linux IA64: 1024KB(1MB)&lt;/code&gt; &lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;Solaris Sparc: 512KB&lt;/code&gt;  &lt;br /&gt;
+       我们一般通过减少常量，参数的个数来减少栈的增长，在程序设计时，我们把一些常量定义到一个对象中，然后来引用他们可以体现这一点。另外，少用递归调用也可以减少栈的占用。  &lt;br /&gt;
+       栈是不需要垃圾回收的，尽管说垃圾回收是java内存管理的一个很热的话题，栈中的对象如果用垃圾回收的观点来看，他永远是live状态，是可以reachable的，所以也不需要回收，他占有的空间随着Thread的结束而释放。（参考自：&lt;a href=&quot;http://stackoverflow.com/questions/20030120/java-default-stack-size&quot;&gt;http://stackoverflow.com/questions/20030120/java-default-stack-size&lt;/a&gt;）  &lt;br /&gt;
+关于栈一般会发生以下两种异常：
+1. 当线程中的计算所需要的栈超过所允许大小时，会抛出StackOverflowError。 &lt;br /&gt;
+2. 当Java栈试图扩展时，没有足够的存储器来实现扩展，JVM会报OutOfMemoryError。  &lt;br /&gt;
+       我针对栈进行了实验，由于递归的调用可以致使栈的引用增加，导致溢出，所以设计代码如下：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%287%29.png&quot; alt=&quot;&quot; /&gt;
+       我的机器是x86_64系统，所以Stack的默认大小是128KB，上述程序在运行时会报错：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%288%29.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;       而当我在eclipse中调整了&lt;code class=&quot;highlighter-rouge&quot;&gt;-Xss&lt;/code&gt;参数到3M之后，该异常消失。
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%289%29.png&quot; alt=&quot;&quot; /&gt;
+       另外栈上有一点得注意的是，对于本地代码调用，可能会在栈中申请内存，比如C调用&lt;code class=&quot;highlighter-rouge&quot;&gt;malloc()&lt;/code&gt;，而这种情况下，GC是管不着的，需要我们在程序中，手动管理栈内存，使用&lt;code class=&quot;highlighter-rouge&quot;&gt;free()&lt;/code&gt;方法释放内存。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-1&quot;&gt;堆的管理&lt;/h4&gt;
+&lt;p&gt;       堆的管理要比栈管理复杂的多，我通过堆的各部分的作用、设置，以及各部分可能发生的异常，以及如何避免各部分异常进行了学习。
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%2810%29.png&quot; alt=&quot;&quot; /&gt;
+       上图是 Heap和PermanentSapce的组合图，其中 Eden区里面存着是新生的对象，From Space和To Space中存放着是每次垃圾回收后存活下来的对象 ，所以每次垃圾回收后，Eden区会被清空。 存活下来的对象先是放到From Space，当From Space满了之后移动到To Space。当To Space满了之后移动到Old Space。Survivor的两个区是对称的，没先后关系，所以同一个区中可能同时存在从Eden复制过来 对象，和从前一个Survivor复制过来的对象，而复制到年老区的只有从第一个Survivor复制过来的对象。而且，Survivor区总有一个是空的。同时，根据程序需要，Survivor区是可以配置为多个的（多于两个），这样可以增加对象在年轻代中的存在时间，减少被放到年老代的可能。   &lt;br /&gt;
+       Old Space中则存放生命周期比较长的对象，而且有些比较大的新生对象也放在Old Space中。   &lt;br /&gt;
+       堆的大小通过-Xms和-Xmx来指定最小值和最大值，通过-Xmn来指定Young Generation的大小（一些老版本也用-XX:NewSize指定）， 即上图中的Eden加FromSpace和ToSpace的总大小。然后通过-XX:NewRatio来指定Eden区的大小，在Xms和Xmx相等的情况下，该参数不需要设置。通过-XX：SurvivorRatio来设置Eden和一个Survivor区的比值。（参考自博文：&lt;a href=&quot;http://www.cnblogs.com/redcreen/archive/2011/05/04/2037057.html&quot;&gt;http://www.cnblogs.com/redcreen/archive/2011/05/04/2037057.html&lt;/a&gt;）   &lt;br /&gt;
+       堆异常分为两种，一种是Out of Memory(OOM)，一种是Memory Leak(ML)。Memory Leak最终将导致OOM。实际应用中表现为：从Console看，内存监控曲线一直在顶部，程序响应慢，从线程看，大部分的线程在进行GC，占用比较多的CPU，最终程序异常终止，报OOM。OOM发生的时间不定，有短的一个小时，有长的10天一个月的。关于异常的处理，确定OOM/ML异常后，一定要注意保护现场，可以dump heap，如果没有现场则开启GCFlag收集垃圾回收日志，然后进行分析，确定问题所在。如果问题不是ML的话，一般通过增加Heap，增加物理内存来解决问题，是的话，就修改程序逻辑。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-2&quot;&gt;垃圾回收&lt;/h4&gt;
+&lt;p&gt;       JVM中会在以下情况触发回收：对象没有被引用，作用域发生未捕捉异常，程序正常执行完毕，程序执行了&lt;code class=&quot;highlighter-rouge&quot;&gt;System.exit()&lt;/code&gt;，程序发生意外终止。  &lt;br /&gt;
+       JVM中标记垃圾使用的算法是一种根搜索算法。简单的说，就是从一个叫GC Roots的对象开始，向下搜索，如果一个对象不能达到GC Roots对象的时候，说明它可以被回收了。这种算法比一种叫做引用计数法的垃圾标记算法要好，因为它避免了当两个对象啊互相引用时无法被回收的现象。  &lt;br /&gt;
+       JVM中对于被标记为垃圾的对象进行回收时又分为了一下3种算法：  &lt;br /&gt;
+1. 标记清除算法，该算法是从根集合扫描整个空间，标记存活的对象，然后在扫描整个空间对没有被标记的对象进行回收，这种算法在存活对象较多时比较高效，但会产生内存碎片。  &lt;br /&gt;
+2. 复制算法，该算法是从根集合扫描，并将存活的对象复制到新的空间，这种算法在存活对象少时比较高效。  &lt;br /&gt;
+3. 标记整理算法，标记整理算法和标记清除算法一样都会扫描并标记存活对象，在回收未标记对象的同时会整理被标记的对象，解决了内存碎片的问题。  &lt;br /&gt;
+       JVM中，不同的 内存区域作用和性质不一样，使用的垃圾回收算法也不一样，所以JVM中又定义了几种不同的垃圾回收器（图中连线代表两个回收器可以同时使用）：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%2811%29.png&quot; alt=&quot;&quot; /&gt;
+       (1)Serial GC。从名字上看，串行GC意味着是一种单线程的，所以它要求收集的时候所有的线程暂停。这对于高性能的应用是不合理的，所以串行GC一般用于Client模式的JVM中。 &lt;br /&gt;
+       (2)ParNew GC。是在SerialGC的基础上，增加了多线程机制。但是如果机器是单CPU的，这种收集器是比SerialGC效率低的。  &lt;br /&gt;
+       (3)Parrallel Scavenge GC。这种收集器又叫吞吐量优先收集器，而吞吐量=程序运行时间/(JVM执行回收的时间+程序运行时间),假设程序运行了100分钟，JVM的垃圾回收占用1分钟，那么吞吐量就是99%。Parallel Scavenge GC由于可以提供比较不错的吞吐量，所以被作为了server模式JVM的默认配置。  &lt;br /&gt;
+       (4)ParallelOld是老生代并行收集器的一种，使用了标记整理算法，是JDK1.6中引进的，在之前老生代只能使用串行回收收集器。  &lt;br /&gt;
+       (5)Serial Old是老生代client模式下的默认收集器，单线程执行，同时也作为CMS收集器失败后的备用收集器。  &lt;br /&gt;
+       (6)CMS又称响应时间优先回收器，使用标记清除算法。他的回收线程数为(CPU核心数+3)/4，所以当CPU核心数为2时比较高效些。CMS分为4个过程：初始标记、并发标记、重新标记、并发清除。  &lt;br /&gt;
+       (7)GarbageFirst（G1）。比较特殊的是G1回收器既可以回收Young Generation，也可以回收Tenured Generation。它是在JDK6的某个版本中才引入的，性能比较高，同时注意了吞吐量和响应时间。  &lt;br /&gt;
+       对于垃圾收集器的组合使用可以通过下表中的参数指定：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%2812%29.png&quot; alt=&quot;&quot; /&gt;
+       默认的GC种类可以通过jvm.cfg或者通过&lt;code class=&quot;highlighter-rouge&quot;&gt;jmap dump&lt;/code&gt;出heap来查看，一般我们通过&lt;code class=&quot;highlighter-rouge&quot;&gt;jstat -gcutil [pid] 1000&lt;/code&gt;可以查看每秒gc的大体情况，或者可以在启动参数中加入：&lt;code class=&quot;highlighter-rouge&quot;&gt;-verbose:gc -XX:+PrintGCTimeStamps -XX:+PrintGCDetails -Xloggc:./gc.log&lt;/code&gt;来记录GC日志。   &lt;br /&gt;
+       GC中有一种情况叫做Full GC，以下几种情况会触发Full GC：  &lt;br /&gt;
+1. Tenured Space空间不足以创建打的对象或者数组，会执行FullGC，并且当FullGC之后空间如果还不够，那么会OOM:java heap space。  &lt;br /&gt;
+2. Permanet Generation的大小不足，存放了太多的类信息，在非CMS情况下回触发FullGC。如果之后空间还不够，会OOM:PermGen space。  &lt;br /&gt;
+3. CMS GC时出现promotion failed和concurrent mode failure时，也会触发FullGC。promotion failed是在进行Minor GC时，survivor space放不下、对象只能放入旧生代，而此时旧生代也放不下造成的；concurrent mode failure是在执行CMS GC的过程中同时有对象要放入旧生代，而此时旧生代空间不足造成的。  &lt;br /&gt;
+4. 判断MinorGC后，要晋升到TenuredSpace的对象大小大于TenuredSpace的大小，也会触发FullGC。  &lt;br /&gt;
+       可以看出，当FullGC频繁发生时，一定是内存出问题了。&lt;/p&gt;
+
+&lt;h3 id=&quot;jvmclass&quot;&gt;JVM的数据格式规范和Class文件&lt;/h3&gt;
+
+&lt;h4 id=&quot;section-3&quot;&gt;数据类型规范&lt;/h4&gt;
+&lt;p&gt;       依据冯诺依曼的计算机理论，计算机最后处理的都是二进制的数，而JVM是怎么把java文件最后转化成了各个平台都可以识别的二进制呢？JVM自己定义了一个抽象的存储数据单位，叫做Word。一个字足够大以持有byte、char、short、int、float、reference或者returnAdress的一个值，两个字则足够持有更大的类型long、double。它通常是主机平台一个指针的大小，如32位的平台上，字是32位。  &lt;br /&gt;
+       同时JVM中定义了它所支持的基本数据类型，包括两部分：数值类型和returnAddress类型。数值类型分为整型和浮点型。   整型：&lt;/p&gt;
+&lt;table cellpadding=&quot;2&quot; cellspacing=&quot;0&quot; border=&quot;1&quot;&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td valign=&quot;top&quot;&gt;
+byte
+&lt;/td&gt;
+&lt;td valign=&quot;top&quot;&gt;值是8位的有符号二进制补码整数
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td valign=&quot;top&quot;&gt;
+short
+&lt;/td&gt;
+&lt;td valign=&quot;top&quot;&gt;
+值是16位的有符号二进制补码整数
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td valign=&quot;top&quot;&gt;
+int
+&lt;/td&gt;
+&lt;td valign=&quot;top&quot;&gt;
+值是32位的有符号二进制补码整数
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td valign=&quot;top&quot;&gt;
+long
+&lt;/td&gt;
+&lt;td valign=&quot;top&quot;&gt;
+值是64位的有符号二进制补码整数
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td valign=&quot;top&quot;&gt;
+char
+&lt;/td&gt;
+&lt;td valign=&quot;top&quot;&gt;
+值是表示Unicode字符的16位无符号整数
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;浮点：&lt;/p&gt;
+&lt;table cellpadding=&quot;2&quot; cellspacing=&quot;0&quot; border=&quot;1&quot;&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td valign=&quot;top&quot;&gt;
+float
+&lt;/td&gt;
+&lt;td valign=&quot;top&quot;&gt;
+值是32位IEEE754浮点数
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td valign=&quot;top&quot;&gt;
+double
+&lt;/td&gt;
+&lt;td valign=&quot;top&quot;&gt;值是64位IEEE754浮点数
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;       returnAddress类型的值是Java虚拟机指令的操作码的指针。  &lt;br /&gt;
+       对比java的基本数据类型，jvm的规范中没有boolean类型。这是因为jvm中堆boolean的操作是通过int类型来进行处理的，而boolean数组则是通过byte数组来进行处理。   &lt;br /&gt;
+       至于String，我们知道它存储在常量池中，但他不是基本数据类型，之所以可以存在常量池中，是因为这是JVM的一种规定。如果查看String源码，我们就会发现，String其实就是一个基于基本数据类型char的数组。如图：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%2813%29.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;section-4&quot;&gt;字节码文件&lt;/h4&gt;
+&lt;p&gt;       通过字节码文件的格式我们可以看出jvm是如何规范数据类型的。下面是ClassFile的结构：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%2814%29.png&quot; alt=&quot;&quot; /&gt;
+       关于各个字段的定义（参考自JVM Specification 和 博文：&lt;a href=&quot;http://www.cnblogs.com/zhuYears/archive/2012/02/07/2340347.html&quot;&gt;http://www.cnblogs.com/zhuYears/archive/2012/02/07/2340347.html&lt;/a&gt;）&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;magic&lt;/strong&gt;：   &lt;br /&gt;
+魔数，魔数的唯一作用是确定这个文件是否为一个能被虚拟机所接受的Class文件。魔数值固定为0xCAFEBABE，不会改变。  &lt;br /&gt;
+&lt;strong&gt;minor_version&lt;/strong&gt;、&lt;strong&gt;major_version&lt;/strong&gt;：  &lt;br /&gt;
+分别为Class文件的副版本和主版本。它们共同构成了Class文件的格式版本号。不同版本的虚拟机实现支持的Class文件版本号也相应不同，高版本号的虚拟机可以支持低版本的Class文件，反之则不成立。  &lt;br /&gt;
+&lt;strong&gt;constant_pool_count&lt;/strong&gt;：  &lt;br /&gt;
+常量池计数器，constant_pool_count的值等于constant_pool表中的成员数加1。   &lt;br /&gt;
+&lt;strong&gt;constant_pool[]&lt;/strong&gt;：   &lt;br /&gt;
+常量池，constant_pool是一种表结构，它包含Class文件结构及其子结构中引用的所有字符串常量、类或接口名、字段名和其它常量。常量池不同于其他，索引从1开始到constant_pool_count -1。  &lt;br /&gt;
+&lt;strong&gt;access_flags&lt;/strong&gt;：  &lt;br /&gt;
+访问标志，access_flags是一种掩码标志，用于表示某个类或者接口的访问权限及基础属性。access_flags的取值范围和相应含义见下表：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/20615481148.jpeg&quot; alt=&quot;&quot; /&gt;  &lt;br /&gt;
+&lt;strong&gt;this_class&lt;/strong&gt;：   &lt;br /&gt;
+类索引，this_class的值必须是对constant_pool表中项目的一个有效索引值。constant_pool表在这个索引处的项必须为CONSTANT_Class_info类型常量，表示这个Class文件所定义的类或接口。  &lt;br /&gt;
+&lt;strong&gt;super_class&lt;/strong&gt;：  &lt;br /&gt;
+父类索引，对于类来说，super_class的值必须为0或者是对constant_pool表中项目的一个有效索引值。如果它的值不为0，那constant_pool表在这个索引处的项必须为CONSTANT_Class_info类型常量，表示这个Class文件所定义的类的直接父类。当然，如果某个类super_class的值是0，那么它必定是java.lang.Object类，因为只有它是没有父类的。  &lt;br /&gt;
+&lt;strong&gt;interfaces_count&lt;/strong&gt;：  &lt;br /&gt;
+接口计数器，interfaces_count的值表示当前类或接口的直接父接口数量。  &lt;br /&gt;
+&lt;strong&gt;interfaces[]&lt;/strong&gt;：  &lt;br /&gt;
+接口表，interfaces[]数组中的每个成员的值必须是一个对constant_pool表中项目的一个有效索引值，它的长度为interfaces_count。每个成员interfaces[i] 必须为CONSTANT_Class_info类型常量。  &lt;br /&gt;
+&lt;strong&gt;fields_count&lt;/strong&gt;： &lt;br /&gt;
+字段计数器，fields_count的值表示当前Class文件fields[]数组的成员个数。  &lt;br /&gt;
+&lt;strong&gt;fields[]&lt;/strong&gt;：  &lt;br /&gt;
+字段表，fields[]数组中的每个成员都必须是一个fields_info结构的数据项，用于表示当前类或接口中某个字段的完整描述。  &lt;br /&gt;
+&lt;strong&gt;methods_count&lt;/strong&gt;：  &lt;br /&gt;
+方法计数器，methods_count的值表示当前Class文件methods[]数组的成员个数。  &lt;br /&gt;
+&lt;strong&gt;methods[]&lt;/strong&gt;： &lt;br /&gt;
+方法表，methods[]数组中的每个成员都必须是一个method_info结构的数据项，用于表示当前类或接口中某个方法的完整描述。  &lt;br /&gt;
+&lt;strong&gt;attributes_count&lt;/strong&gt;：  &lt;br /&gt;
+属性计数器，attributes_count的值表示当前Class文件attributes表的成员个数。  &lt;br /&gt;
+&lt;strong&gt;attributes[]&lt;/strong&gt;：  &lt;br /&gt;
+属性表，attributes表的每个项的值必须是attribute_info结构。&lt;/p&gt;
+
+&lt;h3 id=&quot;java&quot;&gt;一个java类的实例分析&lt;/h3&gt;
+&lt;p&gt;       为了了解JVM的数据类型规范和内存分配的大体情况，我新建了MemeryTest.java：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%2815%29.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;       编译为MemeryTest.class后，通过WinHex查看该文件，对应字节码文件各个部分不同的定义，我了解了下面16进制数值的具体含义，尽管不清楚ClassLoader的具体实现逻辑，但是可以想象这样一个严谨格式的文件给JVM对于内存管理和执行程序提供了多大的帮助：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%2816%29.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;       运行程序后，我在windows资源管理器中找到对应的进程ID：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%2817%29.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;       并且在控制台通过jmap -heap 10016查看堆内存的使用情况：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%2818%29.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;       输出结果中表示当前java进程启动的JVM是通过4个线程进行Parallel GC，堆的最小FreeRatio是40%，堆的最大FreeRatio是70%，堆的大小是4090M，新对象占用1.5M，Young Generation可以扩展到最大是1363M， Tenured Generation的大小是254.5M，以及NewRadio和SurvivorRadio中，下面更是具体给出了目前Young Generation中1.5M的划分情况，Eden占用1.0M，使用了5.4%，Space占了0.5M,使用了93%，To Space占了0.5M,使用了0%。&lt;/p&gt;
+
+&lt;p&gt;       下面我们通过jmap dump把heap的内容打印打文件中：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%2819%29.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;       使用Eclipse的MAT插件打开对应的文件：
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%2820%29.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;       选择第一项内存泄露分析报告打开test.bin文件，展示出来的是MAT关于内存可能泄露的分析。
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%2821%29.png&quot; alt=&quot;&quot; /&gt;
+&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/java/clipboard%20%2822%29.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</description>
+        <pubDate>Thu, 30 Jul 2015 22:25:54 +0800</pubDate>
+        <link>/2015/07/jvm/</link>
+        <guid isPermaLink="true">/2015/07/jvm/</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>技术博文</category>
+        
+      </item>
+    
+      <item>
+        <title>RTTI与typeid</title>
+        <description>&lt;p&gt;&lt;strong&gt;Typeid操作&lt;/strong&gt;返回指针或引用所指对象的实际类型。
+如果一个基类中没有虚函数被实现，那么就算派生类中有同样的成员函数，指向派生类的指针的&lt;strong&gt;Typeid&lt;/strong&gt;仍然是基类的类别；如果派生类重写了基类中虚函数，那么指向派生类的指针就是派生类的类。   &lt;br /&gt;
+如有&lt;code class=&quot;highlighter-rouge&quot;&gt;class B&lt;/code&gt;继承于&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;A* pA=new B()&lt;/code&gt;;&lt;code class=&quot;highlighter-rouge&quot;&gt;typeid(pA)&lt;/code&gt;就是&lt;code class=&quot;highlighter-rouge&quot;&gt;class *A&lt;/code&gt;，`typeid(*pA)是指向&lt;strong&gt;派生类的指针&lt;/strong&gt;，所以要&lt;strong&gt;根据派生情况来RTTI他的类型&lt;/strong&gt;。&lt;/p&gt;
+</description>
+        <pubDate>Thu, 02 Jul 2015 21:26:20 +0800</pubDate>
+        <link>/2015/07/rttitypeid/</link>
+        <guid isPermaLink="true">/2015/07/rttitypeid/</guid>
+        
+        <category>C++</category>
+        
+        
+        <category>C++/C</category>
+        
+      </item>
+    
+      <item>
+        <title>DirectX 11 SDK的一些问题</title>
+        <description>&lt;p&gt;由于项目需要，学习英伟达的&lt;strong&gt;D3D11&lt;/strong&gt;新技术Sample。在一个使用&lt;strong&gt;fx&lt;/strong&gt;渲染器的案例中，提示  &lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;unrecognized complier target &quot; fx_5_0&quot;&lt;/code&gt;,网上搜索后得知，该&lt;code class=&quot;highlighter-rouge&quot;&gt;fx_5_0&lt;/code&gt;新特性必须使用最新的&lt;strong&gt;SDK11&lt;/strong&gt;才能编译。  &lt;br /&gt;
+最后通过&lt;code class=&quot;highlighter-rouge&quot;&gt;fxc.exe&lt;/code&gt;的命令支持发现，只有&lt;strong&gt;DirectX SDK (June)2010&lt;/strong&gt;才提供&lt;code class=&quot;highlighter-rouge&quot;&gt;fx_5_0&lt;/code&gt;的编译需求。  &lt;br /&gt;
+所以推荐使用&lt;strong&gt;D3D11&lt;/strong&gt;较新技术的时候，都将&lt;strong&gt;DX SDK&lt;/strong&gt;更新到&lt;strong&gt;（June）2010&lt;/strong&gt;版本（大概500多MB的），同时认真读取每份Sample的使用文档来设置环境，一劳永逸，切勿胡乱尝试。  &lt;br /&gt;
+&lt;strong&gt;这是教训所谈&lt;/strong&gt;。&lt;/p&gt;
+</description>
+        <pubDate>Fri, 12 Jun 2015 19:47:33 +0800</pubDate>
+        <link>/2015/06/directx-11-shade/</link>
+        <guid isPermaLink="true">/2015/06/directx-11-shade/</guid>
+        
+        <category>DX</category>
+        
+        
+        <category>图形学</category>
+        
+      </item>
     
       <item>
         <title>ubuntu下设置gedit文本字符编码格式方法汇总</title>
@@ -381,169 +671,6 @@ gsettings &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;org.gnome.gedit.pref
         
         
         <category>算法</category>
-        
-      </item>
-    
-      <item>
-        <title>剑指offer面试题43：n个筛子的点数</title>
-        <description>&lt;p&gt;考虑两个数组来存储&lt;strong&gt;骰子点数的每一个总数出现的次数&lt;/strong&gt;。 &lt;br /&gt;
-在一次循环中，第一个数组中的&lt;strong&gt;第n个数字表示骰子和为n的出现的次数&lt;/strong&gt;，在下次循环中，我们加上一个新的骰子，此时&lt;strong&gt;和为n&lt;/strong&gt;的骰子出现的次数应该&lt;strong&gt;等于&lt;/strong&gt;上次循环中骰子点数为&lt;strong&gt;n-1，n-2，n-3,n-4,n-5,n-6次数的总和&lt;/strong&gt;（比如2个筛子，当出现总数3的时候是可能筛子1出现1，筛子2出现2，或者筛子1出现2，筛子2出现1，筛子前后出现的组合影响着出现的总数）。  &lt;br /&gt;
-所以我们把另一个数组的&lt;strong&gt;第n个数字设为前一个数对应的第n-1,n-2,n-3,n-4,n-5,n-6之和&lt;/strong&gt;，以此可以写出如下的代码，思路很清晰。&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span class=&quot;cp&quot;&gt;#include&amp;lt;iostream&amp;gt;
-#include&amp;lt;math.h&amp;gt;
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;probability&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;max&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;temp1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;temp2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-   &lt;span class=&quot;n&quot;&gt;temp1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-   &lt;span class=&quot;n&quot;&gt;temp2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-   &lt;span class=&quot;n&quot;&gt;temp1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//n dices to go
-&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-   &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//对temp2进行操作
-&lt;/span&gt;   &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-       &lt;span class=&quot;c1&quot;&gt;//cout &amp;lt;&amp;lt;k &amp;lt;&amp;lt;&quot; &quot; &amp;lt;&amp;lt; k-temp &amp;lt;&amp;lt;&quot; &quot; &amp;lt;&amp;lt;temp1[k-temp] &amp;lt;&amp;lt; endl;
-&lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;temp2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temp1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-       &lt;span class=&quot;c1&quot;&gt;//cout &amp;lt;&amp;lt; k &amp;lt;&amp;lt;endl;
-&lt;/span&gt;      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//跳过剩下的循环
-&lt;/span&gt;   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-   &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//对temp1进行操作
-&lt;/span&gt;   &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-     &lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-     &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-     &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;temp1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temp2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-     &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;temp1[&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;] &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;temp1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
- &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
- &lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;total&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pow&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
- &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
- &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-   &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&#39;s&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; probability is:&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;temp1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;total&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
- &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
- &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
- &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-   &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-     &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&#39;s&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; probability is:&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;temp2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;total&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
- &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;cin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;probability&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;system&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;pause&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-</description>
-        <pubDate>Fri, 10 Apr 2015 16:17:29 +0800</pubDate>
-        <link>/2015/04/offer/</link>
-        <guid isPermaLink="true">/2015/04/offer/</guid>
-        
-        <category>算法</category>
-        
-        
-        <category>算法</category>
-        
-      </item>
-    
-      <item>
-        <title>unity5中[Serializable]关键字</title>
-        <description>&lt;p&gt;&lt;img src=&quot;http://7xvk1t.com1.z0.glb.clouddn.com/image/games/serializable.jpg&quot; alt=&quot;&quot; /&gt;
-Unity5中脚本C#有关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;[Serializable]&lt;/code&gt;,从C#的角度讲就是能够对所定义的类进行序列化，经过序列化的对象，可以暂时保存在硬盘上，而不占用内存，等到需要使用时再从硬盘读入。  &lt;br /&gt;
-而Unity5中的&lt;code class=&quot;highlighter-rouge&quot;&gt;[Serializable]&lt;/code&gt;接口声明的作用，就是能够将所定义的类在编辑器中实例展现出来。换而言之，就是能够通过在编辑器中设置，从而实例化该类。   &lt;br /&gt;
-如图所示,官方案例&lt;code class=&quot;highlighter-rouge&quot;&gt;roguelike&lt;/code&gt;中对&lt;code class=&quot;highlighter-rouge&quot;&gt;foodcount&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;wallcount&lt;/code&gt;的实现就是通过在脚本中定义&lt;code class=&quot;highlighter-rouge&quot;&gt;[Serializable]&lt;/code&gt;接口的&lt;strong&gt;count&lt;/strong&gt;类,从而可以在编辑器界面上对该类进行实例化修改等。&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c#&quot; data-lang=&quot;c#&quot;&gt;&lt;span class=&quot;na&quot;&gt;[Serializable]&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Count&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minimum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;maximum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Count&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
- &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-   &lt;span class=&quot;n&quot;&gt;minimum&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-   &lt;span class=&quot;n&quot;&gt;maximum&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
- &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;..............&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Count&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;wallCount&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Count&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Count&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;foodCount&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Count&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-</description>
-        <pubDate>Thu, 09 Apr 2015 23:33:00 +0800</pubDate>
-        <link>/2015/04/unity5serializable/</link>
-        <guid isPermaLink="true">/2015/04/unity5serializable/</guid>
-        
-        <category>unity5</category>
-        
-        
-        <category>Unity5</category>
-        
-      </item>
-    
-      <item>
-        <title>Unity5关于android的打包</title>
-        <description>&lt;p&gt;&lt;strong&gt;unity5&lt;/strong&gt;打包apk需要将安装SDK升级到&lt;strong&gt;android sdk 5.0 api 21&lt;/strong&gt;。  &lt;br /&gt;
-国内使用SDK Manager.exe更新不了，于是下载sdk包手动更新到&lt;strong&gt;sdk 5.0&lt;/strong&gt;。  &lt;br /&gt;
-下载下面几个包：   &lt;br /&gt;
-&lt;a href=&quot;https://dl-ssl.google.com/android/repository/sources-21_r01.zip&quot;&gt;https://dl-ssl.google.com/android/repository/sources-21_r01.zip&lt;/a&gt;   &lt;br /&gt;
-&lt;a href=&quot;https://dl-ssl.google.com/android/repository/build-tools_r21.1-windows.zip&quot;&gt;https://dl-ssl.google.com/android/repository/build-tools_r21.1-windows.zip&lt;/a&gt;   &lt;br /&gt;
-&lt;a href=&quot;https://dl-ssl.google.com/android/repository/tools_r23.0.5-windows.zip&quot;&gt;https://dl-ssl.google.com/android/repository/tools_r23.0.5-windows.zip&lt;/a&gt;   &lt;br /&gt;
-&lt;a href=&quot;https://dl-ssl.google.com/android/repository/platform-tools_r21-windows.zip&quot;&gt;https://dl-ssl.google.com/android/repository/platform-tools_r21-windows.zip&lt;/a&gt;   &lt;br /&gt;
-&lt;a href=&quot;https://dl-ssl.google.com/android/repository/samples-20_r02.zip&quot;&gt;https://dl-ssl.google.com/android/repository/samples-20_r02.zip&lt;/a&gt;   &lt;br /&gt;
-&lt;a href=&quot;https://dl-ssl.google.com/android/repository/support_r21.0.1.zip&quot;&gt;https://dl-ssl.google.com/android/repository/support_r21.0.1.zip&lt;/a&gt;   &lt;br /&gt;
-使用&lt;strong&gt;easygo&lt;/strong&gt;翻墙下载，配合迅雷速度很快。下载之后解压到android-sdk目录下，没有就新建，对应解压路径为：  &lt;br /&gt;
-&lt;strong&gt;android-21_r01.zip&lt;/strong&gt;  &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt;&amp;gt;&amp;gt; E:\android-sdk\platforms\ (将解压后的文件夹名android-5.0 改为 android-21)&lt;/code&gt;&lt;br /&gt;
-&lt;strong&gt;sources-21_r01.zip&lt;/strong&gt;   &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt;&amp;gt;&amp;gt; E:\android-sdk\sources\ (将解压后的文件夹名rec 改为 android-21)&lt;/code&gt;   &lt;br /&gt;
-&lt;strong&gt;build-tools_r21.1-windows.zip&lt;/strong&gt;   &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt;&amp;gt;&amp;gt; E:\android-sdk\build-tools\ (将解压后的文件夹名android-5.0 改为 android-21)&lt;/code&gt;   &lt;br /&gt;
-&lt;strong&gt;tools_r23.0.5-windows.zip&lt;/strong&gt;   &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt;&amp;gt;&amp;gt; E:\android-sdk\ (覆盖原来的tools文件夹)&lt;/code&gt;  &lt;br /&gt;
-&lt;strong&gt;platform-tools_r21-windows.zip&lt;/strong&gt;  &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt;&amp;gt;&amp;gt; E:\android-sdk\ (覆盖原来的platform-tools文件夹)&lt;/code&gt;  &lt;br /&gt;
-&lt;strong&gt;samples-20_r02.zip&lt;/strong&gt;   &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt;&amp;gt;&amp;gt; E:\android-sdk\samples\support_r21.0.1.zip&lt;/code&gt;&lt;/p&gt;
-</description>
-        <pubDate>Thu, 02 Apr 2015 13:22:00 +0800</pubDate>
-        <link>/2015/04/unity5-android/</link>
-        <guid isPermaLink="true">/2015/04/unity5-android/</guid>
-        
-        <category>unity5</category>
-        
-        
-        <category>Unity5</category>
         
       </item>
     

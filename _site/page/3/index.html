@@ -156,6 +156,20 @@
   <ol class="post-list">
     
     <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/03/sqrt/" title="访问 sqrt函数实现与优化">sqrt函数实现与优化</a></h2>
+      <p class="excerpt">片段1，采用牛顿迭代法快速寻找平方根：float SqrtByNewton(float x){  float val = x;//最终  float last;//保存上一个计算的值  do  {    last = val;    val =(val + x/val) / 2;  }while(abs(val-last)&gt;eps);   return val;}片段2，来自quake3，平方根取倒：float Sqrt (float x){     float xhalf = 0....&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-03-10 10:49:24 +0800" class="post-list__meta--date date">2015-03-10</time> &#8226; <span class="post-list__meta--tags tags">sqrt优化</span><a class="btn-border-small" href=/2015/03/sqrt/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/03/Astar/" title="访问 A星算法">A星算法</a></h2>
+      <p class="excerpt">  将起始点加入OPEN表中  循环直到OPEN为空或者终点加入CLOSE表中，否则：找到OPEN表中F值最小的节点(使用堆排序得到小值点)，将此点从OPEN删除，加入CLOSE！(此时最小点已经取出，那么需要从新排序OPEN表，是的第一个点是最小F的点！)  对8个邻居进行处理：  邻居已经在CLOSE表中了，那么不需要考虑了~  邻居是障碍物，不需要考虑了e  邻居不在OPEN表中，那么将邻居加入OPEN，并将次邻居的父节点赋值为当前节点  邻居在OPEN中，那么需要看看此邻居点的G值...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-03-09 13:29:07 +0800" class="post-list__meta--date date">2015-03-09</time> &#8226; <span class="post-list__meta--tags tags">A star</span><a class="btn-border-small" href=/2015/03/Astar/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
       <h2 class="post-list__post-title post-title"><a href="/2015/03/magicvoxel/" title="访问 MagicaVoxel">MagicaVoxel</a></h2>
       <p class="excerpt">star了一个游戏类git总结，其中有Magicavoxel，下载下来试用了一下，感觉这会是没有美工或者另辟蹊径的游戏开发所需必备工具。通过类似“塑泥”过程来创造崭新的3D/2D形象。同时新版本还提供了多种新的功能，比如导入image来生成全新Voxel化的角色/布景等。看来自己又有拿来打发时间的东西了。&hellip;</p>
       <div class="post-list__meta"><time datetime="2015-03-09 00:20:14 +0800" class="post-list__meta--date date">2015-03-09</time> &#8226; <span class="post-list__meta--tags tags">MagicVoxel</span><a class="btn-border-small" href=/2015/03/magicvoxel/>继续阅读</a></div>
@@ -211,13 +225,6 @@
       <hr class="post-list__divider" />
     </li>
     
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/03/this-is-mageric/" title="访问 This is Mageric">This is Mageric</a></h2>
-      <p class="excerpt">这是小M崭新的一天，设立了自己的小站，希望在今后可以不断更新站上的内容，在技术上不断进步。同时，也希望以此自我鼓励，在人生道路上不断前进。&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-03-02 14:47:10 +0800" class="post-list__meta--date date">2015-03-02</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2015/03/this-is-mageric/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
   </ol>
 
   <hr class="post-list__divider " />
@@ -226,7 +233,9 @@
     
         <a class="newer-posts pagination__newer btn btn-small btn-tertiary" href="/page/2/#blog">&larr; 最近</a>
     
-    <span class="pagination__page-number">3 / 3</span>
+    <span class="pagination__page-number">3 / 4</span>
+    
+        <a class="older-posts pagination__older btn btn-small btn-tertiary" href="/page/4/#blog">更早 &rarr;</a>
     
 </nav>
 
@@ -236,7 +245,7 @@
             <section class="footer">
     <footer>
     	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
-        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-06-30 生成</span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-07-03 生成</span>
         <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
     </footer>
 </section>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>后缀树样例</title>
+  <meta name="description" content="       查询串s中是否存在子串P，主要针对于多个子串在一个主串中的匹配问题。   建立后缀树：      class SuffixTreeNode{       map&lt;char,SuffixTreeNode*&gt; childTrees;       char value;       vecto...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="后缀树样例">
+  <meta name="twitter:description" content="       查询串s中是否存在子串P，主要针对于多个子串在一个主串中的匹配问题。   建立后缀树：      class SuffixTreeNode{       map&lt;char,SuffixTreeNode*&gt; childTrees;       char value;       vecto...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="后缀树样例">
+  <meta property="og:description" content="       查询串s中是否存在子串P，主要针对于多个子串在一个主串中的匹配问题。   建立后缀树：      class SuffixTreeNode{       map&lt;char,SuffixTreeNode*&gt; childTrees;       char value;       vecto...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="/2015/08/suffixtree/">
+  <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Mageric 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Mageric logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Mageric" class="blog-button">Mageric</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">42 世界尽头</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Mageric的个人小站.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="http://mageric-one.com" target="_blank" title="My old site">OldSite</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/magericyoung" title="@magericyoung 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Mageric0412" title="@Mageric0412 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- instagram -->
+  <li class="navigation__item">
+   <a href="https://www.instagram.com/mageric0412" title="@mageric0412 的Instagram" target="_blank">
+     <i class='social fa fa-instagram'></i>
+     <span class="label">instagram</span>
+   </a>
+  </li>
+  
+
+<!--
+  
+  <!-- website -->
+  <!--
+  <li class="navigation__item">
+    <a href="https://mageric-one.com" rel="author" title="mageric的小站" target="_blank">
+        <i class='social fa fa-rss'> </i>
+      <span class="label">website</span>
+    </a>
+  </li>
+  
+-->
+
+
+
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:mageric0412@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-08-04 18:44:24 +0800" itemprop="datePublished" class="post-meta__date date">2015-08-04</time> &#8226; <span class="post-meta__tags tags">字符串处理</span>
+    </div>
+    <h1 class="post-title">后缀树样例</h1>
+  </header>
+
+  <section class="post">
+    <p>       查询串s中是否存在子串P，主要针对于多个子串在一个主串中的匹配问题。   <br />
+建立后缀树：</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">  
+    <span class="n">class</span> <span class="n">SuffixTreeNode</span><span class="p">{</span>
+       <span class="n">map</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">SuffixTreeNode</span><span class="o">*&gt;</span> <span class="n">childTrees</span><span class="p">;</span>
+       <span class="kt">char</span> <span class="n">value</span><span class="p">;</span>
+       <span class="n">vector</span> <span class="n">posIndex</span><span class="p">;</span>  
+     <span class="n">public</span><span class="o">:</span>
+       <span class="n">SuffixTreeNode</span><span class="p">(){}</span>    
+       <span class="kt">void</span> <span class="n">InsertString</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span><span class="kt">int</span> <span class="n">index</span><span class="p">){</span>
+          <span class="n">posIndex</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">index</span><span class="p">);</span> <span class="c1">//对插入的顶点在处理串中的位置进行记录
+</span>         <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+         <span class="n">value</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+         <span class="n">SuffixTreeNode</span><span class="o">*</span> <span class="n">child</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span>
+          <span class="k">if</span><span class="p">(</span><span class="n">childTrees</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">!=</span><span class="n">childTrees</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+           <span class="p">{</span>
+             <span class="n">child</span><span class="o">=</span><span class="n">childTrees</span><span class="p">[</span><span class="n">value</span><span class="p">];</span>
+           <span class="p">}</span>
+           <span class="k">else</span> <span class="p">{</span>
+             <span class="n">child</span><span class="o">=</span><span class="n">new</span> <span class="n">SuffixTreeNode</span><span class="p">();</span>
+             <span class="n">childTrees</span><span class="p">[</span><span class="n">value</span><span class="p">]</span><span class="o">=</span><span class="n">child</span><span class="p">;</span>
+             <span class="p">}</span>
+           <span class="n">string</span> <span class="n">lastString</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">//对除了首字符之外的子串继续处理
+</span>           <span class="n">child</span><span class="o">-&gt;</span><span class="n">InsertString</span><span class="p">(</span><span class="n">lastString</span><span class="p">,</span><span class="n">index</span><span class="p">);</span> <span class="c1">//递归插入子串
+</span>          <span class="p">}</span>
+       <span class="p">}</span>  
+        <span class="c1">//获取满足匹配条件的字串在主串的位置
+</span>        <span class="n">vector</span> <span class="n">getPosition</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">){</span>
+         <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+             <span class="k">return</span> <span class="n">posIndex</span><span class="p">;</span>
+         <span class="k">else</span><span class="p">{</span>
+           <span class="kt">char</span> <span class="n">first</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+           <span class="k">if</span><span class="p">(</span><span class="n">childTrees</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">first</span><span class="p">)</span><span class="o">!=</span><span class="n">childTrees</span><span class="p">.</span><span class="n">end</span><span class="p">()){</span>
+               <span class="n">string</span> <span class="n">lastString</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+               <span class="k">return</span> <span class="n">childTrees</span><span class="p">[</span><span class="n">first</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">getPosition</span><span class="p">(</span><span class="n">lastString</span><span class="p">);</span> <span class="c1">//递归调用函数，直到匹配处理完毕
+</span>              <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+               <span class="n">vector</span> <span class="n">noPos</span><span class="p">;</span>
+               <span class="k">return</span> <span class="n">noPos</span><span class="p">;</span>
+              <span class="p">}</span>
+           <span class="p">}</span>
+        <span class="p">}</span><span class="c1">//getposition end
+</span>       <span class="c1">//析构
+</span>       <span class="o">~</span><span class="n">SuffixTreeNode</span><span class="p">(){</span>
+           <span class="n">map</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">SuffixTreeNode</span><span class="o">*&gt;::</span> <span class="n">iterator</span> <span class="n">itr</span><span class="p">;</span>
+          <span class="k">for</span><span class="p">(</span><span class="n">itr</span><span class="o">=</span><span class="n">childTrees</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span><span class="n">itr</span><span class="o">!=</span><span class="n">childTrees</span><span class="p">.</span><span class="n">end</span><span class="p">();</span><span class="n">itr</span><span class="o">++</span><span class="p">)</span>
+             <span class="n">delete</span><span class="p">(</span><span class="n">itr</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">);</span>
+         <span class="p">}</span>
+     <span class="p">};</span>  
+    <span class="err">​</span><span class="c1">//后缀树
+</span>      <span class="n">class</span> <span class="n">SuffixTree</span><span class="p">{</span>
+        <span class="n">SuffixTreeNode</span><span class="o">*</span> <span class="n">root</span><span class="p">;</span>
+        <span class="n">public</span><span class="o">:</span>
+         <span class="n">SuffixTree</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">){</span>
+           <span class="n">root</span><span class="o">=</span><span class="n">new</span> <span class="n">SuffixTreeNode</span><span class="p">();</span>
+           <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">();</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="c1">//构造根节点，对字串进行斩头处理，构造后缀树 ​ { ​ string suffix=s.substr(i); ​ root-&gt;InsertString(suffix,i);
+</span>    <span class="err">​</span>       <span class="p">}</span>
+        <span class="p">}</span>    <span class="err">​</span>
+         <span class="c1">//调用节点的获取子串在主串的位置方法
+</span>    <span class="err">​</span>    <span class="n">vector</span> <span class="n">getRootPos</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="err">​</span>       <span class="k">return</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">getPosition</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+        <span class="p">}</span>    <span class="err">​</span>
+    <span class="err">​</span>   <span class="o">~</span><span class="n">SuffixTree</span><span class="p">(){</span>
+    <span class="err">​</span>      <span class="k">if</span><span class="p">(</span><span class="n">root</span><span class="o">!=</span><span class="nb">NULL</span><span class="p">)</span> <span class="n">delete</span> <span class="n">root</span><span class="p">;</span>
+    <span class="err">​</span>    <span class="p">}</span>  <span class="err">​</span>
+     <span class="p">};</span>
+     <span class="err">​</span><span class="c1">//测试主函数
+</span>     <span class="err">​</span><span class="kt">void</span> <span class="n">main</span><span class="p">(){</span>
+        <span class="n">string</span> <span class="n">test</span><span class="err">​</span><span class="n">String</span><span class="o">=</span><span class="s">"thisishello"</span><span class="p">;</span>
+    <span class="err">​</span>    <span class="n">string</span> <span class="n">stringList</span><span class="p">[]{</span><span class="s">"this"</span><span class="p">,</span><span class="s">"is"</span><span class="p">,</span><span class="s">"shell"</span><span class="p">,</span><span class="s">"she"</span><span class="p">};</span>
+    <span class="err">​</span>    <span class="n">SuffixTree</span> <span class="n">DicSufTree</span><span class="p">(</span><span class="n">testString</span><span class="p">);</span>
+    <span class="err">​</span>     <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="err">​</span>       <span class="n">vector</span> <span class="n">pos</span><span class="o">=</span><span class="n">DicSufTree</span><span class="p">.</span><span class="n">getRootPos</span><span class="p">(</span><span class="n">stringList</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="err">​</span>        <span class="k">if</span><span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">!=</span><span class="mi">0</span><span class="p">){</span>
+    <span class="err">​</span>            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">stringList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">c_str</span><span class="p">()</span><span class="o">&lt;&lt;</span><span class="s">" "</span><span class="p">;</span>
+    <span class="err">​</span>               <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">pos</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+    <span class="err">​</span>                     <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">pos</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="s">" "</span><span class="p">;</span>
+    <span class="err">​</span>             <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+    <span class="err">​</span>        <span class="p">}</span>
+        <span class="p">}</span>
+     <span class="err">​</span><span class="p">};</span></code></pre></figure>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/08/complier/" title="link to C程序编译过程回顾">C程序编译过程回顾</a></h2>
+       <p class="excerpt">       编译程序读取源程序（字符流），对之进行词法和语法的分析，将高级语言指令转换为功能等效的汇编代码，再由汇编程序转换为机器语言(目标文件)，并且按照操作系统对可执行文件格式的要求链接生成可执行程序。   C源程序头文件－－&gt;预编译处理(cpp)－－&gt;编译程序本身－－&gt;优化程序－－&gt;汇编程序－－&gt;链接程序--&gt;可执行文件编译预处理读取c源程序，对其中的伪指令（以#开头的指令）和特殊符号进行处理伪指令主要包括以下四个方面：  宏定义指令，如#def...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-08-06 19:58:50 +0800" class="post-list__meta--date date">2015-08-06</time> &#8226; <span class="post-list__meta--tags tags">C++</span><a class="btn-border-small" href=/2015/08/complier/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/08/javamemory/" title="link to Java内存管理原理及区域简介">Java内存管理原理及区域简介</a></h2>
+       <p class="excerpt">       Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干不同的数据区域，这些区域都有各自的用途以及创建和销毁的时间。Java虚拟机所管理的内存将会包括以下几个运行时数据区域，如下图所示：下面就每一个区域进行阐述。运行时数据区域程序计数器       程序计数器，可以看做是当前线程所执行的字节码的行号指示器。在虚拟机的概念模型里，字节码解释器工作就是通过改变程序计数器的值来选择下一条需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复等基础功能都要依赖这个计数...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-08-03 13:50:18 +0800" class="post-list__meta--date date">2015-08-03</time> &#8226; <span class="post-list__meta--tags tags">内存管理，jvm</span><a class="btn-border-small" href=/2015/08/javamemory/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "/2015/08/suffixtree/";
+        this.page.identifier = "/2015/08/suffixtree/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-07-03 生成</span>
+        <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

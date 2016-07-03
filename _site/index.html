@@ -156,6 +156,20 @@
   <ol class="post-list">
     
     <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/08/complier/" title="访问 C程序编译过程回顾">C程序编译过程回顾</a></h2>
+      <p class="excerpt">       编译程序读取源程序（字符流），对之进行词法和语法的分析，将高级语言指令转换为功能等效的汇编代码，再由汇编程序转换为机器语言(目标文件)，并且按照操作系统对可执行文件格式的要求链接生成可执行程序。   C源程序头文件－－&gt;预编译处理(cpp)－－&gt;编译程序本身－－&gt;优化程序－－&gt;汇编程序－－&gt;链接程序--&gt;可执行文件编译预处理读取c源程序，对其中的伪指令（以#开头的指令）和特殊符号进行处理伪指令主要包括以下四个方面：  宏定义指令，如#def...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-08-06 19:58:50 +0800" class="post-list__meta--date date">2015-08-06</time> &#8226; <span class="post-list__meta--tags tags">C++</span><a class="btn-border-small" href=/2015/08/complier/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/08/suffixtree/" title="访问 后缀树样例">后缀树样例</a></h2>
+      <p class="excerpt">       查询串s中是否存在子串P，主要针对于多个子串在一个主串中的匹配问题。   建立后缀树：      class SuffixTreeNode{       map&lt;char,SuffixTreeNode*&gt; childTrees;       char value;       vector posIndex;       public:       SuffixTreeNode(){}           void InsertString(string s,in...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-08-04 18:44:24 +0800" class="post-list__meta--date date">2015-08-04</time> &#8226; <span class="post-list__meta--tags tags">字符串处理</span><a class="btn-border-small" href=/2015/08/suffixtree/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
       <h2 class="post-list__post-title post-title"><a href="/2015/08/javamemory/" title="访问 Java内存管理原理及区域简介">Java内存管理原理及区域简介</a></h2>
       <p class="excerpt">       Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干不同的数据区域，这些区域都有各自的用途以及创建和销毁的时间。Java虚拟机所管理的内存将会包括以下几个运行时数据区域，如下图所示：下面就每一个区域进行阐述。运行时数据区域程序计数器       程序计数器，可以看做是当前线程所执行的字节码的行号指示器。在虚拟机的概念模型里，字节码解释器工作就是通过改变程序计数器的值来选择下一条需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复等基础功能都要依赖这个计数...&hellip;</p>
       <div class="post-list__meta"><time datetime="2015-08-03 13:50:18 +0800" class="post-list__meta--date date">2015-08-03</time> &#8226; <span class="post-list__meta--tags tags">内存管理，jvm</span><a class="btn-border-small" href=/2015/08/javamemory/>继续阅读</a></div>
@@ -208,20 +222,6 @@
       <h2 class="post-list__post-title post-title"><a href="/2015/05/designmodel/" title="访问 设计模式个人总结">设计模式个人总结</a></h2>
       <p class="excerpt">  简单工厂方法： 对具体方法进行类封装，把封装好的各类方法用类似switch的办法来初始化；这样可以在调用的时候去动态的选择我们所需要使用的方法  策略模式： 声明一个策略基类，每种策略都继承自这个基类，同时声明一个管理类，实现两个方法，一个是产生一个策略的具体引用，一个是实现具体的策略类      装饰模式：一个抽象类，我们所需要装饰的对象继承自这个抽象类，装饰基类也继承这个抽象类，同时创造一些具体的装饰类，调用时候采用装饰类1装饰（装饰类2装饰（装饰类装饰（对象）））这样的顺序，最后...&hellip;</p>
       <div class="post-list__meta"><time datetime="2015-05-29 09:52:50 +0800" class="post-list__meta--date date">2015-05-29</time> &#8226; <span class="post-list__meta--tags tags">设计模式</span><a class="btn-border-small" href=/2015/05/designmodel/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/04/serial/" title="访问 二叉树的序列化">二叉树的序列化</a></h2>
-      <p class="excerpt">            序列化（由树序列化为字串）      逆序列化（由字串序列化为树）      char* Serialize(TreeNode *root) {  string s=e_Serialize(root);  char* c=new char[s.length()+1];  for(int i=0;i&lt;;s.length();i++)    c[i]=s[i];  c[s.length()]='\0';  return c;}string e_Serialize(...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-04-20 22:54:06 +0800" class="post-list__meta--date date">2015-04-20</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/04/serial/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/04/offer36/" title="访问 剑指offer 36 逆序对问题">剑指offer 36 逆序对问题</a></h2>
-      <p class="excerpt">逆序对问题，用归并思想求解。  在参考多个博客内容后，终于得到正确的书写过程：int InversePairs(vector data) {  if(data.size()&lt;2)    return 0;  int count=0;  int length=data.size();  int temp[1000];  int arr[1000];  for(int i=0;i&lt;length;i++)  arr[i]=data[i];  inverse_pair(arr,0,le...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-04-16 01:00:18 +0800" class="post-list__meta--date date">2015-04-16</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/04/offer36/>继续阅读</a></div>
       <hr class="post-list__divider" />
     </li>
     

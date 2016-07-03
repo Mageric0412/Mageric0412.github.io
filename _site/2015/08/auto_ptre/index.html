@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>auto_ptr、shared_ptr、weak_ptr、scoped_ptr用法小结</title>
+  <meta name="description" content="auto_ptr       auto_ptr是现在标准库里面一个轻量级的智能指针的实现，存在于头文件memory中，之所以说它是轻量级，是因为它只有一个成员变量（拥有对象的指针），相关的调用开销也非常小。下面的代码来自于VC++ 8.0里面的源码：          里面有个auto_ptr_ref的数据结构，...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="auto_ptr、shared_ptr、weak_ptr、scoped_ptr用法小结">
+  <meta name="twitter:description" content="auto_ptr       auto_ptr是现在标准库里面一个轻量级的智能指针的实现，存在于头文件memory中，之所以说它是轻量级，是因为它只有一个成员变量（拥有对象的指针），相关的调用开销也非常小。下面的代码来自于VC++ 8.0里面的源码：          里面有个auto_ptr_ref的数据结构，...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="auto_ptr、shared_ptr、weak_ptr、scoped_ptr用法小结">
+  <meta property="og:description" content="auto_ptr       auto_ptr是现在标准库里面一个轻量级的智能指针的实现，存在于头文件memory中，之所以说它是轻量级，是因为它只有一个成员变量（拥有对象的指针），相关的调用开销也非常小。下面的代码来自于VC++ 8.0里面的源码：          里面有个auto_ptr_ref的数据结构，...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="/2015/08/auto_ptre/">
+  <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Mageric 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Mageric logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Mageric" class="blog-button">Mageric</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">42 世界尽头</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Mageric的个人小站.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="http://mageric-one.com" target="_blank" title="My old site">OldSite</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/magericyoung" title="@magericyoung 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Mageric0412" title="@Mageric0412 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- instagram -->
+  <li class="navigation__item">
+   <a href="https://www.instagram.com/mageric0412" title="@mageric0412 的Instagram" target="_blank">
+     <i class='social fa fa-instagram'></i>
+     <span class="label">instagram</span>
+   </a>
+  </li>
+  
+
+<!--
+  
+  <!-- website -->
+  <!--
+  <li class="navigation__item">
+    <a href="https://mageric-one.com" rel="author" title="mageric的小站" target="_blank">
+        <i class='social fa fa-rss'> </i>
+      <span class="label">website</span>
+    </a>
+  </li>
+  
+-->
+
+
+
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:mageric0412@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-08-17 18:30:40 +0800" itemprop="datePublished" class="post-meta__date date">2015-08-17</time> &#8226; <span class="post-meta__tags tags">智能指针</span>
+    </div>
+    <h1 class="post-title">auto_ptr、shared_ptr、weak_ptr、scoped_ptr用法小结</h1>
+  </header>
+
+  <section class="post">
+    <h3 id="autoptr">auto_ptr</h3>
+<p>       auto_ptr是现在标准库里面一个轻量级的智能指针的实现，存在于头文件memory中，之所以说它是轻量级，是因为它只有一个成员变量（拥有对象的指针），相关的调用开销也非常小。下面的代码来自于VC++ 8.0里面的源码：   <br />
+       里面有个auto_ptr_ref的数据结构，我们可以把它忽略，这个只是内部使用的代理结构，用于一些隐式的const变化，我们客户端代码通常不会直接使用到它。我们可以看到除了构造函数，拷贝构造函数，赋值函数，析构函数和两个重载操作符（*，-&gt;）外，还有get，release和reset三个函数，它们的作用分别是： <br />
+       <strong>get</strong>，获得内部对象的指针 <br />
+       <strong>release</strong>，放弃内部对象的所有权，将内部指针置为空 <br />
+       <strong>reset</strong>，销毁内部对象并接受新的对象的所有权（如果使用缺省参数的话，也就是没有任何对象的所有权）  <br />
+       下面的例程来自Exceptional C++，Item 37：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">// Example 2: Using an auto_ptr
+</span><span class="kt">void</span> <span class="nf">g</span><span class="p">()</span>
+<span class="p">{</span>
+     <span class="n">T</span><span class="o">*</span> <span class="n">pt1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">;</span>
+     <span class="c1">// right now, we own the allocated object
+</span>     <span class="c1">// pass ownership to an auto_ptr
+</span>     <span class="n">auto_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">pt2</span><span class="p">(</span> <span class="n">pt1</span> <span class="p">);</span>
+     <span class="c1">// use the auto_ptr the same way
+</span>     <span class="c1">// we'd use a simple pointer
+</span>     <span class="o">*</span><span class="n">pt2</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span>       <span class="c1">// same as "*pt1 = 12;"
+</span>     <span class="n">pt2</span><span class="o">-&gt;</span><span class="n">SomeFunc</span><span class="p">();</span> <span class="c1">// same as "pt1-&gt;SomeFunc();"
+</span>     <span class="c1">// use get() to see the pointer value
+</span>     <span class="n">assert</span><span class="p">(</span> <span class="n">pt1</span> <span class="o">==</span> <span class="n">pt2</span><span class="p">.</span><span class="n">get</span><span class="p">()</span> <span class="p">);</span>
+     <span class="c1">// use release() to take back ownership
+</span>     <span class="n">T</span><span class="o">*</span> <span class="n">pt3</span> <span class="o">=</span> <span class="n">pt2</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+     <span class="c1">// delete the object ourselves, since now
+</span>     <span class="c1">// no auto_ptr owns it any more
+</span>     <span class="k">delete</span> <span class="n">pt3</span><span class="p">;</span>
+<span class="p">}</span> <span class="c1">// pt2 doesn't own any pointer, and so won't
+</span> <span class="c1">// try to delete it... OK, no double delete
+// Example 3: Using reset()
+</span><span class="kt">void</span> <span class="nf">h</span><span class="p">()</span>
+<span class="p">{</span>
+     <span class="n">auto_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">pt</span><span class="p">(</span> <span class="k">new</span> <span class="n">T</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">);</span>
+     <span class="n">pt</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span> <span class="k">new</span> <span class="n">T</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="p">);</span>
+    <span class="c1">// deletes the first T that was
+</span>    <span class="c1">// allocated with "new T(1)"
+</span><span class="p">}</span> <span class="c1">// finally, pt goes out of scope and
+</span> <span class="o">//</span> <span class="n">the</span> <span class="n">second</span> <span class="n">T</span> <span class="n">is</span> <span class="n">also</span> <span class="n">deleted</span></code></pre></figure>
+
+<p>       从上面的例子来看，auto_ptr的使用很简单，通过构造函数拥有一个动态分配对象的所有权，然后就可以被当作对象指针来使用，当auto_ptr对象被销毁的时候，它也会自动销毁自己拥有所有权的对象（嗯，标准的RAAI做法），release可以用来手动放弃所有权，reset可用于手动销毁内部对象。  <br />
+       但实际上，auto_ptr是一个相当容易被误用并且在实际中常常被误用的类。原因是由于它的对象所有权占用的特性和它非平凡的拷贝行为。auto_ptr的对象所有权是独占性的！这决定了不可能有两个auto_ptr对象同时拥有同一动态对象的所有权，从而也导致了auto_ptr的拷贝行为是非对等的，其中伴随着对象所有权的转移。  <br />
+       我们仔细观察auto_ptr的源码就会发现拷贝构造和赋值操作符所接受的参数类型都是非const的引用类型（auto_ptr<_Ty>&amp; ），而不是我们一般应该使用的const引用类型，查看源码我们会发现：</_Ty></p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">auto_ptr</span><span class="p">(</span><span class="n">auto_ptr</span><span class="o">&lt;</span><span class="n">_Ty</span><span class="o">&gt;&amp;</span> <span class="n">_Right</span><span class="p">)</span> <span class="n">_THROW0</span><span class="p">()</span><span class="o">:</span> <span class="n">_Myptr</span><span class="p">(</span><span class="n">_Right</span><span class="p">.</span><span class="n">release</span><span class="p">())</span>
+      <span class="p">{</span>        <span class="c1">// construct by assuming pointer from _Right auto_ptr
+</span>      <span class="p">}</span>
+      <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">_Other</span><span class="o">&gt;</span> <span class="n">auto_ptr</span><span class="o">&lt;</span><span class="n">_Ty</span><span class="o">&gt;&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">auto_ptr</span><span class="o">&lt;</span><span class="n">_Other</span><span class="o">&gt;&amp;</span> <span class="n">_Right</span><span class="p">)</span> <span class="n">_THROW0</span><span class="p">()</span>
+      <span class="p">{</span>        <span class="c1">// assign compatible _Right (assume pointer)
+</span>        <span class="n">reset</span><span class="p">(</span><span class="n">_Right</span><span class="p">.</span><span class="n">release</span><span class="p">());</span>
+        <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
+      <span class="p">}</span></code></pre></figure>
+
+<p>       拷贝过程中被拷贝的对象（_Right）都会被调用release来放弃所包括的动态对象的所有权，动态对象的所有权被转移了，新的auto_ptr独占了动态对象的所有权。也就是说被拷贝对象在拷贝过程中会被修改，拷贝物与被拷贝物之间是非等价的。这意味着如下的代码是错误的（例程来自 Exceptional C++ Item 37）：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">// Example 6: Never try to do work through
+//            a non-owning auto_ptr
+//
+</span><span class="kt">void</span> <span class="nf">f</span><span class="p">()</span>
+<span class="p">{</span>
+     <span class="n">auto_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">pt1</span><span class="p">(</span> <span class="k">new</span> <span class="n">T</span> <span class="p">);</span>
+     <span class="n">auto_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">pt2</span><span class="p">;</span>
+     <span class="n">pt2</span> <span class="o">=</span> <span class="n">pt1</span><span class="p">;</span> <span class="c1">// now pt2 owns the pointer, and
+</span>              <span class="c1">// pt1 does not
+</span>     <span class="n">pt1</span><span class="o">-&gt;</span><span class="n">DoSomething</span><span class="p">();</span>
+              <span class="c1">// error: following a null pointer
+</span><span class="p">}</span></code></pre></figure>
+
+<p>       同时也不要将auto_ptr放进标准库的容器中，否则在标准库容器无准备的拷贝行为中（标准库容器需要的拷贝行为是等价的），会导致难以发觉的错误。auto_ptr特殊的拷贝行为使得使用它来远距离传递动态对象变成了一件十分危险的行为，在传递的过程中，一不小心就会留下一些实际为空但程序本身却缺少这样认知的auto_ptr对象。  <br />
+       简单的说来，auto_ptr适合用来管理生命周期比较短或者不会被远距离传递的动态对象，使用auto_ptr来管理动态分配对象，最好是局限于某个函数内部或者是某个类的内部。也就是说，动态对象的产生，使用和销毁的全过程是处于一个小的受控的范围，而不会在其中加入一些适应未来时态的扩展。   <br />
+auto_ptr的几点注意事项：  <br />
+       1.auto_ptr不能共享所有权   <br />
+       2.auto_ptr不能指向数组  <br />
+       3.auto_ptr不能作为容器的成员  <br />
+       4.不能通过复制操作来初始化auto_ptr</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>//auto_ptr的构造函数被定义了explicit
+<span class="gp">std::auto_ptr&lt;int&gt; </span>p<span class="o">(</span>new int<span class="o">(</span>42<span class="o">))</span>; //OK     
+std::auto_ptr&lt;int&gt;p <span class="o">=</span> new int<span class="o">(</span>42<span class="o">)</span>;//Error
+</code></pre>
+</div>
+<p>       5.不要把auto_ptr放入容器</p>
+
+<h3 id="sharedptr">shared_ptr</h3>
+<p>       shared_ptr是Boost库所提供的一个智能指针的实现，正如其名字所蕴意的一样：  <br />
+An important goal of shared_ptr is to provide a standard shared-ownership pointer.    <br />
+shared_ptr的一个重要目的就是为了提供一个标准的共享所有权的智能指针。   <br />
+       没错，shared_ptr就是为了解决auto_ptr在对象所有权上的局限性（auto_ptr是独占的），在使用引用计数的机制上提供了可以共享所有权的智能指针，当然这不会没有任何额外的代价……   <br />
+       首先一个shared_ptr对象除了包括一个所拥有对象的指针（px）外，还必须包括一个引用计数代理对象（shared_count）的指针（pn）。而这个引用计数代理对象包括一个真正的多态的引用计数对象（sp_counted_base）的指针（_pi）,真正的引用计数对象在使用VC编译器的情况下包括一个虚表，一个虚表指针，和两个计数器。     <br />
+       假设我们有多个（5个以上）shared_ptr共享一个动态对象，那么每个shared_ptr的开销比起只使用原生指针的开销大概在3，4倍左右（这还是理想状况，忽略了动态分配带来的俑余开销）。如果只有一个shared_ptr独占动态对象，空间上开销更是高度十数倍！而auto_ptr的开销只是使用原生指针的两倍。  <br />
+       时间上的开销主要在初始化和拷贝操作上，*和-&gt;操作符重载的开销跟auto_ptr是一样的。当然开销并不是我们不使用shared_ptr的理由，永远不要进行不成熟的优化，直到性能分析器告诉你这一点，这是Hurb提出的明智的建议。以上的说明只是为了让你了解强大的功能背后总是伴随着更多的开销，shared_ptr应该被使用，但是也不要过于滥用，特别是在一些auto_ptr更擅长的地方。  <br />
+       下面是shared_ptr的类型定义：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"> <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">shared_ptr</span> <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+      <span class="k">typedef</span> <span class="n">T</span> <span class="n">element_type</span><span class="p">;</span>
+      <span class="n">shared_ptr</span><span class="p">();</span> <span class="c1">// never throws
+</span>      <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Y</span><span class="o">&gt;</span> <span class="k">explicit</span> <span class="n">shared_ptr</span><span class="p">(</span><span class="n">Y</span> <span class="o">*</span> <span class="n">p</span><span class="p">);</span>
+      <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Y</span><span class="p">,</span> <span class="k">class</span> <span class="nc">D</span><span class="o">&gt;</span> <span class="n">shared_ptr</span><span class="p">(</span><span class="n">Y</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">D</span> <span class="n">d</span><span class="p">);</span>
+      <span class="o">~</span><span class="n">shared_ptr</span><span class="p">();</span> <span class="c1">// never throws
+</span>      <span class="n">shared_ptr</span><span class="p">(</span><span class="n">shared_ptr</span> <span class="k">const</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">);</span> <span class="c1">// never throws
+</span>      <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Y</span><span class="o">&gt;</span> <span class="n">shared_ptr</span><span class="p">(</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Y</span><span class="o">&gt;</span> <span class="k">const</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">);</span> <span class="c1">// never throws
+</span>      <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Y</span><span class="o">&gt;</span> <span class="k">explicit</span> <span class="n">shared_ptr</span><span class="p">(</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">Y</span><span class="o">&gt;</span> <span class="k">const</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">);</span>
+      <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Y</span><span class="o">&gt;</span> <span class="k">explicit</span> <span class="n">shared_ptr</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">auto_ptr</span><span class="o">&lt;</span><span class="n">Y</span><span class="o">&gt;</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">);</span>
+      <span class="n">shared_ptr</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">shared_ptr</span> <span class="k">const</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">);</span> <span class="c1">// never throws
+</span>      <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Y</span><span class="o">&gt;</span> <span class="n">shared_ptr</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Y</span><span class="o">&gt;</span> <span class="k">const</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">);</span> <span class="c1">// never throws
+</span>      <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Y</span><span class="o">&gt;</span> <span class="n">shared_ptr</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">auto_ptr</span><span class="o">&lt;</span><span class="n">Y</span><span class="o">&gt;</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">);</span>
+      <span class="kt">void</span> <span class="n">reset</span><span class="p">();</span> <span class="c1">// never throws
+</span>      <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Y</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">reset</span><span class="p">(</span><span class="n">Y</span> <span class="o">*</span> <span class="n">p</span><span class="p">);</span>
+      <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Y</span><span class="p">,</span> <span class="k">class</span> <span class="nc">D</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">reset</span><span class="p">(</span><span class="n">Y</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="n">D</span> <span class="n">d</span><span class="p">);</span>
+      <span class="n">T</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">*</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span> <span class="c1">// never throws
+</span>      <span class="n">T</span> <span class="o">*</span> <span class="k">operator</span><span class="o">-&gt;</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span> <span class="c1">// never throws
+</span>      <span class="n">T</span> <span class="o">*</span> <span class="n">get</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span> <span class="c1">// never throws
+</span>      <span class="kt">bool</span> <span class="n">unique</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span> <span class="c1">// never throws
+</span>      <span class="kt">long</span> <span class="n">use_count</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span> <span class="c1">// never throws
+</span>      <span class="k">operator</span> <span class="n">unspecified</span><span class="o">-</span><span class="kt">bool</span><span class="o">-</span><span class="n">type</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span> <span class="c1">// never throws
+</span>      <span class="kt">void</span> <span class="n">swap</span><span class="p">(</span><span class="n">shared_ptr</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">);</span> <span class="c1">// never throws
+</span> <span class="p">};</span>
+ </code></pre></figure>
+
+<p>       大多数成员函数都跟auto_ptr类似，但是没有了release（请看注释），reset用来放弃所拥有对象的所有权或拥有对象的变更，会引起原有对象的引用计数的减少。  <br />
+Note：  <br />
+       Boost文档里面的QA说明了为什么不提供release函数：   <br />
+Q. Why doesn’t shared_ptr provide a release() function?   <br />
+A. shared_ptr cannot give away ownership unless it’s unique() because the other copy will still destroy the object.  <br />
+Consider:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">a</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">);</span>
+<span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">b</span><span class="p">(</span><span class="n">a</span><span class="p">);</span> <span class="c1">// a.use_count() == b.use_count() == 2
+</span><span class="kt">int</span> <span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">release</span><span class="p">();</span></code></pre></figure>
+
+<p>       use_count返回引用计数的个数，unique拥于确认是否是独占所有权（use_count为1），swap用于交换两个shared_ptr对象（即交换所拥有的对象），有一个bool类型转换操作符使得shared_ptr可用于需要的bool类型的语境下，比如我们通常用if(pointer)来判断某个指针是否为空。   <br />
+       Boost库里面有很多shared_ptr的使用例程，文档里面也列举了许许多多shared_ptr的用途，其中最有用也最常用的莫过于传递动态分配对象，有了引用计数机制，我们现在可以安全地将动态分配的对象包裹在shared_ptr里面跨越模块，跨越线程的边界传递。shared_ptr为我们自动管理对象的生命周期，嗯，C++也可以体会到Java里面使用引用的美妙之处了。  <br />
+       另外，还记得Effective C++里面（或者其它的C++书籍），Scott Meyer告诉你的：在一个由多个模块组成的系统里面，一个模块不用试图自己去释放另外一个模块分配的资源，而应该遵循谁分配谁释放的原则。正确的原则但是有时难免有时让人忽略（过于繁琐），将资源包装在shared_ptr里面传递，而shared_ptr保证了在资源不再被拥有的时候，产生资源的模块的delete语句会被调用。   <br />
+       shared_ptr是可以拷贝和赋值的，拷贝行为也是等价的，并且可以被比较，这意味这它可被放入标准库的一般容器（vector，list）和关联容器中（map）。   <br />
+       shared_ptr可以用来容纳多态对象，比如所下面的例子：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">class</span> <span class="nc">Base</span>
+<span class="p">{}</span>
+<span class="k">class</span> <span class="nc">Derived</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Base</span>
+<span class="p">{}</span>
+<span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Base</span><span class="o">&gt;</span> <span class="n">sp_base</span><span class="p">(</span><span class="k">new</span> <span class="n">Derived</span><span class="p">);</span></code></pre></figure>
+
+<p>甚至shared_ptr也具备多态的行为：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">Derived</span><span class="o">*</span> <span class="n">pd</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Derived</span><span class="p">;</span>
+<span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Derived</span><span class="o">&gt;</span> <span class="n">sp_derived</span><span class="p">(</span><span class="n">pd</span><span class="p">);</span>
+<span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Base</span><span class="o">&gt;</span> <span class="n">sp_base2</span><span class="p">(</span><span class="n">sp_derived</span><span class="p">);</span></code></pre></figure>
+
+<p>       上面的语句是合法的，shared_ptr会完成所需的类型转换，当shared_ptr的模版参数Base的确是Derived的基类的时候。最后是一个小小的提醒，无论是使用auto_ptr还是shared_ptr，都永远不要写这样的代码：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">A</span><span class="o">*</span> <span class="n">pa</span> <span class="o">=</span> <span class="k">new</span> <span class="n">A</span><span class="p">;</span>
+<span class="n">xxx_ptr</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span> <span class="n">ptr_a_1</span><span class="p">(</span><span class="n">pa</span><span class="p">);</span>
+<span class="n">xxx_ptr</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span> <span class="n">ptr_a_2</span><span class="p">(</span><span class="n">pa</span><span class="p">);</span></code></pre></figure>
+
+<p>       很明显，在ptr_a_1和ptr_a_2生命周期结束的时候都会去删除pa，pa被删除了两次，这肯定会引起你程序的崩溃。可能有人会疑问，假如使用shared_ptr,第二次引用pa的时候，计数会加一。知道ptr_a_1和ptr_a_2的生命周期全部结束时才会删除，怎么会崩溃呢。实际上，shared_ptr的构造函数是不一样的：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Y</span><span class="o">&gt;</span> <span class="k">explicit</span> <span class="n">shared_ptr</span><span class="p">(</span><span class="n">Y</span><span class="o">*</span> <span class="n">p</span><span class="p">);</span></code></pre></figure>
+
+<p>       这个构造函数获得给定指针p的所有权。参数p必须是指向Y的有效指针。构造后引用计数设为1。唯一从这个构造函数抛出的异常是std::bad_alloc(仅在一种很罕见的情况下发生，即不能获得引用计数器所需的自由空间)。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">shared_ptr</span><span class="p">(</span><span class="k">const</span> <span class="n">shared_ptr</span><span class="o">&amp;</span> <span class="n">r</span><span class="p">);</span></code></pre></figure>
+
+<p>       r中保存的资源被新构造的shared_ptr所共享，引用计数加一。这个构造函数不会抛出异常。因此，直接用指针作为构造形参传入shared_ptr，计数是不会加一的，当它生命周期结束时，就会去删除指针，因此，上面的例子实际上删除了两次。  <br />
+       当然，这个误用的例子比较明显，但是在某种情况下，可能会一不小心就写出如下的代码（嗯，我承认我的确做过这样的事情）：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">DoSomething</span><span class="p">(</span><span class="n">xxx_ptr</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span><span class="p">)</span>
+<span class="p">{</span>
+         <span class="c1">//do something
+</span><span class="p">}</span>
+<span class="k">class</span> <span class="nc">A</span>
+<span class="p">{</span>
+         <span class="n">doSomething</span><span class="p">()</span>
+         <span class="p">{</span>
+                 <span class="n">xxx_ptr</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span> <span class="n">ptr_a</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+                 <span class="n">DoSomething</span><span class="p">(</span><span class="n">ptr_a</span><span class="p">);</span>
+         <span class="p">}</span>
+<span class="p">};</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+         <span class="n">A</span> <span class="n">a</span><span class="p">;</span>
+         <span class="n">a</span><span class="p">.</span><span class="n">doSomething</span><span class="p">();</span>
+         <span class="c1">//continue do something with a, but it was already destory
+</span><span class="p">}</span></code></pre></figure>
+
+<p>       在函数a.doSomething()里面发生了什么事情，它为了调用DoSomething所以不得不把自己包装成一个xxx_ptr，但是忘记在函数结束的时候，xxx ptr_a被销毁的同时也销毁了自己，程序或者立刻崩溃或者在下面的某个时间点上崩溃！所以你在使用智能指针做为函数参数的时候请小心这样的误用，有时候使用智能指针作为函数参数不一定是一个好注意。比如请遵循下面的建议，请不要在属于类型A的接口的一部分的非成员函数或者跟A有紧密联系的辅助函数里面使用xxx_ptr<a>作为函数的参数类型。</a></p>
+
+<h3 id="weakptr">weak_ptr</h3>
+<p>       weak_ptr是为配合shared_ptr而引入的一种智能指针来协助shared_ptr工作，它可以从一个shared_ptr或另一个weak_ptr对象构造，它的构造和析构不会引起引用记数的增加或减少。没有重载*和-&gt;但可以使用lock获得一个可用的shared_ptr对象:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">weak_ptr</span>   
+<span class="p">{</span>   
+<span class="k">public</span><span class="o">:</span>   
+    <span class="n">weak_ptr</span><span class="p">();</span>   
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Y</span><span class="o">&gt;</span> <span class="n">weak_ptr</span><span class="p">(</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Y</span><span class="o">&gt;</span> <span class="k">const</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">);</span>   
+    <span class="n">weak_ptr</span><span class="p">(</span><span class="n">weak_ptr</span> <span class="k">const</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">);</span>   
+    <span class="o">~</span><span class="n">weak_ptr</span><span class="p">();</span>   
+    <span class="n">weak_ptr</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">weak_ptr</span> <span class="k">const</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">);</span>   
+    <span class="kt">long</span> <span class="n">use_count</span><span class="p">()</span><span class="k">const</span><span class="p">;</span>   
+    <span class="c1">//判断是否过期   
+</span>    <span class="kt">bool</span> <span class="n">expired</span><span class="p">()</span><span class="k">const</span><span class="p">;</span>   
+    <span class="c1">//得到一个空的或者被协助的shared_ptr   
+</span>    <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">()</span><span class="k">const</span><span class="p">;</span>   
+    <span class="kt">void</span> <span class="n">reset</span><span class="p">();</span>   
+    <span class="kt">void</span> <span class="n">swap</span><span class="p">(</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">);</span>   
+<span class="p">};</span>  
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">weak_ptr</span>  
+<span class="p">{</span>  
+<span class="k">public</span><span class="o">:</span>  
+    <span class="n">weak_ptr</span><span class="p">();</span>  
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Y</span><span class="o">&gt;</span> <span class="n">weak_ptr</span><span class="p">(</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Y</span><span class="o">&gt;</span> <span class="k">const</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">);</span>  
+    <span class="n">weak_ptr</span><span class="p">(</span><span class="n">weak_ptr</span> <span class="k">const</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">);</span>  
+    <span class="o">~</span><span class="n">weak_ptr</span><span class="p">();</span>  
+    <span class="n">weak_ptr</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">weak_ptr</span> <span class="k">const</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">);</span>  
+    <span class="kt">long</span> <span class="n">use_count</span><span class="p">()</span><span class="k">const</span><span class="p">;</span>  
+    <span class="c1">//判断是否过期  
+</span>    <span class="kt">bool</span> <span class="n">expired</span><span class="p">()</span><span class="k">const</span><span class="p">;</span>  
+    <span class="c1">//得到一个空的或者被协助的shared_ptr  
+</span>    <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">()</span><span class="k">const</span><span class="p">;</span>  
+    <span class="kt">void</span> <span class="n">reset</span><span class="p">();</span>  
+    <span class="kt">void</span> <span class="n">swap</span><span class="p">(</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">);</span>  
+<span class="p">};</span>  </code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include&lt;iostream&gt;   
+#include&lt;boost/weak_ptr.hpp&gt;   
+#include&lt;boost/shared_ptr.hpp&gt;   
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>   
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">boost</span><span class="p">;</span>   
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>   
+<span class="p">{</span>   
+    <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>   
+    <span class="n">weak_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">w</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>   
+    <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">w</span><span class="p">.</span><span class="n">expired</span><span class="p">()){</span>   
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">w</span><span class="p">.</span><span class="n">use_count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>   
+        <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="n">w</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>   
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">t</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>   
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">w</span><span class="p">.</span><span class="n">use_count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>   
+        <span class="k">if</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">use_count</span><span class="p">()</span><span class="o">==</span><span class="mi">2</span><span class="p">){</span>   
+            <span class="k">break</span><span class="p">;</span>   
+        <span class="p">}</span>   
+    <span class="p">}</span>   
+    <span class="n">w</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>   
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">w</span><span class="p">.</span><span class="n">expired</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>   
+<span class="p">}</span>   </code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include&lt;iostream&gt;  
+#include&lt;boost/weak_ptr.hpp&gt;  
+#include&lt;boost/shared_ptr.hpp&gt;  
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>  
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">boost</span><span class="p">;</span>  
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>  
+<span class="p">{</span>  
+    <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>  
+    <span class="n">weak_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">w</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>  
+    <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">w</span><span class="p">.</span><span class="n">expired</span><span class="p">()){</span>  
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">w</span><span class="p">.</span><span class="n">use_count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  
+        <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="n">w</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>  
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">t</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">w</span><span class="p">.</span><span class="n">use_count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  
+        <span class="k">if</span><span class="p">(</span><span class="n">w</span><span class="p">.</span><span class="n">use_count</span><span class="p">()</span><span class="o">==</span><span class="mi">2</span><span class="p">){</span>  
+            <span class="k">break</span><span class="p">;</span>  
+        <span class="p">}</span>  
+    <span class="p">}</span>  
+    <span class="n">w</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>  
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">w</span><span class="p">.</span><span class="n">expired</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  
+<span class="p">}</span>  </code></pre></figure>
+
+<p>       weak_ptr的一个重要用途是通过lock获得this指针的shared_ptr,使对象自己能够生产shared_ptr来管理自己，但助手类enable_shared_from_this的shared_from_this会返回this的shared_ptr，只需要让想被shared_ptr管理的类从它继承即可。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include&lt;boost/enable_shared_from_this.hpp&gt;   
+#include&lt;boost/make_shared.hpp&gt;   
+#include&lt;iostream&gt;   
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">boost</span><span class="p">;</span>   
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>   
+<span class="k">class</span> <span class="nc">testWeak</span><span class="o">:</span><span class="k">public</span> <span class="n">enable_shared_from_this</span><span class="o">&lt;</span><span class="n">testWeak</span><span class="o">&gt;</span><span class="p">{</span><span class="c1">//  
+</span><span class="nl">public:</span>   
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>   
+    <span class="n">testWeak</span><span class="p">(</span><span class="kt">int</span> <span class="n">ii</span><span class="p">)</span><span class="o">:</span><span class="n">i</span><span class="p">(</span><span class="n">ii</span><span class="p">){}</span>   
+    <span class="kt">void</span> <span class="n">print</span><span class="p">(){</span>   
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>   
+    <span class="p">}</span>   
+<span class="p">};</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>   
+<span class="p">{</span>   
+    <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">testWeak</span><span class="o">&gt;</span> <span class="n">sp</span> <span class="o">=</span> <span class="n">make_shared</span><span class="o">&lt;</span><span class="n">testWeak</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>   
+    <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">testWeak</span><span class="o">&gt;</span> <span class="n">tw</span> <span class="o">=</span> <span class="n">sp</span><span class="o">-&gt;</span><span class="n">shared_from_this</span><span class="p">();</span>   
+    <span class="n">tw</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>   
+<span class="p">}</span>  </code></pre></figure>
+
+<h4 id="section">循环引用</h4>
+<p>       引用计数是一种便利的内存管理机制，但它有一个很大的缺点，那就是不能管理循环引用的对象。一个简单的例子如下：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;string&gt;   
+#include &lt;iostream&gt;   
+#include &lt;boost/shared_ptr.hpp&gt;   
+#include &lt;boost/weak_ptr.hpp&gt;   
+</span><span class="k">class</span> <span class="nc">parent</span><span class="p">;</span>   
+<span class="k">class</span> <span class="nc">children</span><span class="p">;</span>  
+<span class="k">typedef</span> <span class="n">boost</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">parent</span><span class="o">&gt;</span> <span class="n">parent_ptr</span><span class="p">;</span>   
+<span class="k">typedef</span> <span class="n">boost</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">children</span><span class="o">&gt;</span> <span class="n">children_ptr</span><span class="p">;</span>   
+<span class="k">class</span> <span class="nc">parent</span>   
+<span class="p">{</span>   
+<span class="k">public</span><span class="o">:</span>   
+    <span class="o">~</span><span class="n">parent</span><span class="p">()</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span><span class="s">"destroying parent</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span> <span class="p">}</span>   
+<span class="k">public</span><span class="o">:</span>   
+    <span class="n">children_ptr</span> <span class="n">children</span><span class="p">;</span>   
+<span class="p">};</span>   
+<span class="k">class</span> <span class="nc">children</span>   
+<span class="p">{</span>   
+<span class="k">public</span><span class="o">:</span>   
+    <span class="o">~</span><span class="n">children</span><span class="p">()</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span><span class="s">"destroying children</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span> <span class="p">}</span>   
+<span class="k">public</span><span class="o">:</span>   
+    <span class="n">parent_ptr</span> <span class="n">parent</span><span class="p">;</span>   
+<span class="p">};</span>   
+<span class="kt">void</span> <span class="nf">test</span><span class="p">()</span>   
+<span class="p">{</span>   
+    <span class="n">parent_ptr</span> <span class="n">father</span><span class="p">(</span><span class="k">new</span> <span class="n">parent</span><span class="p">());</span>   
+    <span class="n">children_ptr</span> <span class="n">son</span><span class="p">(</span><span class="k">new</span> <span class="n">children</span><span class="p">);</span>   
+    <span class="n">father</span><span class="o">-&gt;</span><span class="n">children</span> <span class="o">=</span> <span class="n">son</span><span class="p">;</span>   
+    <span class="n">son</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">father</span><span class="p">;</span>   
+<span class="p">}</span>   
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span>   
+<span class="p">{</span>   
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"begin test...</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>   
+    <span class="n">test</span><span class="p">();</span>   
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"end test.</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>   
+<span class="p">}</span>  </code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;string&gt;  
+#include &lt;iostream&gt;  
+#include &lt;boost/shared_ptr.hpp&gt;  
+#include &lt;boost/weak_ptr.hpp&gt;  
+</span><span class="k">class</span> <span class="nc">parent</span><span class="p">;</span>  
+<span class="k">class</span> <span class="nc">children</span><span class="p">;</span>  
+<span class="k">typedef</span> <span class="n">boost</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">parent</span><span class="o">&gt;</span> <span class="n">parent_ptr</span><span class="p">;</span>  
+<span class="k">typedef</span> <span class="n">boost</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">children</span><span class="o">&gt;</span> <span class="n">children_ptr</span><span class="p">;</span>  
+<span class="k">class</span> <span class="nc">parent</span>  
+<span class="p">{</span>  
+<span class="k">public</span><span class="o">:</span>  
+    <span class="o">~</span><span class="n">parent</span><span class="p">()</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span><span class="s">"destroying parent</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span> <span class="p">}</span>  
+<span class="k">public</span><span class="o">:</span>  
+    <span class="n">children_ptr</span> <span class="n">children</span><span class="p">;</span>  
+<span class="p">};</span>  
+<span class="k">class</span> <span class="nc">children</span>  
+<span class="p">{</span>  
+<span class="k">public</span><span class="o">:</span>  
+    <span class="o">~</span><span class="n">children</span><span class="p">()</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span><span class="s">"destroying children</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span> <span class="p">}</span>  
+<span class="k">public</span><span class="o">:</span>  
+    <span class="n">parent_ptr</span> <span class="n">parent</span><span class="p">;</span>  
+<span class="p">};</span>  
+<span class="kt">void</span> <span class="nf">test</span><span class="p">()</span>  
+<span class="p">{</span>  
+    <span class="n">parent_ptr</span> <span class="n">father</span><span class="p">(</span><span class="k">new</span> <span class="n">parent</span><span class="p">());</span>  
+    <span class="n">children_ptr</span> <span class="n">son</span><span class="p">(</span><span class="k">new</span> <span class="n">children</span><span class="p">);</span>  
+    <span class="n">father</span><span class="o">-&gt;</span><span class="n">children</span> <span class="o">=</span> <span class="n">son</span><span class="p">;</span>  
+    <span class="n">son</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">father</span><span class="p">;</span>  
+<span class="p">}</span>  
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span>  
+<span class="p">{</span>  
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"begin test...</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>  
+    <span class="n">test</span><span class="p">();</span>  
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"end test.</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>  
+<span class="p">}</span>  </code></pre></figure>
+
+<p>       运行该程序可以看到，即使退出了test函数后，由于parent和children对象互相引用，它们的引用计数都是1，不能自动释放，并且此时这两个对象再无法访问到。这就引起了c++中那臭名昭著的内存泄漏。
+       一般来讲，解除这种循环引用有下面有三种可行的方法： <br />
+1. 当只剩下最后一个引用的时候需要手动打破循环引用释放对象。   <br />
+2. 当parent的生存期超过children的生存期的时候，children改为使用一个普通指针指向parent。  <br />
+3. 使用弱引用的智能指针打破这种循环引用。   <br />
+       虽然这三种方法都可行，但方法1和方法2都需要程序员手动控制，麻烦且容易出错。这里主要介绍一下第三种方法和boost中的弱引用的智能指针boost::weak_ptr。</p>
+
+<h4 id="section-1">强引用和弱引用</h4>
+<p>       对于强引用来说，如果被引用的对象还活着，那么这个强引用也存在（就是说，当至少有一个强引用，那么这个对象就不能被释放）。boost::share_ptr就是强引用。  <br />
+       相对而言，对于弱引用来说，当引用的对象活着的时候弱引用不一定存在。仅仅是当它存在的时候的一个引用。弱引用并不修改该对象的引用计数，这意味这弱引用它并不对对象的内存进行管理，在功能上类似于普通指针，然而一个比较大的区别是，弱引用能检测到所管理的对象是否已经被释放，从而避免访问非法内存。</p>
+
+<h4 id="boostweakptr">boost::weak_ptr</h4>
+<p>       boost::weak_ptr<T>是boost提供的一个弱引用的智能指针，它的声明可以简化如下：</T></p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>   
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">weak_ptr</span> <span class="p">{</span>   
+    <span class="k">public</span><span class="o">:</span>   
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Y</span><span class="o">&gt;</span>   
+        <span class="n">weak_ptr</span><span class="p">(</span><span class="k">const</span> <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Y</span><span class="o">&gt;&amp;</span> <span class="n">r</span><span class="p">);</span>   
+        <span class="n">weak_ptr</span><span class="p">(</span><span class="k">const</span> <span class="n">weak_ptr</span><span class="o">&amp;</span> <span class="n">r</span><span class="p">);</span>   
+        <span class="o">~</span><span class="n">weak_ptr</span><span class="p">();</span>   
+        <span class="n">T</span><span class="o">*</span> <span class="n">get</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>    
+        <span class="kt">bool</span> <span class="n">expired</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>    
+        <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>   
+    <span class="p">};</span>    
+<span class="p">}</span>  </code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>  
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">weak_ptr</span> <span class="p">{</span>  
+    <span class="k">public</span><span class="o">:</span>  
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Y</span><span class="o">&gt;</span>  
+        <span class="n">weak_ptr</span><span class="p">(</span><span class="k">const</span> <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Y</span><span class="o">&gt;&amp;</span> <span class="n">r</span><span class="p">);</span>  
+        <span class="n">weak_ptr</span><span class="p">(</span><span class="k">const</span> <span class="n">weak_ptr</span><span class="o">&amp;</span> <span class="n">r</span><span class="p">);</span>  
+        <span class="o">~</span><span class="n">weak_ptr</span><span class="p">();</span>  
+        <span class="n">T</span><span class="o">*</span> <span class="n">get</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>   
+        <span class="kt">bool</span> <span class="n">expired</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>   
+        <span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>  
+    <span class="p">};</span>   
+<span class="p">}</span>  </code></pre></figure>
+
+<p>       可以看到，boost::weak_ptr必须从一个boost::shared_ptr或另一个boost::weak_ptr转换而来。这也说明，进行该对象的内存管理的是那个强引用的boost::shared_ptr。boost::weak_ptr只是提供了对管理对象的一个访问手段。  <br />
+       boost::weak_ptr除了对所管理对象的基本访问功能（通过get()函数）外，还有两个常用的功能函数：expired()用于检测所管理的对象是否已经释放；lock()用于获取所管理的对象的强引用指针。</p>
+
+<h4 id="boostweakptr-1">通过boost::weak_ptr来打破循环引用</h4>
+<p>       由于弱引用不更改引用计数，类似普通指针，只要把循环引用的一方使用弱引用，即可解除循环引用。对于上面的那个例子来说，只要把children的定义改为如下方式，即可解除循环引用：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">class</span> <span class="nc">children</span>   
+<span class="p">{</span>   
+<span class="k">public</span><span class="o">:</span>   
+    <span class="o">~</span><span class="n">children</span><span class="p">()</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span><span class="s">"destroying children</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span> <span class="p">}</span>   
+<span class="k">public</span><span class="o">:</span>   
+    <span class="n">boost</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">parent</span><span class="o">&gt;</span> <span class="n">parent</span><span class="p">;</span>   
+<span class="p">};</span>  </code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">class</span> <span class="nc">children</span>  
+<span class="p">{</span>  
+<span class="k">public</span><span class="o">:</span>  
+    <span class="o">~</span><span class="n">children</span><span class="p">()</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span><span class="s">"destroying children</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span> <span class="p">}</span>  
+<span class="k">public</span><span class="o">:</span>  
+    <span class="n">boost</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">parent</span><span class="o">&gt;</span> <span class="n">parent</span><span class="p">;</span>  
+<span class="p">};</span>  </code></pre></figure>
+
+<p>       最后值得一提的是,虽然通过弱引用指针可以有效的解除循环引用，但这种方式必须在程序员能预见会出现循环引用的情况下才能使用，也可以是说这个仅仅是一种编译期的解决方案，如果程序在运行过程中出现了循环引用，还是会造成内存泄漏的。因此，不要认为只要使用了智能指针便能杜绝内存泄漏。毕竟，对于C++来说，由于没有垃圾回收机制，内存泄漏对每一个程序员来说都是一个非常头痛的问题。</p>
+
+<h3 id="scopedptr">scoped_ptr</h3>
+<p>       boost::scoped_ptr 用于确保动态分配的对象能够被正确地删除。scoped_ptr 有着与std::auto_ptr类似的特性，而最大的区别在于它不能转让所有权而auto_ptr可以。事实上，scoped_ptr永远不能被复制或被赋值！scoped_ptr 拥有它所指向的资源的所有权，并永远不会放弃这个所有权。scoped_ptr的这种特性提升了我们的代码的表现，我们可以根据需要选择最合适的智能指针(scoped_ptr 或 auto_ptr)。  <br />
+       要决定使用std::auto_ptr还是boost::scoped_ptr, 就要考虑转移所有权是不是你想要的智能指针的一个特性。如果不是，就用scoped_ptr. 它是一种轻量级的智能指针；使用它不会使你的程序变大或变慢。它只会让你的代码更安全，更好维护。   <br />
+       下面是scoped_ptr的摘要，以及其成员的简要描述：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">namespace</span> <span class="n">boost</span> <span class="p">{</span>
+  <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">scoped_ptr</span> <span class="o">:</span> <span class="n">noncopyable</span> <span class="p">{</span>
+  <span class="k">public</span><span class="o">:</span>
+    <span class="k">explicit</span> <span class="n">scoped_ptr</span><span class="p">(</span><span class="n">T</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="o">~</span><span class="n">scoped_ptr</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="n">reset</span><span class="p">(</span><span class="n">T</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">*</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="n">T</span><span class="o">*</span> <span class="k">operator</span><span class="o">-&gt;</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="n">T</span><span class="o">*</span> <span class="n">get</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="n">swap</span><span class="p">(</span><span class="n">scoped_ptr</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">);</span>
+  <span class="p">};</span>
+  <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="kt">void</span> <span class="n">swap</span><span class="p">(</span><span class="n">scoped_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">scoped_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>       成员函数<code class="highlighter-rouge">explicit scoped_ptr(T* p=0)</code>。构造函数，存储p的一份拷贝。注意，p必须是用operator new分配的，或者是null. 在构造的时候，不要求T必须是一个完整的类型。当指针p是调用某个分配函数的结果而不是直接调用new得到的时候很有用：因为这个类型不必是完整的，只需要类型T的一个前向声明就可以了。这个构造函数不会抛出异常。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="o">~</span><span class="n">scoped_ptr</span><span class="p">()</span></code></pre></figure>
+
+<p>       删除被指物。类型T在被销毁时必须是一个完整的类型。如果scoped_ptr在它被析构时并没有保存资源，它就什么都不做。这个析构函数不会抛出异常。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="n">reset</span><span class="p">(</span><span class="n">T</span><span class="o">*</span> <span class="n">p</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span></code></pre></figure>
+
+<p>       重置一个 scoped_ptr 就是删除它已保存的指针，如果它有的话，并重新保存 p. 通常，资源的生存期管理应该完全由scoped_ptr自己处理，但是在极少数时候，资源需要在scoped_ptr的析构之前释放，或者scoped_ptr要处理它原有资源之外的另外一个资源。这时，就可以用reset，但一定要尽量少用它。(过多地使用它通常表示有设计方面的问题) 这个函数不会抛出异常。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">*</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span></code></pre></figure>
+
+<p>       返回一个到被保存指针指向的对象的引用。由于不允许空的引用，所以解引用一个拥有空指针的scoped_ptr将导致未定义行为。如果不能肯定所含指针是否有效，就用函数get替代解引用。这个函数不会抛出异常。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">T</span><span class="o">*</span> <span class="k">operator</span><span class="o">-&gt;</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span></code></pre></figure>
+
+<p>       返回保存的指针。如果保存的指针为空，则调用这个函数会导致未定义行为。如果不能肯定指针是否空的，最好使用函数get。这个函数不会抛出异常。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">T</span><span class="o">*</span> <span class="n">get</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span></code></pre></figure>
+
+<p>       返回保存的指针。应该小心地使用get，因为它可以直接操作裸指针。但是，get使得你可以测试保存的指针是否为空。这个函数不会抛出异常。get通常在调用那些需要裸指针的函数时使用。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">operator</span> <span class="n">unspecified_bool_type</span><span class="p">()</span> <span class="k">const</span></code></pre></figure>
+
+<p>       返回scoped_ptr是否为非空。返回值的类型是未指明的，但这个类型可被用于Boolean的上下文中。在if语句中最好使用这个类型转换函数，而不要用get去测试scoped_ptr的有效性</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="n">swap</span><span class="p">(</span><span class="n">scoped_ptr</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span></code></pre></figure>
+
+<p>       交换两个scoped_ptr的内容。这个函数不会抛出异常。
+       普通函数：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">swap</span><span class="p">(</span><span class="n">scoped_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">a</span><span class="p">,</span><span class="n">scoped_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">b</span><span class="p">)</span></code></pre></figure>
+
+<p>       这个函数提供了交换两个scoped pointer的内容的更好的方法。之所以说它更好，是因为 swap(scoped1,scoped2)可以更广泛地用于很多指针类型，包括裸指针和第三方的智能指针。scoped1.swap(scoped2) 则只能用于它的定义所在的智能指针，而不能用于裸指针。  <br />
+       你可为那些不够智能，没有提供它们自己的交换函数的智能指针创建你的普通swap函数。</p>
+
+<h4 id="section-2">用法</h4>
+<p>       scoped_ptr的用法与普通的指针没什么区别；最大的差别在于你不必再记得在指针上调用delete，还有复制是不允许的。典型的指针操作(operator* 和 operator-&gt;)都被重载了，并提供了和裸指针一样的语法。用scoped_ptr和用裸指针一样快，也没有大小上的增加，因此它们可以广泛使用。使用boost::scoped_ptr时，包含头文件”boost/scoped_ptr.hpp”. 在声明一个scoped_ptr时，用被指物的类型来指定类模板的参数。例如，以下是一个包含std::string指针的scoped_ptr：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">boost</span><span class="o">::</span><span class="n">scoped_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">p</span><span class="p">(</span><span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">));</span></code></pre></figure>
+
+<p>       当scoped_ptr被销毁时，它对它所拥有的指针调用delete 。</p>
+
+<h4 id="scopedptr--const-autoptr">scoped_ptr 不同于 const auto_ptr</h4>
+<p>       留心的读者可能已经注意到auto_ptr可以几乎象scoped_ptr一样地工作，只要把auto_ptr声明为const：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">const</span> <span class="n">auto_ptr</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span> <span class="n">no_transfer_of_ownership</span><span class="p">(</span><span class="k">new</span> <span class="n">A</span><span class="p">);</span></code></pre></figure>
+
+<p>       它们很接近，但不是一样。最大的区别在于scoped_ptr可以被reset, 在需要时可以删除并替换被指物。而对于const auto_ptr这是不可能的。另一个小一点的区别是，它们的名字不同：尽管const auto_ptr意思上和scoped_ptr一样，但它更冗长，也更不明显。当你的词典里有了scoped_ptr，你就应该使用它，因为它可以更清楚地表明你的意图。如果你想说一个资源是要被限制在作用域里的，并且不应该有办法可以放弃它的所有权，你就应该用 boost::scoped_ptr。</p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/08/complier/" title="link to C程序编译过程回顾">C程序编译过程回顾</a></h2>
+       <p class="excerpt">       编译程序读取源程序（字符流），对之进行词法和语法的分析，将高级语言指令转换为功能等效的汇编代码，再由汇编程序转换为机器语言(目标文件)，并且按照操作系统对可执行文件格式的要求链接生成可执行程序。   C源程序头文件－－&gt;预编译处理(cpp)－－&gt;编译程序本身－－&gt;优化程序－－&gt;汇编程序－－&gt;链接程序--&gt;可执行文件编译预处理读取c源程序，对其中的伪指令（以#开头的指令）和特殊符号进行处理伪指令主要包括以下四个方面：  宏定义指令，如#def...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-08-06 19:58:50 +0800" class="post-list__meta--date date">2015-08-06</time> &#8226; <span class="post-list__meta--tags tags">C++</span><a class="btn-border-small" href=/2015/08/complier/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "/2015/08/auto_ptre/";
+        this.page.identifier = "/2015/08/auto_ptre/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-07-03 生成</span>
+        <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

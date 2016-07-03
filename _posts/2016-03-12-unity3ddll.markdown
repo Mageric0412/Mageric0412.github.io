@@ -1,0 +1,74 @@
+---
+author: mageric
+comments: true
+date: 2016-03-12 06:51:08+00:00
+layout: post
+title: Unity3D中使用C++ Dll的方法
+categories:
+- Unity5
+tags:
+- unity3d
+---
+&#160; &#160; &#160;&#160;我们在Unity3D的脚本使用中，难免会遇到需要使用自定义库的时候，由于Unity只支持脚本编辑，因此原生C++需要通过打包为Dll的方式，才能为我们的脚本所用。下面介绍我们的打包过程：       
+&#160; &#160; &#160;&#160;首先在VS编辑器中定义一个dll项目，自定义.h文件，注意宏内容:
+{% highlight c++ %}
+    #pragma once  
+    #ifdef MALIBDLL  
+     #define MYAPI _declspec(dllexport)  
+    #else  
+     #define MYAPI  _declspec(dllimport)  
+    #endif  
+    //可以include需要用到的头文件  
+    extern "C" int MYAPI test(int x,int y);
+    class MYAPI  MagericTest  
+    {  
+    public:  
+    	MagericTest();
+    	MagericTest(int x,int y);  
+    	~MagericTest();  
+    	int _x;
+    	int _y;
+    	//类的函数
+    };
+{% endhighlight %}
+&#160; &#160; &#160;&#160;其中，`_declspec(dllexport)`正是将之后定义的函数、类导出为dll的说明。由于Unity中不支持直接调用C++中类的方法使用，因此，当我们需要使用类中的方法到Unity脚本中时，使用类似Bridge的方法。在实现的test调用函数中进行类的调用。下面是cpp文件的实现：
+{% highlight c++ %}
+    #define MALIBDLL  
+    #include "dlltest.h"  
+    //////////头文件中函数的实现  
+    MagericTest::MagericTest()   
+    {       
+    }   
+    MagericTest::MagericTest(int x,int y)   
+    {     
+      _x=x;
+      _y=y;
+    }
+    MagericTest::~MagericTest()   
+    {     
+    }   
+    int MYAPI test(int x,int y)
+    {
+    	MagericTest* face=new MagericTest(1,2);
+    	return x+y+face->_x+face->_y;
+    }
+{% endhighlight %}
+&#160; &#160; &#160;&#160;其中test函数中实现了对类MagericTest的使用，最后返回值中包含了其调用结果。为了方便起见，在编译过程中我们将dll设置为64位编译。从编译的Debug文件夹中找到dll文件，将其复制到Unity项目中。（如果没有）新建文件夹Plugins，将Dll复制到此文件夹中（脚本会自动搜寻此命名的文件夹寻找外部文件）。在脚本中，进行如下编辑：
+{% highlight c# %}
+    using UnityEngine;
+    using System.Collections;
+    using System.Runtime.InteropServices;
+    public class testdll : MonoBehaviour {
+    		[DllImport("TestDll3")]
+    	// Use this for initialization
+    		private static extern  int test(int x,int y);
+    		int i=test(5,6);
+    	void Start () {
+    	}
+      void OnGUI()
+      {
+    		GUI.Button(new Rect(1,1,200,100),"this"+i);
+    	}
+    }
+{% endhighlight %}
+&#160; &#160; &#160;&#160;其中，`using System.Runtime.InteropServices;`代表可以进行Dll的导入操作，注意调用外部函数的前缀`private static extern`。此时可以在GUI中看到，最终的计算结果是5+6+1+2=14。即我们的计算也包含了对类的使用。

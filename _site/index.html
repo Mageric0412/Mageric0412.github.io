@@ -156,6 +156,62 @@
   <ol class="post-list">
     
     <li>
+      <h2 class="post-list__post-title post-title"><a href="/2016/06/nio/" title="访问 NIO技术小结">NIO技术小结</a></h2>
+      <p class="excerpt">NIO是 JAVA New IO 的简称，在 jdk1.4 里提供的新api。官方标榜的特性如下：  为所有的原始类型提供 (Buffer) 缓存支持。  字符集编码解码解决方案。  Channel ：一个新的原始 I/O 抽象。  支持锁和内存映射文件的文件访问接口。  提供多路 (non-bloking) 非阻塞式的高伸缩性网络 I/O 。      NIO与传统的IO一个最大的区别就是：IO是面向流的，NIO是面向缓冲区的，因此，IO流操作势必要求完成读取完流中的数据后才能进行接下来...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2016-06-06 19:25:52 +0800" class="post-list__meta--date date">2016-06-06</time> &#8226; <span class="post-list__meta--tags tags">JAVA IO</span><a class="btn-border-small" href=/2016/06/nio/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2016/06/zz/" title="访问 常用正则表达式举例">常用正则表达式举例</a></h2>
+      <p class="excerpt">      以下提供一些正则表达式的常用场景示例，可以为一些现用场景提供正则表达式的使用：  //匹配中文字符的正则表达式：    [u4e00-u9fa5]  //匹配中文还真是个头疼的事，有了这个表达式就好办了     //匹配双字节字符(包括汉字在内)：     [^x00-xff] //可以用来计算字符串的长度（一个双字节字符长度计2，ASCII字符计1)     //匹配空白行的正则表达式：    ns*r //可以用来删除空白行      //匹配HTML标记的正则表达式：  ...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2016-06-04 17:52:04 +0800" class="post-list__meta--date date">2016-06-04</time> &#8226; <span class="post-list__meta--tags tags">正则表达式</span><a class="btn-border-small" href=/2016/06/zz/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2016/03/unity3ddll/" title="访问 Unity3D中使用C++ Dll的方法">Unity3D中使用C++ Dll的方法</a></h2>
+      <p class="excerpt">      我们在Unity3D的脚本使用中，难免会遇到需要使用自定义库的时候，由于Unity只支持脚本编辑，因此原生C++需要通过打包为Dll的方式，才能为我们的脚本所用。下面介绍我们的打包过程：           首先在VS编辑器中定义一个dll项目，自定义.h文件，注意宏内容:    #pragma once      #ifdef MALIBDLL       #define MYAPI _declspec(dllexport)      #else       #define ...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2016-03-12 14:51:08 +0800" class="post-list__meta--date date">2016-03-12</time> &#8226; <span class="post-list__meta--tags tags">unity3d</span><a class="btn-border-small" href=/2016/03/unity3ddll/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/11/leetcode-301/" title="访问 leetcode 301">leetcode 301</a></h2>
+      <p class="excerpt">Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.  Note: The input string may contain letters other than the parentheses ( and ).  Examples:  “()())()” -&gt; [”()()()”, “(())()”]...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-11-09 16:57:57 +0800" class="post-list__meta--date date">2015-11-09</time> &#8226; <span class="post-list__meta--tags tags">leetcode</span><a class="btn-border-small" href=/2015/11/leetcode-301/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/09/rector/" title="访问 Rector模式与Proactor模式">Rector模式与Proactor模式</a></h2>
+      <p class="excerpt">概述      系统I/O可分为阻塞型，非阻塞同步型以及非阻塞异步型。        阻塞型I/O意味着控制权只到调用操作结束了才会回到调用者手里。         非阻塞同步是会立即返回控制权给调用者的。调用者不需要等等，它从调用的函数获取两种结果：要么此次调用成功进行了;要么系统返回错误标识告诉调用者当前资源不可用，你再等等或者再试度看吧。比如read()操作， 如果当前socket无数据可读，则立即返回EWOULBLOCK/EAGAIN，告诉调用read()者”数据还没准备好，你稍后...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-09-17 19:14:50 +0800" class="post-list__meta--date date">2015-09-17</time> &#8226; <span class="post-list__meta--tags tags">多线程Java</span><a class="btn-border-small" href=/2015/09/rector/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/09/tcpip2/" title="访问 TCP/IP协议简述（下）（转）">TCP/IP协议简述（下）（转）</a></h2>
+      <p class="excerpt">TCP的RTT算法      从前面的TCP重传机制我们知道Timeout的设置对于重传非常重要。  设长了，重发就慢，丢了老半天才重发，没有效率，性能差；  设短了，会导致可能并没有丢就重发。于是重发的就快，会增加网络拥塞，导致更多的超时，更多的超时导致更多的重发。      而且，这个超时时间在不同的网络的情况下，根本没有办法设置一个死的值。只能动态地设置。为了动态地设置，TCP引入了RTT——Round Trip Time，也就是一个数据包从发出去到回来的时间。这样发送端就大约知道需...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-09-02 22:06:37 +0800" class="post-list__meta--date date">2015-09-02</time> &#8226; <span class="post-list__meta--tags tags">tcp</span><a class="btn-border-small" href=/2015/09/tcpip2/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/09/tcpip1/" title="访问 TCP/IP协议简述（上）（转）">TCP/IP协议简述（上）（转）</a></h2>
+      <p class="excerpt">      首先，我们需要知道TCP在网络OSI的七层模型中的第四层——Transport层，IP在第三层——Network层，ARP在第二层——Data Link层，在第二层上的数据，我们叫Frame，在第三层上的数据叫Packet，第四层的数据叫Segment。         我们程序的数据首先会打到TCP的Segment中，然后TCP的Segment会打到IP的Packet中，然后再打到以太网Ethernet的Frame中，传到对端后，各个层解析自己的协议，然后把数据交给更高层的协...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-09-02 20:30:38 +0800" class="post-list__meta--date date">2015-09-02</time> &#8226; <span class="post-list__meta--tags tags">tcp</span><a class="btn-border-small" href=/2015/09/tcpip1/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/08/stl/" title="访问 STL迭代器类型简介">STL迭代器类型简介</a></h2>
+      <p class="excerpt">标准模板库(The Standard Template Library, STL)定义了五种迭代器。迭代器类别说明输入：从容器中读取元素。输入迭代器只能一次读入一个元素向前移动，输入迭代器只支持一遍算法，同一个输入迭代器不能两遍遍历一个序列   输出：向容器中写入元素。输出迭代器只能一次一个元素向前移动。输出迭代器只支持一遍算法，统一输出迭代器不能两次遍历一个序列 正向：组合输入迭代器和输出迭代器的功能，并保留在容器中的位置  双向：组合正向迭代器和逆向迭代器的功能，支持多遍算法  随机访...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-08-18 14:56:19 +0800" class="post-list__meta--date date">2015-08-18</time> &#8226; <span class="post-list__meta--tags tags">STL</span><a class="btn-border-small" href=/2015/08/stl/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
       <h2 class="post-list__post-title post-title"><a href="/2015/08/auto_ptre/" title="访问 auto_ptr、shared_ptr、weak_ptr、scoped_ptr用法小结">auto_ptr、shared_ptr、weak_ptr、scoped_ptr用法小结</a></h2>
       <p class="excerpt">auto_ptr       auto_ptr是现在标准库里面一个轻量级的智能指针的实现，存在于头文件memory中，之所以说它是轻量级，是因为它只有一个成员变量（拥有对象的指针），相关的调用开销也非常小。下面的代码来自于VC++ 8.0里面的源码：          里面有个auto_ptr_ref的数据结构，我们可以把它忽略，这个只是内部使用的代理结构，用于一些隐式的const变化，我们客户端代码通常不会直接使用到它。我们可以看到除了构造函数，拷贝构造函数，赋值函数，析构函数和两个重载...&hellip;</p>
       <div class="post-list__meta"><time datetime="2015-08-17 18:30:40 +0800" class="post-list__meta--date date">2015-08-17</time> &#8226; <span class="post-list__meta--tags tags">智能指针</span><a class="btn-border-small" href=/2015/08/auto_ptre/>继续阅读</a></div>
@@ -169,69 +225,13 @@
       <hr class="post-list__divider" />
     </li>
     
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/08/suffixtree/" title="访问 后缀树样例">后缀树样例</a></h2>
-      <p class="excerpt">       查询串s中是否存在子串P，主要针对于多个子串在一个主串中的匹配问题。   建立后缀树：      class SuffixTreeNode{       map&lt;char,SuffixTreeNode*&gt; childTrees;       char value;       vector posIndex;       public:       SuffixTreeNode(){}           void InsertString(string s,in...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-08-04 18:44:24 +0800" class="post-list__meta--date date">2015-08-04</time> &#8226; <span class="post-list__meta--tags tags">字符串处理</span><a class="btn-border-small" href=/2015/08/suffixtree/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/08/javamemory/" title="访问 Java内存管理原理及区域简介">Java内存管理原理及区域简介</a></h2>
-      <p class="excerpt">       Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干不同的数据区域，这些区域都有各自的用途以及创建和销毁的时间。Java虚拟机所管理的内存将会包括以下几个运行时数据区域，如下图所示：下面就每一个区域进行阐述。运行时数据区域程序计数器       程序计数器，可以看做是当前线程所执行的字节码的行号指示器。在虚拟机的概念模型里，字节码解释器工作就是通过改变程序计数器的值来选择下一条需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复等基础功能都要依赖这个计数...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-08-03 13:50:18 +0800" class="post-list__meta--date date">2015-08-03</time> &#8226; <span class="post-list__meta--tags tags">内存管理，jvm</span><a class="btn-border-small" href=/2015/08/javamemory/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/08/list/" title="访问 经典数据结构与算法">经典数据结构与算法</a></h2>
-      <p class="excerpt">链表       链表是一种非常基本的数据结构，被广泛的用在各种语言的集合框架中。首先链表是一张表，只不过链表中的元素在内存中不一定相邻，并且每个元素都可带有指向另一个元素的指针。         链表有，单项链表，双向链表，循环链表等。单项链表的数据结构       如下：     typedef struct NODE{         struct NODE * link;         int value;     } Node;对链表的操作       主要有增删查：    N...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-08-03 00:39:38 +0800" class="post-list__meta--date date">2015-08-03</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/08/list/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/07/jvm/" title="访问 JVM相关知识整理（转）">JVM相关知识整理（转）</a></h2>
-      <p class="excerpt">       JVM是虚拟机，也是一种规范，他遵循着冯·诺依曼体系结构的设计原理。冯·诺依曼体系结构中，指出计算机处理的数据和指令都是二进制数，采用存储程序方式不加区分的存储在同一个存储器里，并且顺序执行，指令由操作码和地址码组成，操作码决定了操作类型和所操作的数的数字类型，地址码则指出地址码和操作数。           从dos到window8，从unix到ubuntu和CentOS，还有MAC OS等等，不同的操作系统指令集以及数据结构都有着差异，而JVM通过在操作系统上建立虚拟机，...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-07-30 22:25:54 +0800" class="post-list__meta--date date">2015-07-30</time> &#8226; <span class="post-list__meta--tags tags">Java</span><a class="btn-border-small" href=/2015/07/jvm/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/07/rttitypeid/" title="访问 RTTI与typeid">RTTI与typeid</a></h2>
-      <p class="excerpt">Typeid操作返回指针或引用所指对象的实际类型。如果一个基类中没有虚函数被实现，那么就算派生类中有同样的成员函数，指向派生类的指针的Typeid仍然是基类的类别；如果派生类重写了基类中虚函数，那么指向派生类的指针就是派生类的类。   如有class B继承于A，A* pA=new B();typeid(pA)就是class *A，typeid(*pA)是指向派生类的指针，所以要根据派生情况来RTTI他的类型。&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-07-02 21:26:20 +0800" class="post-list__meta--date date">2015-07-02</time> &#8226; <span class="post-list__meta--tags tags">C++</span><a class="btn-border-small" href=/2015/07/rttitypeid/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/06/directx-11-shade/" title="访问 DirectX 11 SDK的一些问题">DirectX 11 SDK的一些问题</a></h2>
-      <p class="excerpt">由于项目需要，学习英伟达的D3D11新技术Sample。在一个使用fx渲染器的案例中，提示  unrecognized complier target " fx_5_0",网上搜索后得知，该fx_5_0新特性必须使用最新的SDK11才能编译。  最后通过fxc.exe的命令支持发现，只有DirectX SDK (June)2010才提供fx_5_0的编译需求。  所以推荐使用D3D11较新技术的时候，都将DX SDK更新到（June）2010版本（大概500多MB的），同时认真读取每份Sa...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-06-12 19:47:33 +0800" class="post-list__meta--date date">2015-06-12</time> &#8226; <span class="post-list__meta--tags tags">DX</span><a class="btn-border-small" href=/2015/06/directx-11-shade/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/06/ubuntu/" title="访问 ubuntu下设置gedit文本字符编码格式方法汇总">ubuntu下设置gedit文本字符编码格式方法汇总</a></h2>
-      <p class="excerpt">ubuntu 下gedit默认编码为UTF-8，而在windows下编写得txt默认编码为GBK，所以在windows下面的txt用getdit打开则为乱码。解决方案：  1. 安装dconf-editor，在apps/gedit-2/preferences/encodings下修改auto_detected和shown_in_menu的默认格式，添加'GB18030', 'GB2312', 'GBK'等支持中文的格式。注意GB18030格式要位于最上方。 2. 如果apps中没有gedi...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-06-09 10:37:42 +0800" class="post-list__meta--date date">2015-06-09</time> &#8226; <span class="post-list__meta--tags tags">Ubuntu</span><a class="btn-border-small" href=/2015/06/ubuntu/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/05/newsky/" title="访问 好天气">好天气</a></h2>
-      <p class="excerpt">MX4 Pro拍摄，摄像头感光真不是一般的差。&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-05-29 23:10:12 +0800" class="post-list__meta--date date">2015-05-29</time> &#8226; <span class="post-list__meta--tags tags">摄影</span><a class="btn-border-small" href=/2015/05/newsky/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
   </ol>
 
   <hr class="post-list__divider " />
 
 <nav class="pagination" role="navigation">
     
-    <span class="pagination__page-number">1 / 4</span>
+    <span class="pagination__page-number">1 / 5</span>
     
         <a class="older-posts pagination__older btn btn-small btn-tertiary" href="/page/2/#blog">更早 &rarr;</a>
     

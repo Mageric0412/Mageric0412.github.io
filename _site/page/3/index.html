@@ -156,6 +156,62 @@
   <ol class="post-list">
     
     <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/04/offer36/" title="访问 剑指offer 36 逆序对问题">剑指offer 36 逆序对问题</a></h2>
+      <p class="excerpt">逆序对问题，用归并思想求解。  在参考多个博客内容后，终于得到正确的书写过程：int InversePairs(vector data) {  if(data.size()&lt;2)    return 0;  int count=0;  int length=data.size();  int temp[1000];  int arr[1000];  for(int i=0;i&lt;length;i++)  arr[i]=data[i];  inverse_pair(arr,0,le...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-04-16 01:00:18 +0800" class="post-list__meta--date date">2015-04-16</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/04/offer36/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/04/nugly/" title="访问 第n个丑数">第n个丑数</a></h2>
+      <p class="excerpt">丑数，是分解因子仅为2、3、5的数，从小到大排序，求第n个丑数：class Solution {public:  int min1(int n1,int n2,int n3){  int min=n1&gt;n2?n2:n1;  min=min&gt;n3?n3:min;  return min; } int GetUglyNumber_Solution(int index) {  if(index&lt;=0)  return 0;  int set[index];  for(int i...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-04-15 16:59:00 +0800" class="post-list__meta--date date">2015-04-15</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/04/nugly/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/04/offer28/" title="访问 字符串的排列">字符串的排列</a></h2>
+      <p class="excerpt">剑指offer28,字符串的全排列，若提出可以重复字符串，则代码如下：vector&lt;string&gt; Permutation(string str) {  vector&lt;string&gt; sv;  permutation(str,0,sv);  return sv;}void permutation(string str, int i,vector&lt;string&gt; &amp;sv){  if(str.length()==0)  return;  if(str...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-04-14 21:17:05 +0800" class="post-list__meta--date date">2015-04-14</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/04/offer28/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/04/offer/" title="访问 剑指offer面试题43：n个筛子的点数">剑指offer面试题43：n个筛子的点数</a></h2>
+      <p class="excerpt">考虑两个数组来存储骰子点数的每一个总数出现的次数。 在一次循环中，第一个数组中的第n个数字表示骰子和为n的出现的次数，在下次循环中，我们加上一个新的骰子，此时和为n的骰子出现的次数应该等于上次循环中骰子点数为n-1，n-2，n-3,n-4,n-5,n-6次数的总和（比如2个筛子，当出现总数3的时候是可能筛子1出现1，筛子2出现2，或者筛子1出现2，筛子2出现1，筛子前后出现的组合影响着出现的总数）。  所以我们把另一个数组的第n个数字设为前一个数对应的第n-1,n-2,n-3,n-4,n-...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-04-10 16:17:29 +0800" class="post-list__meta--date date">2015-04-10</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/04/offer/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/04/unity5serializable/" title="访问 unity5中[Serializable]关键字">unity5中[Serializable]关键字</a></h2>
+      <p class="excerpt">Unity5中脚本C#有关键字[Serializable],从C#的角度讲就是能够对所定义的类进行序列化，经过序列化的对象，可以暂时保存在硬盘上，而不占用内存，等到需要使用时再从硬盘读入。  而Unity5中的[Serializable]接口声明的作用，就是能够将所定义的类在编辑器中实例展现出来。换而言之，就是能够通过在编辑器中设置，从而实例化该类。   如图所示,官方案例roguelike中对foodcount和wallcount的实现就是通过在脚本中定义[Serializable]接口...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-04-09 23:33:00 +0800" class="post-list__meta--date date">2015-04-09</time> &#8226; <span class="post-list__meta--tags tags">unity5</span><a class="btn-border-small" href=/2015/04/unity5serializable/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/04/unity5-android/" title="访问 Unity5关于android的打包">Unity5关于android的打包</a></h2>
+      <p class="excerpt">unity5打包apk需要将安装SDK升级到android sdk 5.0 api 21。  国内使用SDK Manager.exe更新不了，于是下载sdk包手动更新到sdk 5.0。  下载下面几个包：   https://dl-ssl.google.com/android/repository/sources-21_r01.zip   https://dl-ssl.google.com/android/repository/build-tools_r21.1-windows.zip  ...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-04-02 13:22:00 +0800" class="post-list__meta--date date">2015-04-02</time> &#8226; <span class="post-list__meta--tags tags">unity5</span><a class="btn-border-small" href=/2015/04/unity5-android/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/04/unity5/" title="访问 Unity5">Unity5</a></h2>
+      <p class="excerpt">今天开始学习Unity5了，发现脚本化游戏逻辑+图形化编程 简直就是游戏开发者的乐园。难点就在于游戏资源的设计以及游戏策划了吧。恩，每次看到Unity的一些设计截图都会让自己内心为之震撼，什么时候自己也能做出如此牛逼的游戏.&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-04-01 22:06:24 +0800" class="post-list__meta--date date">2015-04-01</time> &#8226; <span class="post-list__meta--tags tags">unity5</span><a class="btn-border-small" href=/2015/04/unity5/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/03/animation/" title="访问 《异能系》">《异能系》</a></h2>
+      <p class="excerpt">最近没空，好想再画两幅&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-03-20 15:15:29 +0800" class="post-list__meta--date date">2015-03-20</time> &#8226; <span class="post-list__meta--tags tags">手绘</span><a class="btn-border-small" href=/2015/03/animation/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
       <h2 class="post-list__post-title post-title"><a href="/2015/03/hamming-weight/" title="访问 Hamming Weight在计算数中二进制1个数的应用">Hamming Weight在计算数中二进制1个数的应用</a></h2>
       <p class="excerpt">代码：  //types and constants used in the functions below  typedef unsigned __int64 uint64; //assume this gives 64-bits  const uint64 m1 = 0x5555555555555555; //binary: 0101...  const uint64 m2 = 0x3333333333333333; //binary: 00110011..  const uint64...&hellip;</p>
       <div class="post-list__meta"><time datetime="2015-03-19 21:46:14 +0800" class="post-list__meta--date date">2015-03-19</time> &#8226; <span class="post-list__meta--tags tags">位运算</span><a class="btn-border-small" href=/2015/03/hamming-weight/>继续阅读</a></div>
@@ -169,62 +225,6 @@
       <hr class="post-list__divider" />
     </li>
     
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/03/max-points-on-a-line/" title="访问 Max Points on a Line">Max Points on a Line</a></h2>
-      <p class="excerpt">给定一些二维平面上的点，求出其中共线点最多时的点个数：  解法：采用暴力枚举，时间复杂度有O（n^2），循环计算两点之间的斜率，构造一个哈希表来存储循环检查的情况，其中key为斜率，value就是共线点的个数。特殊处理：当出现斜率无限大，也就是两点的x轴相同而y轴不同时，记斜率slope为std:numeric_limits&lt;double&gt;::infinity，即无限大。 代码：int maxPoints(vector&lt;Point&gt; &amp;points) {  ...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-03-12 21:52:12 +0800" class="post-list__meta--date date">2015-03-12</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/03/max-points-on-a-line/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/03/sqrt/" title="访问 sqrt函数实现与优化">sqrt函数实现与优化</a></h2>
-      <p class="excerpt">片段1，采用牛顿迭代法快速寻找平方根：float SqrtByNewton(float x){  float val = x;//最终  float last;//保存上一个计算的值  do  {    last = val;    val =(val + x/val) / 2;  }while(abs(val-last)&gt;eps);   return val;}片段2，来自quake3，平方根取倒：float Sqrt (float x){     float xhalf = 0....&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-03-10 10:49:24 +0800" class="post-list__meta--date date">2015-03-10</time> &#8226; <span class="post-list__meta--tags tags">sqrt优化</span><a class="btn-border-small" href=/2015/03/sqrt/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/03/Astar/" title="访问 A星算法">A星算法</a></h2>
-      <p class="excerpt">  将起始点加入OPEN表中  循环直到OPEN为空或者终点加入CLOSE表中，否则：找到OPEN表中F值最小的节点(使用堆排序得到小值点)，将此点从OPEN删除，加入CLOSE！(此时最小点已经取出，那么需要从新排序OPEN表，是的第一个点是最小F的点！)  对8个邻居进行处理：  邻居已经在CLOSE表中了，那么不需要考虑了~  邻居是障碍物，不需要考虑了e  邻居不在OPEN表中，那么将邻居加入OPEN，并将次邻居的父节点赋值为当前节点  邻居在OPEN中，那么需要看看此邻居点的G值...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-03-09 13:29:07 +0800" class="post-list__meta--date date">2015-03-09</time> &#8226; <span class="post-list__meta--tags tags">A star</span><a class="btn-border-small" href=/2015/03/Astar/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/03/magicvoxel/" title="访问 MagicaVoxel">MagicaVoxel</a></h2>
-      <p class="excerpt">star了一个游戏类git总结，其中有Magicavoxel，下载下来试用了一下，感觉这会是没有美工或者另辟蹊径的游戏开发所需必备工具。通过类似“塑泥”过程来创造崭新的3D/2D形象。同时新版本还提供了多种新的功能，比如导入image来生成全新Voxel化的角色/布景等。看来自己又有拿来打发时间的东西了。&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-03-09 00:20:14 +0800" class="post-list__meta--date date">2015-03-09</time> &#8226; <span class="post-list__meta--tags tags">MagicVoxel</span><a class="btn-border-small" href=/2015/03/magicvoxel/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/03/randomsort/" title="访问 随机数组排序">随机数组排序</a></h2>
-      <p class="excerpt">如题，对一个数组进行随机排序，或者随机完整输出数组中所有元素且不重复：int nTemp;int nData[10], nTran[10];for(i=0; i&lt;10; i++)   nTran[i]=i;for(i=0; i&lt;10; i++)  {   nTemp	= rand()%(10-i);   nData[i]	= nTran[nTemp];   nTran[nTemp]	= nTran[9-i];  }//printf(nData);&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-03-06 22:47:49 +0800" class="post-list__meta--date date">2015-03-06</time> &#8226; <span class="post-list__meta--tags tags">排序</span><a class="btn-border-small" href=/2015/03/randomsort/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/03/yuanxiao/" title="访问 又一年元宵节">又一年元宵节</a></h2>
-      <p class="excerpt">又一年元宵节躺在床上用手机登陆后台更博，突然觉得开通一个网站也不是坏事，最好的自我督促自我检查方式，相比博客记录而言，在个人网站上不断鼓捣东西更能让人自省吧。总结之前的失败，不断进取的样子。  有时很感性的思考问题，承认自己在工科领域的执行力仍然受限，所以长久的停伫。希望以后回头看到这篇散记时，能不再有如此觉悟。  不知道手机编辑出来效果如何，回头在pc上看看吧，希望不要太难看。  还是那句话，希望大家都元宵节快乐，过去也好未来也好，希望一切都好。&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-03-06 00:59:35 +0800" class="post-list__meta--date date">2015-03-06</time> &#8226; <span class="post-list__meta--tags tags">个人感悟</span><a class="btn-border-small" href=/2015/03/yuanxiao/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/03/onenumbers/" title="访问 编程之美--求二进制中1的个数">编程之美--求二进制中1的个数</a></h2>
-      <p class="excerpt">求二进制中1的个数对于一个字节（8bit）的变量，求其二进制表示中”1”的个数，要求算法的执行效率尽可能的高。 先来看看样章上给出的几个算法：解法一：每次除二，看是否为奇数，是的话就累计加一，最后这个结果就是二进制表示中1的个数。 解法二：同样用到一个循环，只是里面的操作用位移操作简化了。  int Count(int v)    {   int num = 0;   while (v) {    num += v &amp; 0x01;    v &gt;&gt;= 1;   }   r...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-03-05 00:50:52 +0800" class="post-list__meta--date date">2015-03-05</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/03/onenumbers/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/03/97/" title="访问 windows下桌面网络图标显示未连接却可以上网的解决方案">windows下桌面网络图标显示未连接却可以上网的解决方案</a></h2>
-      <p class="excerpt">RT， 博主某次更新注册表之后出现网络图标无法正常显示的情况，具体情况如下： 1. 网络与共享中心中的网络信息显示为未知。 2. 开机后需等待网络图标从正在连接转变为未连接，否则再次关机时会出现Task Host Windows任务宿主正在执行关闭任务的需强制关闭的选项 3. 更换无线连接节时连接时间较长，甚至出现无法连接到新节点的情况 4. 无线连接显示为受限制的访问。 5. 在网络图标显示为正在更新的情况下强制打开网络与共享中心时会出现卡死状态。 如所遇问题与题主列出的问题类似，则大多...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-03-05 00:47:58 +0800" class="post-list__meta--date date">2015-03-05</time> &#8226; <span class="post-list__meta--tags tags">windows</span><a class="btn-border-small" href=/2015/03/97/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
   </ol>
 
   <hr class="post-list__divider " />
@@ -233,7 +233,7 @@
     
         <a class="newer-posts pagination__newer btn btn-small btn-tertiary" href="/page/2/#blog">&larr; 最近</a>
     
-    <span class="pagination__page-number">3 / 4</span>
+    <span class="pagination__page-number">3 / 5</span>
     
         <a class="older-posts pagination__older btn btn-small btn-tertiary" href="/page/4/#blog">更早 &rarr;</a>
     

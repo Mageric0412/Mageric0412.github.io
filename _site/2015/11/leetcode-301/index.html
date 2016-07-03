@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>leetcode 301</title>
+  <meta name="description" content="Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.  Note: The input string may contain le...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="leetcode 301">
+  <meta name="twitter:description" content="Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.  Note: The input string may contain le...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="leetcode 301">
+  <meta property="og:description" content="Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.  Note: The input string may contain le...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="/2015/11/leetcode-301/">
+  <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Mageric 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Mageric logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Mageric" class="blog-button">Mageric</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">42 世界尽头</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Mageric的个人小站.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="http://mageric-one.com" target="_blank" title="My old site">OldSite</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/magericyoung" title="@magericyoung 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Mageric0412" title="@Mageric0412 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- instagram -->
+  <li class="navigation__item">
+   <a href="https://www.instagram.com/mageric0412" title="@mageric0412 的Instagram" target="_blank">
+     <i class='social fa fa-instagram'></i>
+     <span class="label">instagram</span>
+   </a>
+  </li>
+  
+
+<!--
+  
+  <!-- website -->
+  <!--
+  <li class="navigation__item">
+    <a href="https://mageric-one.com" rel="author" title="mageric的小站" target="_blank">
+        <i class='social fa fa-rss'> </i>
+      <span class="label">website</span>
+    </a>
+  </li>
+  
+-->
+
+
+
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:mageric0412@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-11-09 16:57:57 +0800" itemprop="datePublished" class="post-meta__date date">2015-11-09</time> &#8226; <span class="post-meta__tags tags">leetcode</span>
+    </div>
+    <h1 class="post-title">leetcode 301</h1>
+  </header>
+
+  <section class="post">
+    <p>Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.  <br />
+Note: The input string may contain letters other than the parentheses ( and ).  <br />
+Examples:  <br />
+“()())()” -&gt; [”()()()”, “(())()”]   <br />
+“(a)())()” -&gt; [“(a)()()”, “(a())()”]  <br />
+“)(“ -&gt; [””]</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">class</span> <span class="n">Solution</span> <span class="p">{</span>
+<span class="n">public</span><span class="o">:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">removeInvalidParentheses</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+       <span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span>
+       <span class="kt">int</span> <span class="n">leftnum</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+       <span class="kt">int</span> <span class="n">rightnum</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+       <span class="c1">//分别记录左右括号未匹配的数量
+</span>       <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+       <span class="p">{</span>
+           <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="sc">'('</span><span class="p">)</span>
+               <span class="n">leftnum</span><span class="o">++</span><span class="p">;</span>           
+            <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="sc">')'</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">leftnum</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+                   <span class="n">leftnum</span><span class="o">--</span><span class="p">;</span>
+                 <span class="k">else</span>
+                    <span class="n">rightnum</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+       <span class="p">}</span>       
+       <span class="n">dfs</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">leftnum</span><span class="p">,</span><span class="n">rightnum</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s">""</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">result</span><span class="p">);</span>
+       <span class="k">return</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="n">result</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="p">}</span>    
+    <span class="kt">void</span> <span class="n">dfs</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span><span class="kt">int</span> <span class="n">leftnum</span><span class="p">,</span><span class="kt">int</span> <span class="n">rightnum</span><span class="p">,</span><span class="kt">int</span> <span class="n">index</span><span class="p">,</span><span class="n">string</span> <span class="n">path</span><span class="p">,</span><span class="kt">int</span> <span class="n">match</span><span class="p">,</span> <span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">results</span><span class="p">){</span>        
+        <span class="k">if</span><span class="p">(</span><span class="n">index</span><span class="o">==</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+        <span class="p">{</span>
+           <span class="k">if</span><span class="p">(</span><span class="n">leftnum</span><span class="o">==</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="n">rightnum</span><span class="o">==</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="n">match</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+               <span class="n">results</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+           <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>        
+        <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">!=</span><span class="sc">'('</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">!=</span><span class="sc">')'</span><span class="p">)</span>
+           <span class="n">dfs</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">leftnum</span><span class="p">,</span><span class="n">rightnum</span><span class="p">,</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">path</span><span class="o">+</span><span class="n">s</span><span class="p">[</span><span class="n">index</span><span class="p">],</span><span class="n">match</span><span class="p">,</span><span class="n">results</span><span class="p">);</span>      
+        <span class="k">else</span> <span class="nf">if</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">==</span><span class="sc">'('</span><span class="p">)</span>
+           <span class="p">{</span>
+               <span class="k">if</span><span class="p">(</span><span class="n">leftnum</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+                 <span class="c1">//不添加该左括号，继续下一个字符的递归处理
+</span>                 <span class="n">dfs</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">leftnum</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">rightnum</span><span class="p">,</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">path</span><span class="p">,</span><span class="n">match</span><span class="p">,</span><span class="n">results</span><span class="p">);</span>
+                <span class="c1">//添加该左括号，并对匹配标记加1        
+</span>               <span class="n">dfs</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">leftnum</span><span class="p">,</span><span class="n">rightnum</span><span class="p">,</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">path</span><span class="o">+</span><span class="n">s</span><span class="p">[</span><span class="n">index</span><span class="p">],</span><span class="n">match</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">results</span><span class="p">);</span>
+           <span class="p">}</span>
+         <span class="k">else</span>
+           <span class="p">{</span>
+              <span class="k">if</span><span class="p">(</span><span class="n">rightnum</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+                <span class="c1">//不添加该右括号，继续下一个字符的递归处理
+</span>                  <span class="n">dfs</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">leftnum</span><span class="p">,</span><span class="n">rightnum</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">path</span><span class="p">,</span><span class="n">match</span><span class="p">,</span><span class="n">results</span><span class="p">);</span>
+              <span class="c1">//如果匹配标记大于1，说明左括号没有匹配完，那么添加右括号，同时对标记减1；
+</span>              <span class="c1">//否则不添加右括号
+</span>              <span class="k">if</span><span class="p">(</span><span class="n">match</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+               <span class="n">dfs</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">leftnum</span><span class="p">,</span><span class="n">rightnum</span><span class="p">,</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">path</span><span class="o">+</span><span class="n">s</span><span class="p">[</span><span class="n">index</span><span class="p">],</span><span class="n">match</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">results</span><span class="p">);</span>
+           <span class="p">}</span>          
+    <span class="p">}</span>
+<span class="p">};</span></code></pre></figure>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2016/03/unity3ddll/" title="link to Unity3D中使用C++ Dll的方法">Unity3D中使用C++ Dll的方法</a></h2>
+       <p class="excerpt">      我们在Unity3D的脚本使用中，难免会遇到需要使用自定义库的时候，由于Unity只支持脚本编辑，因此原生C++需要通过打包为Dll的方式，才能为我们的脚本所用。下面介绍我们的打包过程：           首先在VS编辑器中定义一个dll项目，自定义.h文件，注意宏内容:{% highlight c++ %}    #pragma once    #ifdef MALIBDLL     #define MYAPI _declspec(dllexport)    #else  ...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-03-12 14:51:08 +0800" class="post-list__meta--date date">2016-03-12</time> &#8226; <span class="post-list__meta--tags tags">unity3d</span><a class="btn-border-small" href=/2016/03/unity3ddll/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/09/rector/" title="link to Rector模式与Proactor模式">Rector模式与Proactor模式</a></h2>
+       <p class="excerpt">概述      系统I/O可分为阻塞型，非阻塞同步型以及非阻塞异步型。        阻塞型I/O意味着控制权只到调用操作结束了才会回到调用者手里。         非阻塞同步是会立即返回控制权给调用者的。调用者不需要等等，它从调用的函数获取两种结果：要么此次调用成功进行了;要么系统返回错误标识告诉调用者当前资源不可用，你再等等或者再试度看吧。比如read()操作， 如果当前socket无数据可读，则立即返回EWOULBLOCK/EAGAIN，告诉调用read()者”数据还没准备好，你稍后...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-09-17 19:14:50 +0800" class="post-list__meta--date date">2015-09-17</time> &#8226; <span class="post-list__meta--tags tags">多线程Java</span><a class="btn-border-small" href=/2015/09/rector/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "/2015/11/leetcode-301/";
+        this.page.identifier = "/2015/11/leetcode-301/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-07-03 生成</span>
+        <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

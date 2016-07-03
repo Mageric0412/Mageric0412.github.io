@@ -1,0 +1,297 @@
+---
+author: mageric
+comments: true
+date: 2016-06-06 11:25:52+00:00
+layout: post
+title: NIO技术小结
+categories:
+- Java
+tags:
+- JAVA IO
+---
+NIO是 JAVA New IO 的简称，在 jdk1.4 里提供的新api。官方标榜的特性如下：    
+
+*  为所有的原始类型提供 (Buffer) 缓存支持。    
+*  字符集编码解码解决方案。
+*  Channel ：一个新的原始 I/O 抽象。
+*  支持锁和内存映射文件的文件访问接口。
+*  提供多路 (non-bloking) 非阻塞式的高伸缩性网络 I/O 。
+
+&#160; &#160; &#160;&#160;NIO与传统的IO一个最大的区别就是：IO是面向流的，NIO是面向缓冲区的，因此，IO流操作势必要求完成读取完流中的数据后才能进行接下来的操作，对于线程来说是阻塞的。而NIO由于存在缓冲区（Buffer）模块，因此，在每次IO操作时，系统可以灵活运动缓冲的特质，实现非阻塞的线程操作。这样，一个线程可以管理多个输入输出通道（Channel）。为了方便用户管理系统线程中各个IO的运行情况，我们需要类似于观察者模式中的Observer-------Selector，负责将注册在内各个通道上的IO情况反馈给用户。一旦返回的方法是我们需要的IO模式，则根据我们的规则进行相应IO处理。
+
+### **Buffer**
+&#160; &#160; &#160;&#160;NIO中对应不同数据类型有不同的Buffer选择：ByteBuffer、CharBuffer、FloatBuffer、ShortBuffer等。一般而言，运用得比较多的是ByteBuffer。我们可以把Buffer简单地理解为一组基本数据类型的元素列表，它通过几个变量来保存这个数据的当前位置状态：    
+&#160; &#160; &#160;&#160;**capacity**----缓冲数组的总长度     
+&#160; &#160; &#160;&#160;**position**----下一个要操作的缓存元素的位置     
+&#160; &#160; &#160;&#160;**limit**----缓存数组中不可操作的下一元素的界限(limit<=capacity)    
+&#160; &#160; &#160;&#160;以下是文件的NIO读操作：
+{% highlight java %}
+    public static void NIOtextRead(){
+            RandomAccessFile aFile = null;
+            try{
+                   //这里使用随机读取，也可用FileInputStream.getChannel()获取通道
+                aFile = new RandomAccessFile("src/nio.txt","rw");
+                FileChannel fileChannel = aFile.getChannel();
+                ByteBuffer buf = ByteBuffer.allocate(1024);//设置缓冲区大小
+                  //此时buf从通道读入了数据，buf的position下标不再指在开头
+                int bytesRead = fileChannel.read(buf);
+                System.out.println(bytesRead);
+                while(bytesRead != -1)
+                {    //对缓冲区数组的position下标进行"重置"，这样下一步获取buf内数据时就可以直接调用get()
+                    buf.flip();
+                    while(buf.hasRemaining())//存在数据
+                    {
+                        System.out.print((char)buf.get());//打印buf内数据
+                    }
+                      /*通常与flip()联合使用，旨在将position下标移动到Limit位置处，以保证Limit位置之前
+                      可能尚未读取完毕的缓冲区不会被覆盖*/
+                    buf.compact();
+                    bytesRead = fileChannel.read(buf);//从新的position位置处开始缓存数据
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+            }finally{
+                try{
+                    if(aFile != null){
+                        aFile.close();
+                    }
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+{% endhighlight %}
+&#160; &#160; &#160;&#160;可以发现，当每次利用Buffer缓存接收数据或是发送数据时，都需要采用flip()操作调整position下标。如果一次缓存不完，需要多次缓存通道数据时，为此需要调用compact()方法，将未读取的数据空出来，在下一位置开始写缓存。类似的文件操作还有rewind()、clear()等。    
+&#160; &#160; &#160;&#160;对于大文件读写，NIO 提供了其子类缓存：直接模式**MappedByteBuffer**(间接模式为堆缓存**HeapByteBuffer**)。
+MappeByteBuffer顾名思义，采用文件直接映射到内存（虚拟内存）的方式进行缓存，对于较大的文件，可能还需要分段映射，只需要指定文件的相应部分即可。因此，我们的通道类提供了map方法来实现一定大小的文件的映像操作：
+
+```bash
+    MappedByteBuffer map(int mode,long position,long size);
+```
+&#160; &#160; &#160;&#160;其中mode为该映像文件的访问方式：   
+
+*  READ_ONLY,（只读）： 试图修改得到的缓冲区将导致抛出 ReadOnlyBufferException。(MapMode.READ_ONLY)
+*  READ_WRITE（读/写）： 对得到的缓冲区的更改最终将传播到文件；该更改对映射到同一文件的其他程序不一定是可见的。 (MapMode.READ_WRITE)
+*  PRIVATE（专用）： 对得到的缓冲区的更改不会传播到文件，并且该更改对映射到同一文件的其他程序也不是可见的；相反，会创建缓冲区已修改部分的专用副本(MapMode.PRIVATE)。     
+&#160; &#160; &#160;&#160;实例大文件读取：
+{% highlight java %}
+    public static void BigFileRead(){
+          RandomAccessFile aFile = null;
+          FileChannel fc = null;
+          try{
+              aFile = new RandomAccessFile("src/test.ppt","rw");
+              fc = aFile.getChannel();
+              long timeBegin = System.currentTimeMillis();
+              MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_ONLY, 0, aFile.length());
+                // System.out.println((char)mbb.get((int)(aFile.length()/2-1)));
+                // System.out.println((char)mbb.get((int)(aFile.length()/2)));
+               //System.out.println((char)mbb.get((int)(aFile.length()/2)+1));
+              long timeEnd = System.currentTimeMillis();
+              System.out.println("Read time: "+(timeEnd-timeBegin)+"ms");
+          }catch(IOException e){
+              e.printStackTrace();
+          }finally{
+              try{
+                  if(aFile!=null){
+                      aFile.close();
+                  }
+                  if(fc!=null){
+                      fc.close();
+                  }
+              }catch(IOException e){
+                  e.printStackTrace();
+              }
+          }
+      }
+{% endhighlight %}
+&#160; &#160; &#160;&#160;同时MappeByteBuffer扩展了ByteBuffer：    
+
+* force()：缓冲区是READ_WRITE模式下，此方法对缓冲区内容的修改强行写入文件；
+* load()：将缓冲区的内容载入内存，并返回该缓冲区的引用；
+* isLoaded()：如果缓冲区的内容在物理内存中，则返回真，否则返回假；
+
+### **Channel**
+&#160; &#160; &#160;&#160;NIO给出了许多通道操作，类似于传统IO中的流InputStream、OutputStream，Channel的主要实现有：    
+
+* FileChannel----文件操作IO
+* DatagramChannel----UDP操作IO
+* SocketChannel----TCP操作IO
+* ServerSocketChannel----TCP Server操作IO    
+
+&#160; &#160; &#160;&#160;下面实例以TCP的双端IO操作为展开。    
+&#160; &#160; &#160;&#160;客户端：
+{% highlight java %}
+    public static void client(){
+            ByteBuffer buffer = ByteBuffer.allocate(1024);//设置缓冲区大小
+            SocketChannel socketChannel = null;
+            try
+            {
+                socketChannel = SocketChannel.open();
+                socketChannel.configureBlocking(false);
+                   //连接指定ip、端口的服务器
+                socketChannel.connect(new InetSocketAddress("10.10.195.115",8080));
+                if(socketChannel.finishConnect())//完成连接
+                {
+                    int i=0;
+                    while(true)
+                    {
+                        TimeUnit.SECONDS.sleep(1);
+                        String info = "I'm "+i+++"-th information from client";
+                        buffer.clear();//清空缓冲区
+                        buffer.put(info.getBytes());//内容写入缓冲区
+                        buffer.flip();//缓冲区下标重置
+                        while(buffer.hasRemaining()){
+                            System.out.println(buffer);
+                            socketChannel.write(buffer);//缓冲写入通道
+                        }
+                    }
+                }
+            }
+            catch (IOException | InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+            finally{
+                try{
+                    if(socketChannel!=null){
+                        socketChannel.close();
+                    }
+                }catch(IOException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+{% endhighlight %}
+&#160; &#160; &#160;&#160;服务端：
+{% highlight java %}
+    public class ServerConnect
+    {
+        private static final int BUF_SIZE=1024;
+        private static final int PORT = 8080;
+        private static final int TIMEOUT = 3000;
+
+        public static void main(String[] args)
+        {
+            selector();
+        }
+          //接收处理
+        public static void handleAccept(SelectionKey key) throws IOException{
+             //获得server通道
+            ServerSocketChannel ssChannel = (ServerSocketChannel)key.channel();
+             //监听客户端的连接
+            SocketChannel sc = ssChannel.accept();
+             //配置非阻塞通道
+            sc.configureBlocking(false);
+             //将该客户端注册到selector,注册方式为读
+            sc.register(key.selector(), SelectionKey.OP_READ,ByteBuffer.allocateDirect(BUF_SIZE));
+        }
+         //可读处理
+        public static void handleRead(SelectionKey key) throws IOException{
+            SocketChannel sc = (SocketChannel)key.channel();
+            ByteBuffer buf = (ByteBuffer)key.attachment();//从selector附属获取buf
+            long bytesRead = sc.read(buf);
+            while(bytesRead>0){
+                buf.flip();//重置buf下标
+                while(buf.hasRemaining()){
+                    System.out.print((char)buf.get());//从buf读取字节信息
+                }
+                System.out.println();
+                buf.clear();//清空buf
+                bytesRead = sc.read(buf);//从通道读取信息写入buf
+            }
+            if(bytesRead == -1){
+                sc.close();
+            }
+        }
+          //写入处理
+        public static void handleWrite(SelectionKey key) throws IOException{
+            ByteBuffer buf = (ByteBuffer)key.attachment();//获取附属的buf
+            buf.flip();//重置下标
+            SocketChannel sc = (SocketChannel) key.channel();//获取客户端通道
+            while(buf.hasRemaining()){
+                sc.write(buf);//将buf写入通道
+            }
+            buf.compact();//非阻塞position
+        }
+
+        public static void selector() {
+            Selector selector = null;
+            ServerSocketChannel ssc = null;
+            try{
+                selector = Selector.open();//创建selector
+                ssc= ServerSocketChannel.open();//创建server通道
+                ssc.socket().bind(new InetSocketAddress(PORT));//绑定server端口
+                ssc.configureBlocking(false);//非阻塞IO
+                ssc.register(selector, SelectionKey.OP_ACCEPT);//注册server到selector为监听状态
+                while(true){
+                    if(selector.select(TIMEOUT) == 0){
+                        System.out.println("==");
+                        continue;
+                    }
+                    Iterator<selectionkey> iter = selector.selectedKeys().iterator();
+                    while(iter.hasNext()){
+                        //根据selector事件类型的不同进行处理
+                        SelectionKey key = iter.next();
+                        if(key.isAcceptable()){
+                            handleAccept(key);
+                        }
+                        if(key.isReadable()){
+                            handleRead(key);
+                        }
+                        if(key.isWritable() && key.isValid()){
+                            handleWrite(key);
+                        }
+                        if(key.isConnectable()){
+                            System.out.println("isConnectable = true");
+                        }
+                        iter.remove();
+                    }
+                }
+            }catch(IOException e){
+                e.printStackTrace();
+            }finally{
+                try{
+                    if(selector!=null){
+                        selector.close();//关闭selector
+                    }
+                    if(ssc!=null){
+                        ssc.close();//关闭server通道
+                    }
+                }catch(IOException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+{% endhighlight %}
+
+### **Selector**
+&#160; &#160; &#160;&#160;当向Selector注册Channel时，register()方法会返回一个SelectionKey对象。这个对象包含了一些你感兴趣的属性：   
+
+* **interest集合**
+* **ready集合**
+* **Channel**
+* **Selector**
+* **附加的对象**    
+
+&#160; &#160; &#160;&#160;selector定义了4种事件类型，分别用4个常量来表示：    
+
+* SelectionKey.OP_CONNECT
+* SelectionKey.OP_ACCEPT
+* SelectionKey.OP_READ
+* SelectionKey.OP_WRITE    
+
+&#160; &#160; &#160;&#160;以下方法检测事件操作是否就绪：
+{% highlight java %}
+    selectionKey.isAcceptable();
+    selectionKey.isConnectable();
+    selectionKey.isReadable();
+    selectionKey.isWritable();
+{% endhighlight %}
+&#160; &#160; &#160;&#160;同时，我们可以将一个对象或信息附着到SelectionKey上，方便识别某个给定的通道：
+{% highlight java %}
+    selectionKey.attach(theObject);
+    Object attachedObj = selectionKey.attachment();
+    //上述服务器部分IO代码的附加信息处理方法为方法2
+    SelectionKey key = channel.register(selector, SelectionKey.OP_READ, theObject);
+{% endhighlight %}

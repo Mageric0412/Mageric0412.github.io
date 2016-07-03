@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Rector模式与Proactor模式</title>
+  <meta name="description" content="概述      系统I/O可分为阻塞型，非阻塞同步型以及非阻塞异步型。        阻塞型I/O意味着控制权只到调用操作结束了才会回到调用者手里。         非阻塞同步是会立即返回控制权给调用者的。调用者不需要等等，它从调用的函数获取两种结果：要么此次调用成功进行了;要么系统返回错误标识告诉调用者当前资源...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Rector模式与Proactor模式">
+  <meta name="twitter:description" content="概述      系统I/O可分为阻塞型，非阻塞同步型以及非阻塞异步型。        阻塞型I/O意味着控制权只到调用操作结束了才会回到调用者手里。         非阻塞同步是会立即返回控制权给调用者的。调用者不需要等等，它从调用的函数获取两种结果：要么此次调用成功进行了;要么系统返回错误标识告诉调用者当前资源...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Rector模式与Proactor模式">
+  <meta property="og:description" content="概述      系统I/O可分为阻塞型，非阻塞同步型以及非阻塞异步型。        阻塞型I/O意味着控制权只到调用操作结束了才会回到调用者手里。         非阻塞同步是会立即返回控制权给调用者的。调用者不需要等等，它从调用的函数获取两种结果：要么此次调用成功进行了;要么系统返回错误标识告诉调用者当前资源...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="/2015/09/rector/">
+  <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Mageric 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Mageric logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Mageric" class="blog-button">Mageric</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">42 世界尽头</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Mageric的个人小站.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="http://mageric-one.com" target="_blank" title="My old site">OldSite</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/magericyoung" title="@magericyoung 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Mageric0412" title="@Mageric0412 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- instagram -->
+  <li class="navigation__item">
+   <a href="https://www.instagram.com/mageric0412" title="@mageric0412 的Instagram" target="_blank">
+     <i class='social fa fa-instagram'></i>
+     <span class="label">instagram</span>
+   </a>
+  </li>
+  
+
+<!--
+  
+  <!-- website -->
+  <!--
+  <li class="navigation__item">
+    <a href="https://mageric-one.com" rel="author" title="mageric的小站" target="_blank">
+        <i class='social fa fa-rss'> </i>
+      <span class="label">website</span>
+    </a>
+  </li>
+  
+-->
+
+
+
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:mageric0412@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-09-17 19:14:50 +0800" itemprop="datePublished" class="post-meta__date date">2015-09-17</time> &#8226; <span class="post-meta__tags tags">多线程Java</span>
+    </div>
+    <h1 class="post-title">Rector模式与Proactor模式</h1>
+  </header>
+
+  <section class="post">
+    <h3 id="section">概述</h3>
+<p>      系统I/O可分为<strong>阻塞型</strong>，<strong>非阻塞同步型</strong>以及<strong>非阻塞异步型</strong>。  <br />
+      <strong>阻塞型I/O</strong>意味着控制权只到调用操作结束了才会回到调用者手里。   <br />
+      <strong>非阻塞同步</strong>是会立即返回控制权给调用者的。调用者不需要等等，它从调用的函数获取两种结果：要么此次调用成功进行了;要么系统返回错误标识告诉调用者当前资源不可用，你再等等或者再试度看吧。比如read()操作， 如果当前socket无数据可读，则立即返回EWOULBLOCK/EAGAIN，告诉调用read()者”数据还没准备好，你稍后再试”。   <br />
+      <strong>非阻塞异步</strong>调用中，稍有不同。调用函数在立即返回时，还告诉调用者，这次请求已经开始了。系统会使用另外的资源或者线程来完成这次调用操作，并在完成的时候知会调用者（比如通过回调函数）。POSIX的aio_read()来说，调用它之后，函数立即返回，操作系统在后台同时开始读操作。即是将工作交给了内核去完成这个操作。  <br />
+在以上三种IO形式中，<strong>非阻塞异步</strong>是<strong>性能最高、伸缩性最好</strong>的。</p>
+
+<h3 id="ioreactor-and-proactor">两种IO多路复用方案:Reactor and Proactor</h3>
+<p>      一般情况下，I/O 复用机制需要事件分享器(event demultiplexor)。 事件分享器的作用，即将那些读写事件源分发给各读写事件的处理者，就像送快递的在楼下喊: 谁的什么东西送了， 快来拿吧。开发人员在开始的时候需要在分享器那里注册感兴趣的事件，并提供相应的处理者(event handlers)，或者是回调函数; 事件分享器在适当的时候会将请求的事件分发给这些handler或者回调函数。</p>
+
+<h4 id="reactor"><strong>Reactor模式</strong></h4>
+<p>      Java NIO非堵塞技术实际是采取反应器模式，或者说是观察者(observer)模式为我们监察I/O端口，如果有内容进来，会自动通知我们，这样，我们就不必开启多个线程死等，从外界看，实现了流畅的I/O读写，不堵塞了。  <br />
+      NIO 有一个主要的类Selector，这个类似一个观察者，只要我们把需要探知的socketchannel告诉Selector，我们接着做别的事情，当有事件发生时，他会通知我们，传回一组SelectionKey，我们读取这些Key，就会获得我们刚刚注册过的socketchannel，然后，我们从这个Channel中读取数据，接着我们可以处理这些数据。   <br />
+      反应器模式与观察者模式在某些方面极为相似：当一个主体发生改变时，所有依属体都得到通知。不过，观察者模式与单个事件源关联，而反应器模式则与多个事件源关联 。
+<img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/java/reactor.png" alt=" " />
+      反应者实现：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">linxcool</span><span class="o">.</span><span class="na">reactor</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">java.net.InetAddress</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">java.net.InetSocketAddress</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">java.nio.channels.SelectionKey</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">java.nio.channels.Selector</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">java.nio.channels.ServerSocketChannel</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">java.util.Iterator</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
+    <span class="cm">/**
+     * 反应器模式
+     * 用于解决多用户访问并发问题
+     *
+     * 举个例子：餐厅服务问题
+     *
+     * 传统线程池做法：来一个客人(请求)去一个服务员(线程)
+     * 反应器模式做法：当客人点菜的时候，服务员就可以去招呼其他客人了，等客人点好了菜，直接招呼一声“服务员”
+     *
+     * @author linxcool
+     */</span>
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Reactor</span> <span class="kd">implements</span> <span class="n">Runnable</span><span class="o">{</span>
+    	<span class="kd">public</span> <span class="kd">final</span> <span class="n">Selector</span> <span class="n">selector</span><span class="o">;</span>
+    	<span class="kd">public</span> <span class="kd">final</span> <span class="n">ServerSocketChannel</span> <span class="n">serverSocketChannel</span><span class="o">;</span>
+    	<span class="kd">public</span> <span class="nf">Reactor</span><span class="o">(</span><span class="kt">int</span> <span class="n">port</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">{</span>
+    		<span class="n">selector</span><span class="o">=</span><span class="n">Selector</span><span class="o">.</span><span class="na">open</span><span class="o">();</span>
+    		<span class="n">serverSocketChannel</span><span class="o">=</span><span class="n">ServerSocketChannel</span><span class="o">.</span><span class="na">open</span><span class="o">();</span>
+    		<span class="n">InetSocketAddress</span> <span class="n">inetSocketAddress</span><span class="o">=</span><span class="k">new</span> <span class="n">InetSocketAddress</span><span class="o">(</span><span class="n">InetAddress</span><span class="o">.</span><span class="na">getLocalHost</span><span class="o">(),</span><span class="n">port</span><span class="o">);</span>
+    		<span class="n">serverSocketChannel</span><span class="o">.</span><span class="na">socket</span><span class="o">().</span><span class="na">bind</span><span class="o">(</span><span class="n">inetSocketAddress</span><span class="o">);</span>
+    		<span class="n">serverSocketChannel</span><span class="o">.</span><span class="na">configureBlocking</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+    		<span class="c1">//向selector注册该channel  </span>
+    		<span class="n">SelectionKey</span> <span class="n">selectionKey</span><span class="o">=</span><span class="n">serverSocketChannel</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="n">selector</span><span class="o">,</span> <span class="n">SelectionKey</span><span class="o">.</span><span class="na">OP_ACCEPT</span><span class="o">);</span>
+    		<span class="c1">//利用selectionKey的attache功能绑定Acceptor 如果有事情，触发Acceptor</span>
+    		<span class="n">selectionKey</span><span class="o">.</span><span class="na">attach</span><span class="o">(</span><span class="k">new</span> <span class="n">Acceptor</span><span class="o">(</span><span class="k">this</span><span class="o">));</span>
+    	<span class="o">}</span>
+    	<span class="nd">@Override</span>
+    	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+    		<span class="k">try</span> <span class="o">{</span>
+    			<span class="k">while</span><span class="o">(!</span><span class="n">Thread</span><span class="o">.</span><span class="na">interrupted</span><span class="o">()){</span>
+    				<span class="n">selector</span><span class="o">.</span><span class="na">select</span><span class="o">();</span>
+    				<span class="n">Set</span> <span class="n">selectionKeys</span><span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="na">selectedKeys</span><span class="o">();</span>
+    				<span class="n">Iterator</span> <span class="n">it</span><span class="o">=</span><span class="n">selectionKeys</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
+    				<span class="c1">//Selector如果发现channel有OP_ACCEPT或READ事件发生，下列遍历就会进行。</span>
+    				<span class="k">while</span><span class="o">(</span><span class="n">it</span><span class="o">.</span><span class="na">hasNext</span><span class="o">()){</span>
+    					<span class="c1">//来一个事件 第一次触发一个accepter线程  </span>
+    					<span class="c1">//以后触发SocketReadHandler</span>
+    					<span class="n">SelectionKey</span> <span class="n">selectionKey</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+    					<span class="n">dispatch</span><span class="o">(</span><span class="n">selectionKey</span><span class="o">);</span>
+    					<span class="n">selectionKeys</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+    				<span class="o">}</span>
+    			<span class="o">}</span>
+    		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    			<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+    		<span class="o">}</span>
+    	<span class="o">}</span>
+    	<span class="cm">/**
+    	 * 运行Acceptor或SocketReadHandler
+    	 * @param key
+    	 */</span>
+    	<span class="kt">void</span> <span class="nf">dispatch</span><span class="o">(</span><span class="n">SelectionKey</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+    		<span class="n">Runnable</span> <span class="n">r</span> <span class="o">=</span> <span class="o">(</span><span class="n">Runnable</span><span class="o">)(</span><span class="n">key</span><span class="o">.</span><span class="na">attachment</span><span class="o">());</span>  
+    		<span class="k">if</span> <span class="o">(</span><span class="n">r</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>  
+    			<span class="n">r</span><span class="o">.</span><span class="na">run</span><span class="o">();</span>
+    		<span class="o">}</span>  
+    	<span class="o">}</span>  
+    <span class="o">}</span></code></pre></figure>
+
+<p>      接受者实现：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">linxcool</span><span class="o">.</span><span class="na">reactor</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">java.nio.channels.SocketChannel</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Acceptor</span> <span class="kd">implements</span> <span class="n">Runnable</span><span class="o">{</span>
+    	<span class="kd">private</span> <span class="n">Reactor</span> <span class="n">reactor</span><span class="o">;</span>
+    	<span class="kd">public</span> <span class="nf">Acceptor</span><span class="o">(</span><span class="n">Reactor</span> <span class="n">reactor</span><span class="o">){</span>
+    		<span class="k">this</span><span class="o">.</span><span class="na">reactor</span><span class="o">=</span><span class="n">reactor</span><span class="o">;</span>
+    	<span class="o">}</span>
+    	<span class="nd">@Override</span>
+    	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+    		<span class="k">try</span> <span class="o">{</span>
+    			<span class="n">SocketChannel</span> <span class="n">socketChannel</span><span class="o">=</span><span class="n">reactor</span><span class="o">.</span><span class="na">serverSocketChannel</span><span class="o">.</span><span class="na">accept</span><span class="o">();</span>
+    			<span class="k">if</span><span class="o">(</span><span class="n">socketChannel</span><span class="o">!=</span><span class="kc">null</span><span class="o">)</span><span class="c1">//调用Handler来处理channel</span>
+    				<span class="k">new</span> <span class="nf">SocketReadHandler</span><span class="o">(</span><span class="n">reactor</span><span class="o">.</span><span class="na">selector</span><span class="o">,</span> <span class="n">socketChannel</span><span class="o">);</span>
+    		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    			<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+    		<span class="o">}</span>
+    	<span class="o">}</span>
+    <span class="o">}</span></code></pre></figure>
+
+<p>      Handler实现：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">linxcool</span><span class="o">.</span><span class="na">reactor</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">java.nio.ByteBuffer</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">java.nio.channels.SelectionKey</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">java.nio.channels.Selector</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">java.nio.channels.SocketChannel</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">SocketReadHandler</span> <span class="kd">implements</span> <span class="n">Runnable</span><span class="o">{</span>
+    	<span class="kd">private</span> <span class="n">SocketChannel</span> <span class="n">socketChannel</span><span class="o">;</span>
+    	<span class="kd">public</span> <span class="nf">SocketReadHandler</span><span class="o">(</span><span class="n">Selector</span> <span class="n">selector</span><span class="o">,</span><span class="n">SocketChannel</span> <span class="n">socketChannel</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">{</span>
+    		<span class="k">this</span><span class="o">.</span><span class="na">socketChannel</span><span class="o">=</span><span class="n">socketChannel</span><span class="o">;</span>
+    		<span class="n">socketChannel</span><span class="o">.</span><span class="na">configureBlocking</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+    		<span class="n">SelectionKey</span> <span class="n">selectionKey</span><span class="o">=</span><span class="n">socketChannel</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="n">selector</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+    		<span class="c1">//将SelectionKey绑定为本Handler 下一步有事件触发时，将调用本类的run方法。  </span>
+    		<span class="c1">//参看dispatch(SelectionKey key)  </span>
+    		<span class="n">selectionKey</span><span class="o">.</span><span class="na">attach</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    		<span class="c1">//同时将SelectionKey标记为可读，以便读取。  </span>
+    		<span class="n">selectionKey</span><span class="o">.</span><span class="na">interestOps</span><span class="o">(</span><span class="n">SelectionKey</span><span class="o">.</span><span class="na">OP_READ</span><span class="o">);</span>  
+    		<span class="n">selector</span><span class="o">.</span><span class="na">wakeup</span><span class="o">();</span>
+    	<span class="o">}</span>
+    	<span class="cm">/**
+    	 * 处理读取数据
+    	 */</span>
+    	<span class="nd">@Override</span>
+    	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+    		<span class="n">ByteBuffer</span> <span class="n">inputBuffer</span><span class="o">=</span><span class="n">ByteBuffer</span><span class="o">.</span><span class="na">allocate</span><span class="o">(</span><span class="mi">1024</span><span class="o">);</span>
+    		<span class="n">inputBuffer</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+    		<span class="k">try</span> <span class="o">{</span>
+    			<span class="n">socketChannel</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">inputBuffer</span><span class="o">);</span>
+    			<span class="c1">//激活线程池 处理这些request</span>
+    			<span class="c1">//requestHandle(new Request(socket,btt));</span>
+    		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    			<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+    		<span class="o">}</span>
+    	<span class="o">}</span>
+    <span class="o">}</span></code></pre></figure>
+
+<h4 id="proactor"><strong>Proactor模式</strong></h4>
+<p>      在Proactor模式中，事件处理者(或者代由事件分离者发起)直接发起一个异步读写操作(相当于请求)，而实际的工作是由操作系统来完成的。发起时，需要提供的参数包括用于存放读到数据的缓存区，读的数据大小，或者用于存放外发数据的缓存区，以及这个请求完后的回调函数等信息。事件分离者得知了这个请求，它默默等待这个请求的完成，然后转发完成事件给相应的事件处理者或者回调。这种异步模式的典型实现是基于操作系统底层异步API的，所以我们可称之为“系统级别”的或者“真正意义上”的异步，因为具体的读写是由操作系统代劳的。
+<img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/java/proactor.jpg" alt="" />
+      示例代码：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">class</span> <span class="nc">AsyIOProcessor</span>
+    <span class="o">{</span>
+    <span class="kd">public</span><span class="o">:</span>
+        <span class="kt">void</span> <span class="nf">do_read</span><span class="o">()</span>
+        <span class="o">{</span>
+            <span class="c1">//send read operation to OS</span>
+            <span class="c1">// read io finished.and dispatch notification</span>
+            <span class="n">_proactor</span><span class="o">-&gt;</span><span class="n">dispatch_read</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="kd">private</span><span class="o">:</span>
+        <span class="n">Proactor</span> <span class="o">*</span><span class="n">_proactor</span><span class="o">;</span>
+    <span class="o">};</span>
+
+    <span class="kd">class</span> <span class="nc">Proactor</span>
+    <span class="o">{</span>
+    <span class="kd">public</span><span class="o">:</span>
+        <span class="kt">void</span> <span class="nf">dispatch_read</span><span class="o">()</span>
+        <span class="o">{</span>
+            <span class="n">_handlerMgr</span><span class="o">-&gt;</span><span class="n">onRead</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="kd">private</span><span class="o">:</span>
+        <span class="n">HandlerManager</span> <span class="o">*</span><span class="n">_handlerMgr</span><span class="o">;</span>
+    <span class="o">};</span>
+
+    <span class="kd">class</span> <span class="nc">HandlerManager</span>
+    <span class="o">{</span>
+    <span class="kd">public</span><span class="o">:</span>
+        <span class="n">typedef</span> <span class="nl">std:</span><span class="o">:</span><span class="n">list</span><span class="o">&lt;</span><span class="n">Handler</span><span class="o">*&gt;</span> <span class="n">HandlerList</span><span class="o">;</span>
+    <span class="kd">public</span><span class="o">:</span>
+        <span class="kt">void</span> <span class="nf">onRead</span><span class="o">()</span>
+        <span class="o">{</span>
+            <span class="c1">// notify all the handlers.</span>
+            <span class="nl">std:</span><span class="o">:</span><span class="n">for_each</span><span class="o">(</span> <span class="n">_handlers</span><span class="o">.</span><span class="na">begin</span><span class="o">(),</span> <span class="n">_handlers</span><span class="o">.</span><span class="na">end</span><span class="o">(),</span> <span class="n">onRead</span> <span class="o">);</span>
+        <span class="o">}</span>
+    <span class="kd">private</span><span class="o">:</span>
+        <span class="n">HandlerList</span> <span class="o">*</span><span class="n">_handlers</span><span class="o">;</span>
+    <span class="o">};</span>
+
+    <span class="kd">class</span> <span class="nc">Handler</span>
+    <span class="o">{</span>
+    <span class="kd">public</span><span class="o">:</span>
+        <span class="n">virtual</span> <span class="kt">void</span> <span class="nf">onRead</span><span class="o">()</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">};</span>
+    <span class="c1">// application level handler.</span>
+    <span class="kd">class</span> <span class="nc">MyHandler</span> <span class="o">:</span> <span class="kd">public</span> <span class="n">Handler</span>
+    <span class="o">{</span>
+    <span class="kd">public</span><span class="o">:</span>
+        <span class="kt">void</span> <span class="nf">onRead</span><span class="o">()</span>
+        <span class="o">{</span>
+            <span class="c1">//</span>
+        <span class="o">}</span>
+    <span class="o">};</span></code></pre></figure>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/11/leetcode-301/" title="link to leetcode 301">leetcode 301</a></h2>
+       <p class="excerpt">Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.  Note: The input string may contain letters other than the parentheses ( and ).  Examples:  “()())()” -&gt; [”()()()”, “(())()”]...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-11-09 16:57:57 +0800" class="post-list__meta--date date">2015-11-09</time> &#8226; <span class="post-list__meta--tags tags">leetcode</span><a class="btn-border-small" href=/2015/11/leetcode-301/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/09/tcpip2/" title="link to TCP/IP协议简述（下）（转）">TCP/IP协议简述（下）（转）</a></h2>
+       <p class="excerpt">TCP的RTT算法      从前面的TCP重传机制我们知道Timeout的设置对于重传非常重要。  设长了，重发就慢，丢了老半天才重发，没有效率，性能差；  设短了，会导致可能并没有丢就重发。于是重发的就快，会增加网络拥塞，导致更多的超时，更多的超时导致更多的重发。      而且，这个超时时间在不同的网络的情况下，根本没有办法设置一个死的值。只能动态地设置。为了动态地设置，TCP引入了RTT——Round Trip Time，也就是一个数据包从发出去到回来的时间。这样发送端就大约知道需...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-09-02 22:06:37 +0800" class="post-list__meta--date date">2015-09-02</time> &#8226; <span class="post-list__meta--tags tags">tcp</span><a class="btn-border-small" href=/2015/09/tcpip2/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "/2015/09/rector/";
+        this.page.identifier = "/2015/09/rector/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-07-03 生成</span>
+        <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

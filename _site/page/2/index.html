@@ -156,6 +156,62 @@
   <ol class="post-list">
     
     <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/08/suffixtree/" title="访问 后缀树样例">后缀树样例</a></h2>
+      <p class="excerpt">       查询串s中是否存在子串P，主要针对于多个子串在一个主串中的匹配问题。   建立后缀树：      class SuffixTreeNode{       map&lt;char,SuffixTreeNode*&gt; childTrees;       char value;       vector posIndex;       public:       SuffixTreeNode(){}           void InsertString(string s,in...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-08-04 18:44:24 +0800" class="post-list__meta--date date">2015-08-04</time> &#8226; <span class="post-list__meta--tags tags">字符串处理</span><a class="btn-border-small" href=/2015/08/suffixtree/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/08/javamemory/" title="访问 Java内存管理原理及区域简介">Java内存管理原理及区域简介</a></h2>
+      <p class="excerpt">       Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干不同的数据区域，这些区域都有各自的用途以及创建和销毁的时间。Java虚拟机所管理的内存将会包括以下几个运行时数据区域，如下图所示：下面就每一个区域进行阐述。运行时数据区域程序计数器       程序计数器，可以看做是当前线程所执行的字节码的行号指示器。在虚拟机的概念模型里，字节码解释器工作就是通过改变程序计数器的值来选择下一条需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复等基础功能都要依赖这个计数...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-08-03 13:50:18 +0800" class="post-list__meta--date date">2015-08-03</time> &#8226; <span class="post-list__meta--tags tags">内存管理，jvm</span><a class="btn-border-small" href=/2015/08/javamemory/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/08/list/" title="访问 经典数据结构与算法">经典数据结构与算法</a></h2>
+      <p class="excerpt">链表       链表是一种非常基本的数据结构，被广泛的用在各种语言的集合框架中。首先链表是一张表，只不过链表中的元素在内存中不一定相邻，并且每个元素都可带有指向另一个元素的指针。         链表有，单项链表，双向链表，循环链表等。单项链表的数据结构       如下：     typedef struct NODE{         struct NODE * link;         int value;     } Node;对链表的操作       主要有增删查：    N...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-08-03 00:39:38 +0800" class="post-list__meta--date date">2015-08-03</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/08/list/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/07/jvm/" title="访问 JVM相关知识整理（转）">JVM相关知识整理（转）</a></h2>
+      <p class="excerpt">       JVM是虚拟机，也是一种规范，他遵循着冯·诺依曼体系结构的设计原理。冯·诺依曼体系结构中，指出计算机处理的数据和指令都是二进制数，采用存储程序方式不加区分的存储在同一个存储器里，并且顺序执行，指令由操作码和地址码组成，操作码决定了操作类型和所操作的数的数字类型，地址码则指出地址码和操作数。           从dos到window8，从unix到ubuntu和CentOS，还有MAC OS等等，不同的操作系统指令集以及数据结构都有着差异，而JVM通过在操作系统上建立虚拟机，...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-07-30 22:25:54 +0800" class="post-list__meta--date date">2015-07-30</time> &#8226; <span class="post-list__meta--tags tags">Java</span><a class="btn-border-small" href=/2015/07/jvm/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/07/rttitypeid/" title="访问 RTTI与typeid">RTTI与typeid</a></h2>
+      <p class="excerpt">Typeid操作返回指针或引用所指对象的实际类型。如果一个基类中没有虚函数被实现，那么就算派生类中有同样的成员函数，指向派生类的指针的Typeid仍然是基类的类别；如果派生类重写了基类中虚函数，那么指向派生类的指针就是派生类的类。   如有class B继承于A，A* pA=new B();typeid(pA)就是class *A，typeid(*pA)是指向派生类的指针，所以要根据派生情况来RTTI他的类型。&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-07-02 21:26:20 +0800" class="post-list__meta--date date">2015-07-02</time> &#8226; <span class="post-list__meta--tags tags">C++</span><a class="btn-border-small" href=/2015/07/rttitypeid/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/06/directx-11-shade/" title="访问 DirectX 11 SDK的一些问题">DirectX 11 SDK的一些问题</a></h2>
+      <p class="excerpt">由于项目需要，学习英伟达的D3D11新技术Sample。在一个使用fx渲染器的案例中，提示  unrecognized complier target " fx_5_0",网上搜索后得知，该fx_5_0新特性必须使用最新的SDK11才能编译。  最后通过fxc.exe的命令支持发现，只有DirectX SDK (June)2010才提供fx_5_0的编译需求。  所以推荐使用D3D11较新技术的时候，都将DX SDK更新到（June）2010版本（大概500多MB的），同时认真读取每份Sa...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-06-12 19:47:33 +0800" class="post-list__meta--date date">2015-06-12</time> &#8226; <span class="post-list__meta--tags tags">DX</span><a class="btn-border-small" href=/2015/06/directx-11-shade/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/06/ubuntu/" title="访问 ubuntu下设置gedit文本字符编码格式方法汇总">ubuntu下设置gedit文本字符编码格式方法汇总</a></h2>
+      <p class="excerpt">ubuntu 下gedit默认编码为UTF-8，而在windows下编写得txt默认编码为GBK，所以在windows下面的txt用getdit打开则为乱码。解决方案：  1. 安装dconf-editor，在apps/gedit-2/preferences/encodings下修改auto_detected和shown_in_menu的默认格式，添加'GB18030', 'GB2312', 'GBK'等支持中文的格式。注意GB18030格式要位于最上方。 2. 如果apps中没有gedi...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-06-09 10:37:42 +0800" class="post-list__meta--date date">2015-06-09</time> &#8226; <span class="post-list__meta--tags tags">Ubuntu</span><a class="btn-border-small" href=/2015/06/ubuntu/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/05/newsky/" title="访问 好天气">好天气</a></h2>
+      <p class="excerpt">MX4 Pro拍摄，摄像头感光真不是一般的差。&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-05-29 23:10:12 +0800" class="post-list__meta--date date">2015-05-29</time> &#8226; <span class="post-list__meta--tags tags">摄影</span><a class="btn-border-small" href=/2015/05/newsky/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
       <h2 class="post-list__post-title post-title"><a href="/2015/05/designmodel/" title="访问 设计模式个人总结">设计模式个人总结</a></h2>
       <p class="excerpt">  简单工厂方法： 对具体方法进行类封装，把封装好的各类方法用类似switch的办法来初始化；这样可以在调用的时候去动态的选择我们所需要使用的方法  策略模式： 声明一个策略基类，每种策略都继承自这个基类，同时声明一个管理类，实现两个方法，一个是产生一个策略的具体引用，一个是实现具体的策略类      装饰模式：一个抽象类，我们所需要装饰的对象继承自这个抽象类，装饰基类也继承这个抽象类，同时创造一些具体的装饰类，调用时候采用装饰类1装饰（装饰类2装饰（装饰类装饰（对象）））这样的顺序，最后...&hellip;</p>
       <div class="post-list__meta"><time datetime="2015-05-29 09:52:50 +0800" class="post-list__meta--date date">2015-05-29</time> &#8226; <span class="post-list__meta--tags tags">设计模式</span><a class="btn-border-small" href=/2015/05/designmodel/>继续阅读</a></div>
@@ -169,62 +225,6 @@
       <hr class="post-list__divider" />
     </li>
     
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/04/offer36/" title="访问 剑指offer 36 逆序对问题">剑指offer 36 逆序对问题</a></h2>
-      <p class="excerpt">逆序对问题，用归并思想求解。  在参考多个博客内容后，终于得到正确的书写过程：int InversePairs(vector data) {  if(data.size()&lt;2)    return 0;  int count=0;  int length=data.size();  int temp[1000];  int arr[1000];  for(int i=0;i&lt;length;i++)  arr[i]=data[i];  inverse_pair(arr,0,le...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-04-16 01:00:18 +0800" class="post-list__meta--date date">2015-04-16</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/04/offer36/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/04/nugly/" title="访问 第n个丑数">第n个丑数</a></h2>
-      <p class="excerpt">丑数，是分解因子仅为2、3、5的数，从小到大排序，求第n个丑数：class Solution {public:  int min1(int n1,int n2,int n3){  int min=n1&gt;n2?n2:n1;  min=min&gt;n3?n3:min;  return min; } int GetUglyNumber_Solution(int index) {  if(index&lt;=0)  return 0;  int set[index];  for(int i...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-04-15 16:59:00 +0800" class="post-list__meta--date date">2015-04-15</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/04/nugly/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/04/offer28/" title="访问 字符串的排列">字符串的排列</a></h2>
-      <p class="excerpt">剑指offer28,字符串的全排列，若提出可以重复字符串，则代码如下：vector&lt;string&gt; Permutation(string str) {  vector&lt;string&gt; sv;  permutation(str,0,sv);  return sv;}void permutation(string str, int i,vector&lt;string&gt; &amp;sv){  if(str.length()==0)  return;  if(str...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-04-14 21:17:05 +0800" class="post-list__meta--date date">2015-04-14</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/04/offer28/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/04/offer/" title="访问 剑指offer面试题43：n个筛子的点数">剑指offer面试题43：n个筛子的点数</a></h2>
-      <p class="excerpt">考虑两个数组来存储骰子点数的每一个总数出现的次数。 在一次循环中，第一个数组中的第n个数字表示骰子和为n的出现的次数，在下次循环中，我们加上一个新的骰子，此时和为n的骰子出现的次数应该等于上次循环中骰子点数为n-1，n-2，n-3,n-4,n-5,n-6次数的总和（比如2个筛子，当出现总数3的时候是可能筛子1出现1，筛子2出现2，或者筛子1出现2，筛子2出现1，筛子前后出现的组合影响着出现的总数）。  所以我们把另一个数组的第n个数字设为前一个数对应的第n-1,n-2,n-3,n-4,n-...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-04-10 16:17:29 +0800" class="post-list__meta--date date">2015-04-10</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/04/offer/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/04/unity5serializable/" title="访问 unity5中[Serializable]关键字">unity5中[Serializable]关键字</a></h2>
-      <p class="excerpt">Unity5中脚本C#有关键字[Serializable],从C#的角度讲就是能够对所定义的类进行序列化，经过序列化的对象，可以暂时保存在硬盘上，而不占用内存，等到需要使用时再从硬盘读入。  而Unity5中的[Serializable]接口声明的作用，就是能够将所定义的类在编辑器中实例展现出来。换而言之，就是能够通过在编辑器中设置，从而实例化该类。   如图所示,官方案例roguelike中对foodcount和wallcount的实现就是通过在脚本中定义[Serializable]接口...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-04-09 23:33:00 +0800" class="post-list__meta--date date">2015-04-09</time> &#8226; <span class="post-list__meta--tags tags">unity5</span><a class="btn-border-small" href=/2015/04/unity5serializable/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/04/unity5-android/" title="访问 Unity5关于android的打包">Unity5关于android的打包</a></h2>
-      <p class="excerpt">unity5打包apk需要将安装SDK升级到android sdk 5.0 api 21。  国内使用SDK Manager.exe更新不了，于是下载sdk包手动更新到sdk 5.0。  下载下面几个包：   https://dl-ssl.google.com/android/repository/sources-21_r01.zip   https://dl-ssl.google.com/android/repository/build-tools_r21.1-windows.zip  ...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-04-02 13:22:00 +0800" class="post-list__meta--date date">2015-04-02</time> &#8226; <span class="post-list__meta--tags tags">unity5</span><a class="btn-border-small" href=/2015/04/unity5-android/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/04/unity5/" title="访问 Unity5">Unity5</a></h2>
-      <p class="excerpt">今天开始学习Unity5了，发现脚本化游戏逻辑+图形化编程 简直就是游戏开发者的乐园。难点就在于游戏资源的设计以及游戏策划了吧。恩，每次看到Unity的一些设计截图都会让自己内心为之震撼，什么时候自己也能做出如此牛逼的游戏.&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-04-01 22:06:24 +0800" class="post-list__meta--date date">2015-04-01</time> &#8226; <span class="post-list__meta--tags tags">unity5</span><a class="btn-border-small" href=/2015/04/unity5/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/03/animation/" title="访问 《异能系》">《异能系》</a></h2>
-      <p class="excerpt">最近没空，好想再画两幅&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-03-20 15:15:29 +0800" class="post-list__meta--date date">2015-03-20</time> &#8226; <span class="post-list__meta--tags tags">手绘</span><a class="btn-border-small" href=/2015/03/animation/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
   </ol>
 
   <hr class="post-list__divider " />
@@ -233,7 +233,7 @@
     
         <a class="newer-posts pagination__newer btn btn-small btn-tertiary" href="/#blog">&larr; 最近</a>
     
-    <span class="pagination__page-number">2 / 4</span>
+    <span class="pagination__page-number">2 / 5</span>
     
         <a class="older-posts pagination__older btn btn-small btn-tertiary" href="/page/3/#blog">更早 &rarr;</a>
     

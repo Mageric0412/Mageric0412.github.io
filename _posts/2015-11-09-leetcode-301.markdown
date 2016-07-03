@@ -1,0 +1,70 @@
+---
+author: mageric
+comments: true
+date: 2015-11-09 08:57:57+00:00
+layout: post
+title: leetcode 301
+categories:
+- leetcode
+tags:
+- leetcode
+---
+Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.    
+Note: The input string may contain letters other than the parentheses ( and ).    
+Examples:    
+"()())()" -> ["()()()", "(())()"]     
+"(a)())()" -> ["(a)()()", "(a())()"]    
+")(" -> [""]
+{% highlight c %}
+class Solution {
+public:
+    vector<string> removeInvalidParentheses(string s) {
+       unordered_set<string> result;
+       int leftnum=0;
+       int rightnum=0;
+       //分别记录左右括号未匹配的数量
+       for(int i=0;i<s.size();i++)
+       {
+           if(s[i]=='(')
+               leftnum++;           
+            if(s[i]==')')
+            {
+                if(leftnum>0)
+                   leftnum--;
+                 else
+                    rightnum++;
+            }
+       }       
+       dfs(s,leftnum,rightnum,0,"",0,result);
+       return vector<string>(result.begin(),result.end());
+    }    
+    void dfs(string s,int leftnum,int rightnum,int index,string path,int match, unordered_set<string>& results){        
+        if(index==s.size())
+        {
+           if(leftnum==0&&rightnum==0&&match==0)
+               results.insert(path);
+           return;
+        }        
+        if(s[index]!='(' && s[index]!=')')
+           dfs(s,leftnum,rightnum,index+1,path+s[index],match,results);      
+        else if(s[index]=='(')
+           {
+               if(leftnum>0)
+                 //不添加该左括号，继续下一个字符的递归处理
+                 dfs(s,leftnum-1,rightnum,index+1,path,match,results);
+                //添加该左括号，并对匹配标记加1        
+               dfs(s,leftnum,rightnum,index+1,path+s[index],match+1,results);
+           }
+         else
+           {
+              if(rightnum>0)
+                //不添加该右括号，继续下一个字符的递归处理
+                  dfs(s,leftnum,rightnum-1,index+1,path,match,results);
+              //如果匹配标记大于1，说明左括号没有匹配完，那么添加右括号，同时对标记减1；
+              //否则不添加右括号
+              if(match>0)
+               dfs(s,leftnum,rightnum,index+1,path+s[index],match-1,results);
+           }          
+    }
+};
+{% endhighlight %}

@@ -1,0 +1,367 @@
+---
+author: mageric
+comments: true
+date: 2015-08-18 06:56:19+00:00
+layout: post
+title: STL迭代器类型简介
+categories:
+- STL
+- 技术博文
+tags:
+- STL
+---
+**标准模板库(The Standard Template Library, STL)**定义了五种迭代器。    
+
+### 迭代器类别    
+
+#### 说明      
+**输入**：从容器中读取元素。输入迭代器只能一次读入一个元素向前移动，输入迭代器只支持一遍算法，同一个输入迭代器不能两遍遍历一个序列     
+**输出**：向容器中写入元素。输出迭代器只能一次一个元素向前移动。输出迭代器只支持一遍算法，统一输出迭代器不能两次遍历一个序列   
+**正向**：组合输入迭代器和输出迭代器的功能，并保留在容器中的位置    
+**双向**：组合正向迭代器和逆向迭代器的功能，支持多遍算法    
+**随机访问**：组合双向迭代器的功能与直接访问容器中任何元素的功能，即可向前向后跳过任意个元素
+
+### 迭代器操作
+每种迭代器均可进行包括表中前一种迭代器可进行的操作。
+
+#### 所有迭代器
+`p++`：后置自增迭代器    
+`++p`：前置自增迭代器    
+
+#### 输入迭代器
+`*p`：复引用迭代器，作为右值    
+`p=p1`：将一个迭代器赋给另一个迭代器    
+`p==p1`：比较迭代器的相等性     
+`p!=p1`：比较迭代器的不等性
+
+#### 输出迭代器
+`*p`：复引用迭代器，作为左值     
+`p=p1`：将一个迭代器赋给另一个迭代器    
+`--p`：前置自减迭代器     
+`p--`：后置自减迭代器
+
+#### 随机迭代器
+`p+=i`：将迭代器递增i位     
+`p-=i`：将迭代器递减i位    
+`p+i`：在p位加i位后的迭代器     
+`p-i`：在p位减i位后的迭代器     
+`p[i]`：返回p位元素偏离i位的元素引用    
+`p<p1`：如果迭代器p的位置在p1前，返回true，否则返回false     
+`p<=p1`：p的位置在p1的前面或同一位置时返回true，否则返回false p>p1。     
+`p>=p1`：p的位置在p1的后面或同一位置时返回true，否则返回false      
+&#160; &#160; &#160; &#160;只有顺序容器和关联容器支持迭代器遍历，各容器支持的迭代器的类别如下：
+
+### 容器
+支持的迭代器类别     
+**vector随机访问**：一种随机访问的数组类型，提供了对数组元素进行快速随机访问以及在序列尾部进行快速的插入和删除操作的功能。可以再需要的时候修改其自身的大小。     
+**deque随机访问**：一种随机访问的数组类型，提供了序列两端快速进行插入和删除操作的功能。可以再需要的时候修改其自身的大小。     
+**list双向**：一种不支持随机访问的数组类型，插入和删除所花费的时间是固定的，与位置无关。     
+**set双向**：一种随机存取的容器，其关键字和数据元素是同一个值。所有元素都必须具有惟一值。    
+**multiset双向**：一种随机存取的容器，其关键字和数据元素是同一个值。可以包含重复的元素。     
+**map双向**：一种包含成对数值的容器，一个值是实际数据值，另一个是用来寻找数据的关键字。一个特定的关键字只能与一个元素关联。    
+**multimap双向**：一种包含成对数值的容器，一个值是实际数据值，另一个是用来寻找数据的关键字。一个关键字可以与多个数据元素关联。     
+**stack不支持**：适配器容器类型，用vector，deque或list对象创建了一个先进后出容器。     
+**queue不支持**：适配器容器类型，用deque或list对象创建了一个先进先出容器。     
+**priority_queue不支持**：适配器容器类型，用vector或deque对象创建了一个排序队列。     
+&#160; &#160; &#160; &#160;下面列举了些例子说明各个容器的用法：
+{% highlight c %}
+//1.vector
+    int main()
+    {
+    std::vector charVector;
+    int x;
+    for (x=0; x<10; ++x)
+       charVector.push_back(65 + x);
+    int size = charVector.size();
+    for (x=0; x<size; ++x)
+    {
+       std::vector::iterator start =
+       charVector.begin();
+       charVector.erase(start);
+       std::vector::iterator iter;
+       for (iter = charVector.begin();iter != charVector.end(); iter++)
+      {
+         std::cout << *iter;
+      }
+       std::cout << std::endl;
+    }
+    return 0;
+    }
+//2、deque
+    int main()
+    {
+    std::deque charDeque;
+    int x;
+    for (x=0; x<10; ++x)
+       charDeque.push_front(65 + x);
+    int size = charDeque.size();
+    for (x=0; x<size; ++x)
+    {
+       std::deque::iterator start =
+       charDeque.begin();
+       charDeque.erase(start);
+       std::deque::iterator iter;
+       for (iter = charDeque.begin();iter != charDeque.end(); iter++)
+      {
+        std::cout << *iter;
+      }
+      std::cout << std::endl;
+    }
+    return 0;
+    }
+//3、list
+    int main()
+    {
+    // Create and populate the list.
+    int x;
+    std::list charList;
+    for (x=0; x<10; ++x)
+       charList.push_front(65 + x);
+    // Display contents of list.
+    std::cout << "Original list: ";
+    std::list::iterator iter;
+    for (iter = charList.begin();iter != charList.end(); iter++)
+    {
+      std::cout << *iter;
+      //char ch = *iter;
+      //std::cout << ch;
+    }
+    std::cout << std::endl;
+    // Insert five Xs into the list.
+    std::list::iterator start = charList.begin();
+    charList.insert(++start, 5, 'X');
+    // Display the result.
+    std::cout << "Resultant list: ";
+    for (iter = charList.begin();iter != charList.end(); iter++)
+    {
+      std::cout << *iter;
+      //char ch = *iter;
+      //std::cout << ch;
+    }
+    return 0;
+    }
+//4、set
+    int main()
+    {
+    // Create the set object.
+    std::set charSet;
+    // Populate the set with values.
+    charSet.insert('E');
+    charSet.insert('D');
+    charSet.insert('C');
+    charSet.insert('B');
+    charSet.insert('A');
+    // Display the contents of the set.
+    std::cout << "Contents of set: " << std::endl;
+    std::set::iterator iter;
+    for (iter = charSet.begin(); iter != charSet.end(); iter++)
+      std::cout << *iter << std::endl;
+    std::cout << std::endl;
+    // Find the D.
+    iter = charSet.find('D');
+    if (iter == charSet.end())
+      std::cout << "Element not found.";
+    else
+      std::cout << "Element found: " << *iter;
+    return 0;
+    }
+//5、multiset
+    int main()
+    {
+    // Create the first set object.
+    std::multiset charMultiset1;
+    // Populate the multiset with values.
+    charMultiset1.insert('E');
+    charMultiset1.insert('D');
+    charMultiset1.insert('C');
+    charMultiset1.insert('B');
+    charMultiset1.insert('A');
+    charMultiset1.insert('B');
+    charMultiset1.insert('D');
+    // Display the contents of the first multiset.
+    std::cout << "Contents of first multiset: " << std::endl;
+    std::multiset::iterator iter;
+    for (iter = charMultiset1.begin();iter != charMultiset1.end(); iter++)
+       std::cout << *iter << std::endl;
+    std::cout << std::endl;
+    // Create the second multiset object.
+    std::multiset charMultiset2;
+    // Populate the multiset with values.
+    charMultiset2.insert('J');
+    charMultiset2.insert('I');
+    charMultiset2.insert('H');
+    charMultiset2.insert('G');
+    charMultiset2.insert('F');
+    charMultiset2.insert('G');
+    charMultiset2.insert('I');
+    // Display the contents of the second multiset.
+    std::cout << "Contents of second multiset: "<< std::endl;
+    for (iter = charMultiset2.begin();
+       iter != charMultiset2.end(); iter++)
+    std::cout << *iter << std::endl;
+    std::cout << std::endl;
+    // Compare the sets.
+    if (charMultiset1 == charMultiset2)
+       std::cout << "set1 == set2";
+    else if (charMultiset1 < charMultiset2)
+       std::cout << "set1 < set2";
+    else if (charMultiset1 > charMultiset2)
+       std::cout << "set1 > set2";
+    return 0;
+    }
+//6、map
+    typedef std::map<int, char>MYMAP;
+    int main()
+    {
+    // Create the first map object.
+    MYMAP charMap1;
+    // Populate the first map with values.
+    charMap1[1] = 'A';
+    charMap1[4] = 'D';
+    charMap1[2] = 'B';
+    charMap1[5] = 'E';
+    charMap1[3] = 'C';
+    // Display the contents of the first map.
+    std::cout << "Contents of first map: " << std::endl;
+    MYMAP::iterator iter;
+    for (iter = charMap1.begin();iter != charMap1.end(); iter++)
+    {
+      std::cout << (*iter).first << " --> ";
+      std::cout << (*iter).second << std::endl;
+    }
+    std::cout << std::endl;
+    // Create the second map object.
+    MYMAP charMap2;
+    // Populate the first map with values.
+    charMap2[1] = 'F';
+    charMap2[4] = 'I';
+    charMap2[2] = 'G';
+    charMap2[5] = 'J';
+    charMap2[3] = 'H';
+    // Display the contents of the second map.
+    std::cout << "Contents of second map: " << std::endl;
+    for (iter = charMap2.begin();iter != charMap2.end(); iter++)
+    {
+      std::cout << (*iter).first << " --> ";
+      std::cout << (*iter).second << std::endl;
+    }
+    std::cout << std::endl;
+    // Compare the maps.
+    if (charMap1 == charMap2)
+      std::cout << "map1 == map2";
+    else if (charMap1 < charMap2)
+      std::cout << "map1 < map2";
+    else if (charMap1 > charMap2)
+      std::cout << "map1 > map2";
+    return 0;
+    }
+//7、multimap
+    typedef std::multimap<int, char>MYMAP;
+    int main()
+    {
+    // Create the first multimap object.
+    MYMAP charMultimap;
+    // Populate the multimap with values.
+    charMultimap.insert(MYMAP::value_type(1,'A'));
+    charMultimap.insert(MYMAP::value_type(4,'C'));
+    charMultimap.insert(MYMAP::value_type(2,'B'));
+    charMultimap.insert(MYMAP::value_type(7,'E'));
+    charMultimap.insert(MYMAP::value_type(5,'D'));
+    charMultimap.insert(MYMAP::value_type(3,'B'));
+    charMultimap.insert(MYMAP::value_type(6,'D'));
+    // Display the contents of the first multimap.
+    std::cout << "Contents of first multimap: " << std::endl;
+    MYMAP::iterator iter;
+    for (iter = charMultimap.begin();iter != charMultimap.end(); iter++)
+    {
+      std::cout << (*iter).first << " --> ";
+      std::cout << (*iter).second << std::endl;
+    }
+    std::cout << std::endl;
+    // Create the second multimap object.
+    MYMAP charMultimap2;
+    // Populate the second multimap with values.
+    charMultimap2.insert(MYMAP::value_type(1,'C'));
+    charMultimap2.insert(MYMAP::value_type(4,'F'));
+    charMultimap2.insert(MYMAP::value_type(2,'D'));
+    charMultimap2.insert(MYMAP::value_type(7,'E'));
+    charMultimap2.insert(MYMAP::value_type(5,'F'));
+    charMultimap2.insert(MYMAP::value_type(3,'E'));
+    charMultimap2.insert(MYMAP::value_type(6,'G'));
+    // Display the contents of the second multimap.
+    std::cout << "Contents of second multimap: " << std::endl;
+    for (iter = charMultimap2.begin();iter != charMultimap2.end(); iter++)
+    {
+      std::cout << (*iter).first << " --> ";
+      std::cout << (*iter).second << std::endl;
+    }
+    std::cout << std::endl;
+    // Compare the multimaps.
+    if (charMultimap == charMultimap2)
+      std::cout << "multimap1 == multimap2";
+    else if (charMultimap < charMultimap2)
+      std::cout << "multimap1 < multimap2";
+    else if (charMultimap > charMultimap2)
+      std::cout << "multimap1 > multimap2";
+    return 0;
+    }
+//8、stack
+    int main()
+    {
+    std::stack<int, std::list > intStack;
+    int x;
+    std::cout << "Values pushed onto stack:"<< std::endl;
+    for (x=1; x<11; ++x)
+    {
+      intStack.push(x*100);
+      std::cout << x*100 << std::endl;
+    }
+    std::cout << "Values popped from stack:"<< std::endl;
+    int size = intStack.size();
+    for (x=0; x<size; ++x)
+    {
+      std::cout << intStack.top() << std::endl;
+      intStack.pop();
+    }
+    return 0;
+    }
+//9、queue
+    int main()
+    {
+    std::queue<int, std::list > intQueue;
+    int x;
+    std::cout << "Values pushed onto queue:"<< std::endl;
+    for (x=1; x<11; ++x)
+    {
+      intQueue.push(x*100);
+      std::cout << x*100 << std::endl;
+    }
+    std::cout << "Values removed from queue:"<< std::endl;
+    int size = intQueue.size();
+    for (x=0; x<size; ++x)
+    {
+      std::cout << intQueue.front() << std::endl;
+      intQueue.pop();
+    }
+    return 0;
+    }
+//10、priority_queue
+    int main()
+    {
+    std::priority_queue<int, std::vector,std::greater > intPQueue;
+    int x;
+    intPQueue.push(400);
+    intPQueue.push(100);
+    intPQueue.push(500);
+    intPQueue.push(300);
+    intPQueue.push(200);
+    std::cout << "Values removed from priority queue:"<< std::endl;
+    int size = intPQueue.size();
+    for (x=0; x<size; ++x)
+    {
+      std::cout << intPQueue.top() << std::endl;
+      intPQueue.pop();
+    }
+    return 0;
+    }
+{% endhighlight %}

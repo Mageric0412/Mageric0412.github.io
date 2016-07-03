@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Unity3D中使用C++ Dll的方法</title>
+  <meta name="description" content="      我们在Unity3D的脚本使用中，难免会遇到需要使用自定义库的时候，由于Unity只支持脚本编辑，因此原生C++需要通过打包为Dll的方式，才能为我们的脚本所用。下面介绍我们的打包过程：           首先在VS编辑器中定义一个dll项目，自定义.h文件，注意宏内容:    #pragma on...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Unity3D中使用C++ Dll的方法">
+  <meta name="twitter:description" content="      我们在Unity3D的脚本使用中，难免会遇到需要使用自定义库的时候，由于Unity只支持脚本编辑，因此原生C++需要通过打包为Dll的方式，才能为我们的脚本所用。下面介绍我们的打包过程：           首先在VS编辑器中定义一个dll项目，自定义.h文件，注意宏内容:    #pragma on...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Unity3D中使用C++ Dll的方法">
+  <meta property="og:description" content="      我们在Unity3D的脚本使用中，难免会遇到需要使用自定义库的时候，由于Unity只支持脚本编辑，因此原生C++需要通过打包为Dll的方式，才能为我们的脚本所用。下面介绍我们的打包过程：           首先在VS编辑器中定义一个dll项目，自定义.h文件，注意宏内容:    #pragma on...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="/2016/03/unity3ddll/">
+  <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Mageric 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Mageric logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Mageric" class="blog-button">Mageric</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">42 世界尽头</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Mageric的个人小站.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="http://mageric-one.com" target="_blank" title="My old site">OldSite</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/magericyoung" title="@magericyoung 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Mageric0412" title="@Mageric0412 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- instagram -->
+  <li class="navigation__item">
+   <a href="https://www.instagram.com/mageric0412" title="@mageric0412 的Instagram" target="_blank">
+     <i class='social fa fa-instagram'></i>
+     <span class="label">instagram</span>
+   </a>
+  </li>
+  
+
+<!--
+  
+  <!-- website -->
+  <!--
+  <li class="navigation__item">
+    <a href="https://mageric-one.com" rel="author" title="mageric的小站" target="_blank">
+        <i class='social fa fa-rss'> </i>
+      <span class="label">website</span>
+    </a>
+  </li>
+  
+-->
+
+
+
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:mageric0412@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-03-12 14:51:08 +0800" itemprop="datePublished" class="post-meta__date date">2016-03-12</time> &#8226; <span class="post-meta__tags tags">unity3d</span>
+    </div>
+    <h1 class="post-title">Unity3D中使用C++ Dll的方法</h1>
+  </header>
+
+  <section class="post">
+    <p>      我们在Unity3D的脚本使用中，难免会遇到需要使用自定义库的时候，由于Unity只支持脚本编辑，因此原生C++需要通过打包为Dll的方式，才能为我们的脚本所用。下面介绍我们的打包过程：     <br />
+      首先在VS编辑器中定义一个dll项目，自定义.h文件，注意宏内容:</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++">    <span class="cp">#pragma once  
+</span>    <span class="cp">#ifdef MALIBDLL  
+</span>     <span class="cp">#define MYAPI _declspec(dllexport)  
+</span>    <span class="cp">#else  
+</span>     <span class="cp">#define MYAPI  _declspec(dllimport)  
+</span>    <span class="cp">#endif  
+</span>    <span class="c1">//可以include需要用到的头文件  
+</span>    <span class="k">extern</span> <span class="s">"C"</span> <span class="kt">int</span> <span class="n">MYAPI</span> <span class="n">test</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">y</span><span class="p">);</span>
+    <span class="k">class</span> <span class="nc">MYAPI</span>  <span class="n">MagericTest</span>  
+    <span class="p">{</span>  
+    <span class="k">public</span><span class="o">:</span>  
+    	<span class="n">MagericTest</span><span class="p">();</span>
+    	<span class="n">MagericTest</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">y</span><span class="p">);</span>  
+    	<span class="o">~</span><span class="n">MagericTest</span><span class="p">();</span>  
+    	<span class="kt">int</span> <span class="n">_x</span><span class="p">;</span>
+    	<span class="kt">int</span> <span class="n">_y</span><span class="p">;</span>
+    	<span class="c1">//类的函数
+</span>    <span class="p">};</span></code></pre></figure>
+
+<p>      其中，<code class="highlighter-rouge">_declspec(dllexport)</code>正是将之后定义的函数、类导出为dll的说明。由于Unity中不支持直接调用C++中类的方法使用，因此，当我们需要使用类中的方法到Unity脚本中时，使用类似Bridge的方法。在实现的test调用函数中进行类的调用。下面是cpp文件的实现：</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++">    <span class="cp">#define MALIBDLL  
+</span>    <span class="cp">#include "dlltest.h"  
+</span>    <span class="c1">//////////头文件中函数的实现  
+</span>    <span class="n">MagericTest</span><span class="o">::</span><span class="n">MagericTest</span><span class="p">()</span>   
+    <span class="p">{</span>       
+    <span class="p">}</span>   
+    <span class="n">MagericTest</span><span class="o">::</span><span class="n">MagericTest</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">y</span><span class="p">)</span>   
+    <span class="p">{</span>     
+      <span class="n">_x</span><span class="o">=</span><span class="n">x</span><span class="p">;</span>
+      <span class="n">_y</span><span class="o">=</span><span class="n">y</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">MagericTest</span><span class="o">::~</span><span class="n">MagericTest</span><span class="p">()</span>   
+    <span class="p">{</span>     
+    <span class="p">}</span>   
+    <span class="kt">int</span> <span class="n">MYAPI</span> <span class="n">test</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
+    <span class="p">{</span>
+    	<span class="n">MagericTest</span><span class="o">*</span> <span class="n">face</span><span class="o">=</span><span class="k">new</span> <span class="n">MagericTest</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+    	<span class="k">return</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="n">face</span><span class="o">-&gt;</span><span class="n">_x</span><span class="o">+</span><span class="n">face</span><span class="o">-&gt;</span><span class="n">_y</span><span class="p">;</span>
+    <span class="p">}</span></code></pre></figure>
+
+<p>      其中test函数中实现了对类MagericTest的使用，最后返回值中包含了其调用结果。为了方便起见，在编译过程中我们将dll设置为64位编译。从编译的Debug文件夹中找到dll文件，将其复制到Unity项目中。（如果没有）新建文件夹Plugins，将Dll复制到此文件夹中（脚本会自动搜寻此命名的文件夹寻找外部文件）。在脚本中，进行如下编辑：</p>
+
+<figure class="highlight"><pre><code class="language-c#" data-lang="c#">    <span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+    <span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+    <span class="k">using</span> <span class="nn">System.Runtime.InteropServices</span><span class="p">;</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">testdll</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+    		<span class="p">[</span><span class="nf">DllImport</span><span class="p">(</span><span class="s">"TestDll3"</span><span class="p">)]</span>
+    	<span class="c1">// Use this for initialization
+</span>    		<span class="k">private</span> <span class="k">static</span> <span class="k">extern</span>  <span class="kt">int</span> <span class="nf">test</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">y</span><span class="p">);</span>
+    		<span class="kt">int</span> <span class="n">i</span><span class="p">=</span><span class="nf">test</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="m">6</span><span class="p">);</span>
+    	<span class="k">void</span> <span class="nf">Start</span> <span class="p">()</span> <span class="p">{</span>
+    	<span class="p">}</span>
+      <span class="k">void</span> <span class="nf">OnGUI</span><span class="p">()</span>
+      <span class="p">{</span>
+    		<span class="n">GUI</span><span class="p">.</span><span class="nf">Button</span><span class="p">(</span><span class="k">new</span> <span class="nf">Rect</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">200</span><span class="p">,</span><span class="m">100</span><span class="p">),</span><span class="s">"this"</span><span class="p">+</span><span class="n">i</span><span class="p">);</span>
+    	<span class="p">}</span>
+    <span class="p">}</span></code></pre></figure>
+
+<p>      其中，<code class="highlighter-rouge">using System.Runtime.InteropServices;</code>代表可以进行Dll的导入操作，注意调用外部函数的前缀<code class="highlighter-rouge">private static extern</code>。此时可以在GUI中看到，最终的计算结果是5+6+1+2=14。即我们的计算也包含了对类的使用。</p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2016/06/zz/" title="link to 常用正则表达式举例">常用正则表达式举例</a></h2>
+       <p class="excerpt">      以下提供一些正则表达式的常用场景示例，可以为一些现用场景提供正则表达式的使用：  //匹配中文字符的正则表达式：    [u4e00-u9fa5]  //匹配中文还真是个头疼的事，有了这个表达式就好办了     //匹配双字节字符(包括汉字在内)：     [^x00-xff] //可以用来计算字符串的长度（一个双字节字符长度计2，ASCII字符计1)     //匹配空白行的正则表达式：    ns*r //可以用来删除空白行      //匹配HTML标记的正则表达式：  ...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-06-04 17:52:04 +0800" class="post-list__meta--date date">2016-06-04</time> &#8226; <span class="post-list__meta--tags tags">正则表达式</span><a class="btn-border-small" href=/2016/06/zz/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/11/leetcode-301/" title="link to leetcode 301">leetcode 301</a></h2>
+       <p class="excerpt">Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.  Note: The input string may contain letters other than the parentheses ( and ).  Examples:  “()())()” -&gt; [”()()()”, “(())()”]...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-11-09 16:57:57 +0800" class="post-list__meta--date date">2015-11-09</time> &#8226; <span class="post-list__meta--tags tags">leetcode</span><a class="btn-border-small" href=/2015/11/leetcode-301/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "/2016/03/unity3ddll/";
+        this.page.identifier = "/2016/03/unity3ddll/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-07-03 生成</span>
+        <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

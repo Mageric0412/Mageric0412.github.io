@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>STL迭代器类型简介</title>
+  <meta name="description" content="标准模板库(The Standard Template Library, STL)定义了五种迭代器。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="STL迭代器类型简介">
+  <meta name="twitter:description" content="标准模板库(The Standard Template Library, STL)定义了五种迭代器。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="STL迭代器类型简介">
+  <meta property="og:description" content="标准模板库(The Standard Template Library, STL)定义了五种迭代器。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="/2015/08/stl/">
+  <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Mageric 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Mageric logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Mageric" class="blog-button">Mageric</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">42 世界尽头</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Mageric的个人小站.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="http://mageric-one.com" target="_blank" title="My old site">OldSite</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/magericyoung" title="@magericyoung 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Mageric0412" title="@Mageric0412 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- instagram -->
+  <li class="navigation__item">
+   <a href="https://www.instagram.com/mageric0412" title="@mageric0412 的Instagram" target="_blank">
+     <i class='social fa fa-instagram'></i>
+     <span class="label">instagram</span>
+   </a>
+  </li>
+  
+
+<!--
+  
+  <!-- website -->
+  <!--
+  <li class="navigation__item">
+    <a href="https://mageric-one.com" rel="author" title="mageric的小站" target="_blank">
+        <i class='social fa fa-rss'> </i>
+      <span class="label">website</span>
+    </a>
+  </li>
+  
+-->
+
+
+
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:mageric0412@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-08-18 14:56:19 +0800" itemprop="datePublished" class="post-meta__date date">2015-08-18</time> &#8226; <span class="post-meta__tags tags">STL</span>
+    </div>
+    <h1 class="post-title">STL迭代器类型简介</h1>
+  </header>
+
+  <section class="post">
+    <p><strong>标准模板库(The Standard Template Library, STL)</strong>定义了五种迭代器。</p>
+
+<h3 id="section">迭代器类别</h3>
+
+<h4 id="section-1">说明</h4>
+<p><strong>输入</strong>：从容器中读取元素。输入迭代器只能一次读入一个元素向前移动，输入迭代器只支持一遍算法，同一个输入迭代器不能两遍遍历一个序列   <br />
+<strong>输出</strong>：向容器中写入元素。输出迭代器只能一次一个元素向前移动。输出迭代器只支持一遍算法，统一输出迭代器不能两次遍历一个序列 <br />
+<strong>正向</strong>：组合输入迭代器和输出迭代器的功能，并保留在容器中的位置  <br />
+<strong>双向</strong>：组合正向迭代器和逆向迭代器的功能，支持多遍算法  <br />
+<strong>随机访问</strong>：组合双向迭代器的功能与直接访问容器中任何元素的功能，即可向前向后跳过任意个元素</p>
+
+<h3 id="section-2">迭代器操作</h3>
+<p>每种迭代器均可进行包括表中前一种迭代器可进行的操作。</p>
+
+<h4 id="section-3">所有迭代器</h4>
+<p><code class="highlighter-rouge">p++</code>：后置自增迭代器  <br />
+<code class="highlighter-rouge">++p</code>：前置自增迭代器</p>
+
+<h4 id="section-4">输入迭代器</h4>
+<p><code class="highlighter-rouge">*p</code>：复引用迭代器，作为右值  <br />
+<code class="highlighter-rouge">p=p1</code>：将一个迭代器赋给另一个迭代器  <br />
+<code class="highlighter-rouge">p==p1</code>：比较迭代器的相等性   <br />
+<code class="highlighter-rouge">p!=p1</code>：比较迭代器的不等性</p>
+
+<h4 id="section-5">输出迭代器</h4>
+<p><code class="highlighter-rouge">*p</code>：复引用迭代器，作为左值   <br />
+<code class="highlighter-rouge">p=p1</code>：将一个迭代器赋给另一个迭代器  <br />
+<code class="highlighter-rouge">--p</code>：前置自减迭代器   <br />
+<code class="highlighter-rouge">p--</code>：后置自减迭代器</p>
+
+<h4 id="section-6">随机迭代器</h4>
+<p><code class="highlighter-rouge">p+=i</code>：将迭代器递增i位   <br />
+<code class="highlighter-rouge">p-=i</code>：将迭代器递减i位  <br />
+<code class="highlighter-rouge">p+i</code>：在p位加i位后的迭代器   <br />
+<code class="highlighter-rouge">p-i</code>：在p位减i位后的迭代器   <br />
+<code class="highlighter-rouge">p[i]</code>：返回p位元素偏离i位的元素引用  <br />
+<code class="highlighter-rouge">p&lt;p1</code>：如果迭代器p的位置在p1前，返回true，否则返回false   <br />
+<code class="highlighter-rouge">p&lt;=p1</code>：p的位置在p1的前面或同一位置时返回true，否则返回false p&gt;p1。   <br />
+<code class="highlighter-rouge">p&gt;=p1</code>：p的位置在p1的后面或同一位置时返回true，否则返回false    <br />
+       只有顺序容器和关联容器支持迭代器遍历，各容器支持的迭代器的类别如下：</p>
+
+<h3 id="section-7">容器</h3>
+<p>支持的迭代器类别   <br />
+<strong>vector随机访问</strong>：一种随机访问的数组类型，提供了对数组元素进行快速随机访问以及在序列尾部进行快速的插入和删除操作的功能。可以再需要的时候修改其自身的大小。   <br />
+<strong>deque随机访问</strong>：一种随机访问的数组类型，提供了序列两端快速进行插入和删除操作的功能。可以再需要的时候修改其自身的大小。   <br />
+<strong>list双向</strong>：一种不支持随机访问的数组类型，插入和删除所花费的时间是固定的，与位置无关。   <br />
+<strong>set双向</strong>：一种随机存取的容器，其关键字和数据元素是同一个值。所有元素都必须具有惟一值。  <br />
+<strong>multiset双向</strong>：一种随机存取的容器，其关键字和数据元素是同一个值。可以包含重复的元素。   <br />
+<strong>map双向</strong>：一种包含成对数值的容器，一个值是实际数据值，另一个是用来寻找数据的关键字。一个特定的关键字只能与一个元素关联。  <br />
+<strong>multimap双向</strong>：一种包含成对数值的容器，一个值是实际数据值，另一个是用来寻找数据的关键字。一个关键字可以与多个数据元素关联。   <br />
+<strong>stack不支持</strong>：适配器容器类型，用vector，deque或list对象创建了一个先进后出容器。   <br />
+<strong>queue不支持</strong>：适配器容器类型，用deque或list对象创建了一个先进先出容器。   <br />
+<strong>priority_queue不支持</strong>：适配器容器类型，用vector或deque对象创建了一个排序队列。   <br />
+       下面列举了些例子说明各个容器的用法：</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">//1.vector
+</span>    <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span> <span class="n">charVector</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">x</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">x</span><span class="p">)</span>
+       <span class="n">charVector</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">65</span> <span class="o">+</span> <span class="n">x</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">charVector</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">x</span><span class="o">&lt;</span><span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">x</span><span class="p">)</span>
+    <span class="p">{</span>
+       <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">::</span><span class="n">iterator</span> <span class="n">start</span> <span class="o">=</span>
+       <span class="n">charVector</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+       <span class="n">charVector</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">start</span><span class="p">);</span>
+       <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">::</span><span class="n">iterator</span> <span class="n">iter</span><span class="p">;</span>
+       <span class="k">for</span> <span class="p">(</span><span class="n">iter</span> <span class="o">=</span> <span class="n">charVector</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span><span class="n">iter</span> <span class="o">!=</span> <span class="n">charVector</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span>
+      <span class="p">{</span>
+         <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">iter</span><span class="p">;</span>
+      <span class="p">}</span>
+       <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="c1">//2、deque
+</span>    <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">deque</span> <span class="n">charDeque</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">x</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">x</span><span class="p">)</span>
+       <span class="n">charDeque</span><span class="p">.</span><span class="n">push_front</span><span class="p">(</span><span class="mi">65</span> <span class="o">+</span> <span class="n">x</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">charDeque</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">x</span><span class="o">&lt;</span><span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">x</span><span class="p">)</span>
+    <span class="p">{</span>
+       <span class="n">std</span><span class="o">::</span><span class="n">deque</span><span class="o">::</span><span class="n">iterator</span> <span class="n">start</span> <span class="o">=</span>
+       <span class="n">charDeque</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+       <span class="n">charDeque</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">start</span><span class="p">);</span>
+       <span class="n">std</span><span class="o">::</span><span class="n">deque</span><span class="o">::</span><span class="n">iterator</span> <span class="n">iter</span><span class="p">;</span>
+       <span class="k">for</span> <span class="p">(</span><span class="n">iter</span> <span class="o">=</span> <span class="n">charDeque</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span><span class="n">iter</span> <span class="o">!=</span> <span class="n">charDeque</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">iter</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="c1">//3、list
+</span>    <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="c1">// Create and populate the list.
+</span>    <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">list</span> <span class="n">charList</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">x</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">x</span><span class="p">)</span>
+       <span class="n">charList</span><span class="p">.</span><span class="n">push_front</span><span class="p">(</span><span class="mi">65</span> <span class="o">+</span> <span class="n">x</span><span class="p">);</span>
+    <span class="c1">// Display contents of list.
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Original list: "</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">::</span><span class="n">iterator</span> <span class="n">iter</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">iter</span> <span class="o">=</span> <span class="n">charList</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span><span class="n">iter</span> <span class="o">!=</span> <span class="n">charList</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">iter</span><span class="p">;</span>
+      <span class="c1">//char ch = *iter;
+</span>      <span class="c1">//std::cout &lt;&lt; ch;
+</span>    <span class="p">}</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="c1">// Insert five Xs into the list.
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">::</span><span class="n">iterator</span> <span class="n">start</span> <span class="o">=</span> <span class="n">charList</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+    <span class="n">charList</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="o">++</span><span class="n">start</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="sc">'X'</span><span class="p">);</span>
+    <span class="c1">// Display the result.
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Resultant list: "</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">iter</span> <span class="o">=</span> <span class="n">charList</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span><span class="n">iter</span> <span class="o">!=</span> <span class="n">charList</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">iter</span><span class="p">;</span>
+      <span class="c1">//char ch = *iter;
+</span>      <span class="c1">//std::cout &lt;&lt; ch;
+</span>    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="c1">//4、set
+</span>    <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="c1">// Create the set object.
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">set</span> <span class="n">charSet</span><span class="p">;</span>
+    <span class="c1">// Populate the set with values.
+</span>    <span class="n">charSet</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'E'</span><span class="p">);</span>
+    <span class="n">charSet</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'D'</span><span class="p">);</span>
+    <span class="n">charSet</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'C'</span><span class="p">);</span>
+    <span class="n">charSet</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'B'</span><span class="p">);</span>
+    <span class="n">charSet</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'A'</span><span class="p">);</span>
+    <span class="c1">// Display the contents of the set.
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Contents of set: "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">::</span><span class="n">iterator</span> <span class="n">iter</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">iter</span> <span class="o">=</span> <span class="n">charSet</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">iter</span> <span class="o">!=</span> <span class="n">charSet</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">iter</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="c1">// Find the D.
+</span>    <span class="n">iter</span> <span class="o">=</span> <span class="n">charSet</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="sc">'D'</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">iter</span> <span class="o">==</span> <span class="n">charSet</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Element not found."</span><span class="p">;</span>
+    <span class="k">else</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Element found: "</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">iter</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="c1">//5、multiset
+</span>    <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="c1">// Create the first set object.
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">multiset</span> <span class="n">charMultiset1</span><span class="p">;</span>
+    <span class="c1">// Populate the multiset with values.
+</span>    <span class="n">charMultiset1</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'E'</span><span class="p">);</span>
+    <span class="n">charMultiset1</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'D'</span><span class="p">);</span>
+    <span class="n">charMultiset1</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'C'</span><span class="p">);</span>
+    <span class="n">charMultiset1</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'B'</span><span class="p">);</span>
+    <span class="n">charMultiset1</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'A'</span><span class="p">);</span>
+    <span class="n">charMultiset1</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'B'</span><span class="p">);</span>
+    <span class="n">charMultiset1</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'D'</span><span class="p">);</span>
+    <span class="c1">// Display the contents of the first multiset.
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Contents of first multiset: "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">multiset</span><span class="o">::</span><span class="n">iterator</span> <span class="n">iter</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">iter</span> <span class="o">=</span> <span class="n">charMultiset1</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span><span class="n">iter</span> <span class="o">!=</span> <span class="n">charMultiset1</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span>
+       <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">iter</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="c1">// Create the second multiset object.
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">multiset</span> <span class="n">charMultiset2</span><span class="p">;</span>
+    <span class="c1">// Populate the multiset with values.
+</span>    <span class="n">charMultiset2</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'J'</span><span class="p">);</span>
+    <span class="n">charMultiset2</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'I'</span><span class="p">);</span>
+    <span class="n">charMultiset2</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'H'</span><span class="p">);</span>
+    <span class="n">charMultiset2</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'G'</span><span class="p">);</span>
+    <span class="n">charMultiset2</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'F'</span><span class="p">);</span>
+    <span class="n">charMultiset2</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'G'</span><span class="p">);</span>
+    <span class="n">charMultiset2</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="sc">'I'</span><span class="p">);</span>
+    <span class="c1">// Display the contents of the second multiset.
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Contents of second multiset: "</span><span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">iter</span> <span class="o">=</span> <span class="n">charMultiset2</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+       <span class="n">iter</span> <span class="o">!=</span> <span class="n">charMultiset2</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">iter</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="c1">// Compare the sets.
+</span>    <span class="k">if</span> <span class="p">(</span><span class="n">charMultiset1</span> <span class="o">==</span> <span class="n">charMultiset2</span><span class="p">)</span>
+       <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"set1 == set2"</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">charMultiset1</span> <span class="o">&lt;</span> <span class="n">charMultiset2</span><span class="p">)</span>
+       <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"set1 &lt; set2"</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">charMultiset1</span> <span class="o">&gt;</span> <span class="n">charMultiset2</span><span class="p">)</span>
+       <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"set1 &gt; set2"</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="c1">//6、map
+</span>    <span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">char</span><span class="o">&gt;</span><span class="n">MYMAP</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="c1">// Create the first map object.
+</span>    <span class="n">MYMAP</span> <span class="n">charMap1</span><span class="p">;</span>
+    <span class="c1">// Populate the first map with values.
+</span>    <span class="n">charMap1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'A'</span><span class="p">;</span>
+    <span class="n">charMap1</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'D'</span><span class="p">;</span>
+    <span class="n">charMap1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'B'</span><span class="p">;</span>
+    <span class="n">charMap1</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'E'</span><span class="p">;</span>
+    <span class="n">charMap1</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'C'</span><span class="p">;</span>
+    <span class="c1">// Display the contents of the first map.
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Contents of first map: "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="n">MYMAP</span><span class="o">::</span><span class="n">iterator</span> <span class="n">iter</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">iter</span> <span class="o">=</span> <span class="n">charMap1</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span><span class="n">iter</span> <span class="o">!=</span> <span class="n">charMap1</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="o">*</span><span class="n">iter</span><span class="p">).</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">" --&gt; "</span><span class="p">;</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="o">*</span><span class="n">iter</span><span class="p">).</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="c1">// Create the second map object.
+</span>    <span class="n">MYMAP</span> <span class="n">charMap2</span><span class="p">;</span>
+    <span class="c1">// Populate the first map with values.
+</span>    <span class="n">charMap2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'F'</span><span class="p">;</span>
+    <span class="n">charMap2</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'I'</span><span class="p">;</span>
+    <span class="n">charMap2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'G'</span><span class="p">;</span>
+    <span class="n">charMap2</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'J'</span><span class="p">;</span>
+    <span class="n">charMap2</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'H'</span><span class="p">;</span>
+    <span class="c1">// Display the contents of the second map.
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Contents of second map: "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">iter</span> <span class="o">=</span> <span class="n">charMap2</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span><span class="n">iter</span> <span class="o">!=</span> <span class="n">charMap2</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="o">*</span><span class="n">iter</span><span class="p">).</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">" --&gt; "</span><span class="p">;</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="o">*</span><span class="n">iter</span><span class="p">).</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="c1">// Compare the maps.
+</span>    <span class="k">if</span> <span class="p">(</span><span class="n">charMap1</span> <span class="o">==</span> <span class="n">charMap2</span><span class="p">)</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"map1 == map2"</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">charMap1</span> <span class="o">&lt;</span> <span class="n">charMap2</span><span class="p">)</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"map1 &lt; map2"</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">charMap1</span> <span class="o">&gt;</span> <span class="n">charMap2</span><span class="p">)</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"map1 &gt; map2"</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="c1">//7、multimap
+</span>    <span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">multimap</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">char</span><span class="o">&gt;</span><span class="n">MYMAP</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="c1">// Create the first multimap object.
+</span>    <span class="n">MYMAP</span> <span class="n">charMultimap</span><span class="p">;</span>
+    <span class="c1">// Populate the multimap with values.
+</span>    <span class="n">charMultimap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">MYMAP</span><span class="o">::</span><span class="n">value_type</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="sc">'A'</span><span class="p">));</span>
+    <span class="n">charMultimap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">MYMAP</span><span class="o">::</span><span class="n">value_type</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="sc">'C'</span><span class="p">));</span>
+    <span class="n">charMultimap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">MYMAP</span><span class="o">::</span><span class="n">value_type</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="sc">'B'</span><span class="p">));</span>
+    <span class="n">charMultimap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">MYMAP</span><span class="o">::</span><span class="n">value_type</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="sc">'E'</span><span class="p">));</span>
+    <span class="n">charMultimap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">MYMAP</span><span class="o">::</span><span class="n">value_type</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="sc">'D'</span><span class="p">));</span>
+    <span class="n">charMultimap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">MYMAP</span><span class="o">::</span><span class="n">value_type</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="sc">'B'</span><span class="p">));</span>
+    <span class="n">charMultimap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">MYMAP</span><span class="o">::</span><span class="n">value_type</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="sc">'D'</span><span class="p">));</span>
+    <span class="c1">// Display the contents of the first multimap.
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Contents of first multimap: "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="n">MYMAP</span><span class="o">::</span><span class="n">iterator</span> <span class="n">iter</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">iter</span> <span class="o">=</span> <span class="n">charMultimap</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span><span class="n">iter</span> <span class="o">!=</span> <span class="n">charMultimap</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="o">*</span><span class="n">iter</span><span class="p">).</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">" --&gt; "</span><span class="p">;</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="o">*</span><span class="n">iter</span><span class="p">).</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="c1">// Create the second multimap object.
+</span>    <span class="n">MYMAP</span> <span class="n">charMultimap2</span><span class="p">;</span>
+    <span class="c1">// Populate the second multimap with values.
+</span>    <span class="n">charMultimap2</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">MYMAP</span><span class="o">::</span><span class="n">value_type</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="sc">'C'</span><span class="p">));</span>
+    <span class="n">charMultimap2</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">MYMAP</span><span class="o">::</span><span class="n">value_type</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="sc">'F'</span><span class="p">));</span>
+    <span class="n">charMultimap2</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">MYMAP</span><span class="o">::</span><span class="n">value_type</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="sc">'D'</span><span class="p">));</span>
+    <span class="n">charMultimap2</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">MYMAP</span><span class="o">::</span><span class="n">value_type</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="sc">'E'</span><span class="p">));</span>
+    <span class="n">charMultimap2</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">MYMAP</span><span class="o">::</span><span class="n">value_type</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="sc">'F'</span><span class="p">));</span>
+    <span class="n">charMultimap2</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">MYMAP</span><span class="o">::</span><span class="n">value_type</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="sc">'E'</span><span class="p">));</span>
+    <span class="n">charMultimap2</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">MYMAP</span><span class="o">::</span><span class="n">value_type</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="sc">'G'</span><span class="p">));</span>
+    <span class="c1">// Display the contents of the second multimap.
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Contents of second multimap: "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">iter</span> <span class="o">=</span> <span class="n">charMultimap2</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span><span class="n">iter</span> <span class="o">!=</span> <span class="n">charMultimap2</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="o">*</span><span class="n">iter</span><span class="p">).</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">" --&gt; "</span><span class="p">;</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="o">*</span><span class="n">iter</span><span class="p">).</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="c1">// Compare the multimaps.
+</span>    <span class="k">if</span> <span class="p">(</span><span class="n">charMultimap</span> <span class="o">==</span> <span class="n">charMultimap2</span><span class="p">)</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"multimap1 == multimap2"</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">charMultimap</span> <span class="o">&lt;</span> <span class="n">charMultimap2</span><span class="p">)</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"multimap1 &lt; multimap2"</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">charMultimap</span> <span class="o">&gt;</span> <span class="n">charMultimap2</span><span class="p">)</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"multimap1 &gt; multimap2"</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="c1">//8、stack
+</span>    <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">list</span> <span class="o">&gt;</span> <span class="n">intStack</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Values pushed onto stack:"</span><span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">x</span><span class="o">&lt;</span><span class="mi">11</span><span class="p">;</span> <span class="o">++</span><span class="n">x</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">intStack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="mi">100</span><span class="p">);</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="o">*</span><span class="mi">100</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Values popped from stack:"</span><span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">intStack</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">x</span><span class="o">&lt;</span><span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">x</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">intStack</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+      <span class="n">intStack</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="c1">//9、queue
+</span>    <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">list</span> <span class="o">&gt;</span> <span class="n">intQueue</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Values pushed onto queue:"</span><span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">x</span><span class="o">&lt;</span><span class="mi">11</span><span class="p">;</span> <span class="o">++</span><span class="n">x</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">intQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="mi">100</span><span class="p">);</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="o">*</span><span class="mi">100</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Values removed from queue:"</span><span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">intQueue</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">x</span><span class="o">&lt;</span><span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">x</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">intQueue</span><span class="p">.</span><span class="n">front</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+      <span class="n">intQueue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="c1">//10、priority_queue
+</span>    <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">greater</span> <span class="o">&gt;</span> <span class="n">intPQueue</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+    <span class="n">intPQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">400</span><span class="p">);</span>
+    <span class="n">intPQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+    <span class="n">intPQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+    <span class="n">intPQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">300</span><span class="p">);</span>
+    <span class="n">intPQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Values removed from priority queue:"</span><span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">intPQueue</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">x</span><span class="o">&lt;</span><span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">x</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">intPQueue</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+      <span class="n">intPQueue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span></code></pre></figure>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/09/tcpip1/" title="link to TCP/IP协议简述（上）（转）">TCP/IP协议简述（上）（转）</a></h2>
+       <p class="excerpt">      首先，我们需要知道TCP在网络OSI的七层模型中的第四层——Transport层，IP在第三层——Network层，ARP在第二层——Data Link层，在第二层上的数据，我们叫Frame，在第三层上的数据叫Packet，第四层的数据叫Segment。         我们程序的数据首先会打到TCP的Segment中，然后TCP的Segment会打到IP的Packet中，然后再打到以太网Ethernet的Frame中，传到对端后，各个层解析自己的协议，然后把数据交给更高层的协...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-09-02 20:30:38 +0800" class="post-list__meta--date date">2015-09-02</time> &#8226; <span class="post-list__meta--tags tags">tcp</span><a class="btn-border-small" href=/2015/09/tcpip1/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/08/auto_ptre/" title="link to auto_ptr、shared_ptr、weak_ptr、scoped_ptr用法小结">auto_ptr、shared_ptr、weak_ptr、scoped_ptr用法小结</a></h2>
+       <p class="excerpt">auto_ptr       auto_ptr是现在标准库里面一个轻量级的智能指针的实现，存在于头文件memory中，之所以说它是轻量级，是因为它只有一个成员变量（拥有对象的指针），相关的调用开销也非常小。下面的代码来自于VC++ 8.0里面的源码：          里面有个auto_ptr_ref的数据结构，我们可以把它忽略，这个只是内部使用的代理结构，用于一些隐式的const变化，我们客户端代码通常不会直接使用到它。我们可以看到除了构造函数，拷贝构造函数，赋值函数，析构函数和两个重载...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-08-17 18:30:40 +0800" class="post-list__meta--date date">2015-08-17</time> &#8226; <span class="post-list__meta--tags tags">智能指针</span><a class="btn-border-small" href=/2015/08/auto_ptre/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "/2015/08/stl/";
+        this.page.identifier = "/2015/08/stl/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-07-03 生成</span>
+        <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Rector模式与Proactor模式</title>
+  <meta name="description" content="概述:">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Rector模式与Proactor模式">
+  <meta name="twitter:description" content="概述:">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Rector模式与Proactor模式">
+  <meta property="og:description" content="概述:">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="/2015/09/rector-e5-8f-8d-e5-ba-94-e6-a8-a1-e5-bc-8f/">
+  <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Mageric 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Mageric logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Mageric" class="blog-button">Mageric</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">42 世界尽头</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Mageric的个人小站.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="http://mageric-one.com" target="_blank" title="My old site">OldSite</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/magericyoung" title="@magericyoung 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Mageric0412" title="@Mageric0412 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- instagram -->
+  <li class="navigation__item">
+   <a href="https://www.instagram.com/mageric0412" title="@mageric0412 的Instagram" target="_blank">
+     <i class='social fa fa-instagram'></i>
+     <span class="label">instagram</span>
+   </a>
+  </li>
+  
+
+<!--
+  
+  <!-- website -->
+  <!--
+  <li class="navigation__item">
+    <a href="https://mageric-one.com" rel="author" title="mageric的小站" target="_blank">
+        <i class='social fa fa-rss'> </i>
+      <span class="label">website</span>
+    </a>
+  </li>
+  
+-->
+
+
+
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:mageric0412@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-09-17 19:14:50 +0800" itemprop="datePublished" class="post-meta__date date">2015-09-17</time> &#8226; <span class="post-meta__tags tags">多线程网络</span>
+    </div>
+    <h1 class="post-title">Rector模式与Proactor模式</h1>
+  </header>
+
+  <section class="post">
+    <p><strong>概述:</strong></p>
+
+<p>系统I/O 可分为阻塞型， 非阻塞同步型以及非阻塞异步型。</p>
+
+<p>阻塞型I/O意味着控制权只到调用操作结束了才会回到调用者手里。</p>
+
+<p>非阻塞同步是会立即返回控制权给调用者的。调用者不需要等等，它从调用的函数获取两种结果：要么此次调用成功进行了;要么系统返回错误标识告诉调用者当前资源不可用，你再等等或者再试度看吧。比如read()操作， 如果当前socket无数据可读，则立即返回EWOULBLOCK/EAGAIN，告诉调用read()者”数据还没准备好，你稍后再试”。</p>
+
+<p>非阻塞异步调用中，稍有不同。调用函数在立即返回时，还告诉调用者，这次请求已经开始了。系统会使用另外的资源或者线程来完成这次调用操作，并在完成的时候知会调用者（比如通过回调函数）。POSIX的aio_read()来说，调用它之后，函数立即返回，操作系统在后台同时开始读操作。即是将工作交给了内核去完成这个操作。</p>
+
+<p>在以上三种IO形式中，非阻塞异步是性能最高、伸缩性最好的。</p>
+
+<p><strong>两种IO多路复用方案:Reactor and Proactor</strong></p>
+
+<p>一般情况下，I/O 复用机制需要事件分享器(event demultiplexor)。 事件分享器的作用，即将那些读写事件源分发给各读写事件的处理者，就像送快递的在楼下喊: 谁的什么东西送了， 快来拿吧。开发人员在开始的时候需要在分享器那里注册感兴趣的事件，并提供相应的处理者(event handlers)，或者是回调函数; 事件分享器在适当的时候会将请求的事件分发给这些handler或者回调函数。</p>
+
+<p><strong>Reactor模式</strong></p>
+
+<p>Java NIO非堵塞技术实际是采取反应器模式，或者说是观察者(observer)模式为我们监察I/O端口，如果有内容进来，会自动通知我们，这样，我们就不必开启多个线程死等，从外界看，实现了流畅的I/O读写，不堵塞了。</p>
+
+<p>NIO 有一个主要的类Selector，这个类似一个观察者，只要我们把需要探知的socketchannel告诉Selector，我们接着做别的事情，当有事件发生时，他会通知我们，传回一组SelectionKey，我们读取这些Key，就会获得我们刚刚注册过的socketchannel，然后，我们从这个Channel中读取数据，接着我们可以处理这些数据。</p>
+
+<p>反应器模式与观察者模式在某些方面极为相似：当一个主体发生改变时，所有依属体都得到通知。不过，观察者模式与单个事件源关联，而反应器模式则与多个事件源关联 。
+<img src="http://my.csdn.net/uploads/201207/22/1342924397_5725.png" alt=" " /></p>
+
+<p>反应者实现：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>package com.linxcool.reactor;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.util.Iterator;
+import java.util.Set;
+
+/**
+ * 反应器模式
+ * 用于解决多用户访问并发问题
+ * 
+ * 举个例子：餐厅服务问题
+ * 
+ * 传统线程池做法：来一个客人(请求)去一个服务员(线程)
+ * 反应器模式做法：当客人点菜的时候，服务员就可以去招呼其他客人了，等客人点好了菜，直接招呼一声“服务员”
+ * 
+ * @author linxcool
+ */
+public class Reactor implements Runnable{
+	public final Selector selector;
+	public final ServerSocketChannel serverSocketChannel;
+
+	public Reactor(int port) throws IOException{
+		selector=Selector.open();
+		serverSocketChannel=ServerSocketChannel.open();
+		InetSocketAddress inetSocketAddress=new InetSocketAddress(InetAddress.getLocalHost(),port);
+		serverSocketChannel.socket().bind(inetSocketAddress);
+		serverSocketChannel.configureBlocking(false);
+		
+		//向selector注册该channel  
+		SelectionKey selectionKey=serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+
+		//利用selectionKey的attache功能绑定Acceptor 如果有事情，触发Acceptor 
+		selectionKey.attach(new Acceptor(this));
+	}
+
+	@Override
+	public void run() {
+		try {
+			while(!Thread.interrupted()){
+				selector.select();
+				Set selectionKeys= selector.selectedKeys();
+				Iterator it=selectionKeys.iterator();
+				//Selector如果发现channel有OP_ACCEPT或READ事件发生，下列遍历就会进行。
+				while(it.hasNext()){
+					//来一个事件 第一次触发一个accepter线程  
+					//以后触发SocketReadHandler
+					SelectionKey selectionKey=it.next();
+					dispatch(selectionKey);
+					selectionKeys.clear();
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 运行Acceptor或SocketReadHandler
+	 * @param key
+	 */
+	void dispatch(SelectionKey key) {
+		Runnable r = (Runnable)(key.attachment());  
+		if (r != null){  
+			r.run();
+		}  
+	}  
+
+}
+</code></pre>
+</div>
+
+<p>接受者实现：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>package com.linxcool.reactor;
+
+import java.io.IOException;
+import java.nio.channels.SocketChannel;
+
+public class Acceptor implements Runnable{
+	private Reactor reactor;
+	public Acceptor(Reactor reactor){
+		this.reactor=reactor;
+	}
+	@Override
+	public void run() {
+		try {
+			SocketChannel socketChannel=reactor.serverSocketChannel.accept();
+			if(socketChannel!=null)//调用Handler来处理channel
+				new SocketReadHandler(reactor.selector, socketChannel);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}
+</code></pre>
+</div>
+
+<p>Handler实现：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>package com.linxcool.reactor;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
+
+public class SocketReadHandler implements Runnable{
+	private SocketChannel socketChannel;
+	public SocketReadHandler(Selector selector,SocketChannel socketChannel) throws IOException{
+		this.socketChannel=socketChannel;
+		socketChannel.configureBlocking(false);
+		
+		SelectionKey selectionKey=socketChannel.register(selector, 0);
+		
+		//将SelectionKey绑定为本Handler 下一步有事件触发时，将调用本类的run方法。  
+		//参看dispatch(SelectionKey key)  
+		selectionKey.attach(this);
+		
+		//同时将SelectionKey标记为可读，以便读取。  
+		selectionKey.interestOps(SelectionKey.OP_READ);  
+		selector.wakeup();
+	}
+	
+	/**
+	 * 处理读取数据
+	 */
+	@Override
+	public void run() {
+		ByteBuffer inputBuffer=ByteBuffer.allocate(1024);
+		inputBuffer.clear();
+		try {
+			socketChannel.read(inputBuffer);
+			//激活线程池 处理这些request
+			//requestHandle(new Request(socket,btt)); 
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}
+</code></pre>
+</div>
+
+<p><strong>Proactor模式</strong></p>
+
+<p>在Proactor模式中，事件处理者(或者代由事件分离者发起)直接发起一个异步读写操作(相当于请求)，而实际的工作是由操作系统来完成的。发起时，需要提供的参数包括用于存放读到数据的缓存区，读的数据大小，或者用于存放外发数据的缓存区，以及这个请求完后的回调函数等信息。事件分离者得知了这个请求，它默默等待这个请求的完成，然后转发完成事件给相应的事件处理者或者回调。这种异步模式的典型实现是基于操作系统底层异步API的，所以我们可称之为“系统级别”的或者“真正意义上”的异步，因为具体的读写是由操作系统代劳的。</p>
+
+<p><img src="http://image34.360doc.com/DownloadImg/2011/08/1810/16007439_10.jpg" alt="" /></p>
+
+<p>示例代码：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>class AsyIOProcessor
+{
+public:
+    void do_read()
+    {
+        //send read operation to OS
+        // read io finished.and dispatch notification
+        _proactor-&gt;dispatch_read();
+    } 
+
+private:
+    Proactor *_proactor;
+}; 
+
+class Proactor
+{
+public:
+    void dispatch_read()
+    {
+        _handlerMgr-&gt;onRead();
+    } 
+
+private:
+    HandlerManager *_handlerMgr;
+}; 
+
+class HandlerManager
+{
+public:
+    typedef std::list&lt;Handler*&gt; HandlerList; 
+
+public:
+    void onRead()
+    {
+        // notify all the handlers.
+        std::for_each( _handlers.begin(), _handlers.end(), onRead );
+    } 
+
+private:
+    HandlerList *_handlers;
+}; 
+
+class Handler
+{
+public:
+    virtual void onRead() = 0;
+}; 
+
+// application level handler.
+class MyHandler : public Handler
+{
+public:
+    void onRead() 
+    {
+        // 
+    }
+};
+</code></pre>
+</div>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/11/leetcode-301/" title="link to leetcode 301">leetcode 301</a></h2>
+       <p class="excerpt">Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.  Note: The input string may contain letters other than the parentheses ( and ).  Examples:  “()())()” -&gt; [”()()()”, “(())()”]...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-11-09 16:57:57 +0800" class="post-list__meta--date date">2015-11-09</time> &#8226; <span class="post-list__meta--tags tags">leetcode</span><a class="btn-border-small" href=/2015/11/leetcode-301/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2015/09/tcpip2/" title="link to TCP/IP协议简述（下）（转）">TCP/IP协议简述（下）（转）</a></h2>
+       <p class="excerpt">TCP的RTT算法      从前面的TCP重传机制我们知道Timeout的设置对于重传非常重要。  设长了，重发就慢，丢了老半天才重发，没有效率，性能差；  设短了，会导致可能并没有丢就重发。于是重发的就快，会增加网络拥塞，导致更多的超时，更多的超时导致更多的重发。      而且，这个超时时间在不同的网络的情况下，根本没有办法设置一个死的值。只能动态地设置。为了动态地设置，TCP引入了RTT——Round Trip Time，也就是一个数据包从发出去到回来的时间。这样发送端就大约知道需...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2015-09-02 22:06:37 +0800" class="post-list__meta--date date">2015-09-02</time> &#8226; <span class="post-list__meta--tags tags">tcp</span><a class="btn-border-small" href=/2015/09/tcpip2/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "/2015/09/rector-e5-8f-8d-e5-ba-94-e6-a8-a1-e5-bc-8f/";
+        this.page.identifier = "/2015/09/rector-e5-8f-8d-e5-ba-94-e6-a8-a1-e5-bc-8f/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-07-03 生成</span>
+        <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

@@ -156,6 +156,13 @@
   <ol class="post-list">
     
     <li>
+      <h2 class="post-list__post-title post-title"><a href="/2016/07/netty/" title="访问 Netty4.0框架使用简介（一）">Netty4.0框架使用简介（一）</a></h2>
+      <p class="excerpt">Netty前言      在JAVA并发编程领域中，主要存在以下三种不同的IO类型：  BIO（同步阻塞IO）:即在C/S模式中，服务器与客户端的每次连接都需要单独启动一个线程进行处理，势必阻塞其他的IO请求。适合小型固定的架构  NIO1.0（同步非阻塞IO）:简单来说一个线程处理一个请求，并使用多路复用器轮询连接请求。用户进程需要询问IO是否就绪。适合连接短且频繁的架构  AIO（又名NIO2.0，异步非阻塞IO）:用户进程只需要发起一个IO操作，等待服务器回复IO操作完成的通知，实际...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2016-07-17 00:00:00 +0800" class="post-list__meta--date date">2016-07-17</time> &#8226; <span class="post-list__meta--tags tags">Netty</span><a class="btn-border-small" href=/2016/07/netty/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
       <h2 class="post-list__post-title post-title"><a href="/2016/06/nio/" title="访问 NIO技术小结">NIO技术小结</a></h2>
       <p class="excerpt">NIO是 JAVA New IO 的简称，在 jdk1.4 里提供的新api。官方标榜的特性如下：  为所有的原始类型提供 (Buffer) 缓存支持。  字符集编码解码解决方案。  Channel ：一个新的原始 I/O 抽象。  支持锁和内存映射文件的文件访问接口。  提供多路 (non-bloking) 非阻塞式的高伸缩性网络 I/O 。      NIO与传统的IO一个最大的区别就是：IO是面向流的，NIO是面向缓冲区的，因此，IO流操作势必要求完成读取完流中的数据后才能进行接下来...&hellip;</p>
       <div class="post-list__meta"><time datetime="2016-06-06 19:25:52 +0800" class="post-list__meta--date date">2016-06-06</time> &#8226; <span class="post-list__meta--tags tags">JAVA IO</span><a class="btn-border-small" href=/2016/06/nio/>继续阅读</a></div>
@@ -185,7 +192,7 @@
     
     <li>
       <h2 class="post-list__post-title post-title"><a href="/2015/09/rector/" title="访问 Rector模式与Proactor模式">Rector模式与Proactor模式</a></h2>
-      <p class="excerpt">概述      系统I/O可分为阻塞型，非阻塞同步型以及非阻塞异步型。        阻塞型I/O意味着控制权只到调用操作结束了才会回到调用者手里。         非阻塞同步是会立即返回控制权给调用者的。调用者不需要等等，它从调用的函数获取两种结果：要么此次调用成功进行了;要么系统返回错误标识告诉调用者当前资源不可用，你再等等或者再试度看吧。比如read()操作， 如果当前socket无数据可读，则立即返回EWOULBLOCK/EAGAIN，告诉调用read()者”数据还没准备好，你稍后...&hellip;</p>
+      <p class="excerpt">概述      系统I/O可分为阻塞型，非阻塞同步型以及非阻塞异步型。        阻塞型I/O意味着控制权只到调用操作结束了才会回到调用者手里。         非阻塞同步是会立即返回控制权给调用者的。调用者不需要等待，它从调用的函数获取两种结果：要么此次调用成功进行;要么系统返回错误标识告诉调用者当前资源不可用，你再等等或者再试度看吧。比如read()操作， 如果当前socket无数据可读，则立即返回EWOULBLOCK/EAGAIN，告诉调用read()者”数据还没准备好，你稍后再...&hellip;</p>
       <div class="post-list__meta"><time datetime="2015-09-17 19:14:50 +0800" class="post-list__meta--date date">2015-09-17</time> &#8226; <span class="post-list__meta--tags tags">多线程Java</span><a class="btn-border-small" href=/2015/09/rector/>继续阅读</a></div>
       <hr class="post-list__divider" />
     </li>
@@ -218,13 +225,6 @@
       <hr class="post-list__divider" />
     </li>
     
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/08/complier/" title="访问 C程序编译过程回顾">C程序编译过程回顾</a></h2>
-      <p class="excerpt">       编译程序读取源程序（字符流），对之进行词法和语法的分析，将高级语言指令转换为功能等效的汇编代码，再由汇编程序转换为机器语言(目标文件)，并且按照操作系统对可执行文件格式的要求链接生成可执行程序。   C源程序头文件－－&gt;预编译处理(cpp)－－&gt;编译程序本身－－&gt;优化程序－－&gt;汇编程序－－&gt;链接程序--&gt;可执行文件编译预处理读取c源程序，对其中的伪指令（以#开头的指令）和特殊符号进行处理伪指令主要包括以下四个方面：  宏定义指令，如#def...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-08-06 19:58:50 +0800" class="post-list__meta--date date">2015-08-06</time> &#8226; <span class="post-list__meta--tags tags">C++</span><a class="btn-border-small" href=/2015/08/complier/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
   </ol>
 
   <hr class="post-list__divider " />
@@ -243,7 +243,7 @@
             <section class="footer">
     <footer>
     	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
-        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-07-03 生成</span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-07-19 生成</span>
         <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
     </footer>
 </section>

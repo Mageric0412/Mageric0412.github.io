@@ -1,0 +1,309 @@
+---
+author: mageric
+comments: true
+date: 2016-07-17
+layout: post
+title: Netty4.0框架使用简介（一）
+categories:
+- Java
+tags:
+- Netty
+---
+### Netty前言      
+&#160; &#160; &#160;&#160;在JAVA并发编程领域中，主要存在以下三种不同的IO类型：     
+
+*  *BIO*（同步阻塞IO）:即在C/S模式中，服务器与客户端的每次连接都需要单独启动一个线程进行处理，势必阻塞其他的IO请求。适合小型固定的架构    
+*  *NIO1.0*（同步非阻塞IO）:简单来说一个线程处理一个请求，并使用多路复用器轮询连接请求。用户进程需要询问IO是否就绪。适合连接短且频繁的架构
+*  *AIO*（又名NIO2.0，异步非阻塞IO）:用户进程只需要发起一个IO操作，等待服务器回复IO操作完成的通知，实际的IO读写交由内核完成。适合连接数目多且连接较长的架构    
+
+&#160; &#160; &#160;&#160;Netty正是基于AIO(NIO2.0)的Reactor模式实现的一种异步非阻塞的并发框架。相比传统的Reactor模式，Netty将Reactor分为两部分，mainReator(Boss)负责监听server socket，accept新连接并建立socket分派给subReactor(NioWorker)。subReactor负责多路分离这些socket，而将读写数据、业务处理等功能扔给worker线程池完成。
+![](http://7xvk1t.com1.z0.glb.clouddn.com/image/netty/main.png)
+
+### Netty模块     
+&#160; &#160; &#160;&#160;Netty主要模块：
+*Channel*、*ChannelEvent*、*ChannelPipeline*、*ChannelHandler*。其中，Channel是Netty通讯的载体，而*ChannelHandler*负责其中的逻辑处理，ChannelPipeline可以理解为Channel的通道，所有的Handler都在通道中注册，并按顺序组织。在Netty 4.X以后取消了ChannelEvent，改进了GC开销。     
+&#160; &#160; &#160;&#160;我们可以将ChannelPipeline理解为一个地铁隧道，其中有载着各种乘客（msg）的地铁在行驶，到达不同的站点ChannelHandler时，由于站点的提示等处理，让乘客进行基于各自目的地的移动。在隧道中，地铁存在两个行驶方向，`ChannelInboundHandler`和`ChannelOutboundHandler`。     
+
+*  ChannelInboundHandler: 一般处理客户端发往服务器的报文，执行解码（Decoder）、读取客户端数据、业务处理等。按照InitChannel注册的顺序执行。
+*  ChannelOutboundHandler: 处理服务器发往客户端的报文，一般用来编码（Encoder）、发送报文到端等操作。按照注册的逆序执行。     
+
+&#160; &#160; &#160;&#160;在下面模拟Client与Server间通讯的例子中，Server注册两个OutBound和两个InBound，通过OutBound传给客户端消息，用InBound读取客户端：
+{% highlight java %}
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+
+public class HelloServer {
+  public void start(int port) throws Exception {
+    EventLoopGroup bossGroup = new NioEventLoopGroup();
+    EventLoopGroup workerGroup = new NioEventLoopGroup();
+    try {
+      ServerBootstrap b = new ServerBootstrap();
+      b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
+      .childHandler(new ChannelInitializer<SocketChannel>() {
+        @Override
+        public void initChannel(SocketChannel ch) throws Exception {
+          // 注册两个OutboundHandler，执行顺序为注册顺序的逆序，所以应该是OutboundHandler2 OutboundHandler1，且放在InBound之前，否则无法传递到OutBound。
+          ch.pipeline().addLast(new OutboundHandler1());
+          ch.pipeline().addLast(new OutboundHandler2());
+          // 注册两个InboundHandler，执行顺序为注册顺序，所以应该是InboundHandler1 InboundHandler2
+          ch.pipeline().addLast(new InboundHandler1());
+          ch.pipeline().addLast(new InboundHandler2());
+        }
+        }).option(ChannelOption.SO_BACKLOG, 128)
+        .childOption(ChannelOption.SO_KEEPALIVE, true);
+
+      ChannelFuture f = b.bind(port).sync();
+      f.channel().closeFuture().sync();
+		} finally {
+			workerGroup.shutdownGracefully();
+			bossGroup.shutdownGracefully();
+		}
+	}
+	public static void main(String[] args) throws Exception {
+		HelloServer server = new HelloServer();
+		server.start(8000);
+	}
+}
+{% endhighlight %}
+&#160; &#160; &#160;&#160;其中`f.channel().closeFuture().sync()`一句，意义是在线程同步阻塞等待服务器绑定到指定端口之后，给channel增加一个pipeline关闭的监听器并同步阻塞，知道channel关闭，线程才往下执行，结束进程。
+
+### Netty自定义通讯协议      
+&#160; &#160; &#160;&#160;接下来构建一个Server同时支持Person和String通讯协议。此时来自客户端的请求会依次传递两个通讯接口进行解析，如果是则解析，不是则传递给其他接口解析。Server端存在四个类：Server、PersonDecoder、StringDecoder、BusinessHandler。
+{% highlight java %}
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+
+// 测试coder 和 handler 的混合使用
+public class Server {
+	public void start(int port) throws Exception {
+		EventLoopGroup bossGroup = new NioEventLoopGroup();
+		EventLoopGroup workerGroup = new NioEventLoopGroup();
+		try {
+			ServerBootstrap b = new ServerBootstrap();
+			b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
+					.childHandler(new ChannelInitializer<SocketChannel>() {
+						@Override
+						public void initChannel(SocketChannel ch) throws Exception {
+					    ch.pipeline().addLast(new PersonDecoder());
+						  ch.pipeline().addLast(new StringDecoder());
+						  ch.pipeline().addLast(new BusinessHandler());
+						}
+					}).option(ChannelOption.SO_BACKLOG, 128).childOption(ChannelOption.SO_KEEPALIVE, true);
+
+			ChannelFuture f = b.bind(port).sync();
+
+			f.channel().closeFuture().sync();
+		} finally {
+			workerGroup.shutdownGracefully();
+			bossGroup.shutdownGracefully();
+		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		Server server = new Server();
+		server.start(8000);
+	}
+}
+
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
+import java.util.List;
+import com.guowl.utils.ByteBufToBytes;
+import com.guowl.utils.ByteObjConverter;
+
+public class PersonDecoder extends ByteToMessageDecoder {
+	@Override
+	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+		byte n = "n".getBytes()[0];
+		byte p = in.readByte();
+		in.resetReaderIndex();
+		if (n != p) {
+			// 把读取的起始位置重置
+			ByteBufToBytes reader = new ByteBufToBytes();
+			out.add(ByteObjConverter.byteToObject(reader.read(in)));
+		} else {
+			// 执行其它的decode
+			ctx.fireChannelRead(in);
+		}
+	}
+}
+
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
+import java.util.List;
+import com.guowl.utils.ByteBufToBytes;
+
+public class StringDecoder extends ByteToMessageDecoder {
+	@Override
+	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+		// 判断是否是String协议
+		byte n = "n".getBytes()[0];
+		byte p = in.readByte();
+		// 把读取的起始位置重置
+		in.resetReaderIndex();
+		if (n == p) {
+			ByteBufToBytes reader = new ByteBufToBytes();
+			String msg = new String(reader.read(in));
+			Person person = buildPerson(msg);
+			out.add(person);
+			//in.release();
+		} else {
+			ctx.fireChannelRead(in);
+		}
+	}
+
+	private Person buildPerson(String msg) {
+		Person person = new Person();
+		String[] msgArray = msg.split(";|:");
+		person.setName(msgArray[1]);
+		person.setAge(Integer.parseInt(msgArray[3]));
+		person.setSex(msgArray[5]);
+		return person;
+	}
+}
+
+import io.netty.channel.ChannelHandlerContext;  
+import io.netty.channel.ChannelInboundHandlerAdapter;  
+import org.slf4j.Logger;  
+import org.slf4j.LoggerFactory;  
+
+public class BusinessHandler extends ChannelInboundHandlerAdapter {  
+    private Logger  logger  = LoggerFactory.getLogger(BusinessHandler.class);  
+    @Override  
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {  
+        Person person = (Person) msg;  
+        logger.info("BusinessHandler read msg from client :" + person);  
+    }  
+    @Override  
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {  
+        ctx.flush();  
+    }  
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {  
+        ctx.close();  
+    }  
+}
+{% endhighlight %}
+&#160; &#160; &#160;&#160;客户端发送类：Client、ClientInitHandler、PersonEncoder、StringEncoder。
+{% highlight java %}
+import io.netty.bootstrap.Bootstrap;  
+import io.netty.channel.ChannelFuture;  
+import io.netty.channel.ChannelInitializer;  
+import io.netty.channel.ChannelOption;  
+import io.netty.channel.EventLoopGroup;  
+import io.netty.channel.nio.NioEventLoopGroup;  
+import io.netty.channel.socket.SocketChannel;  
+import io.netty.channel.socket.nio.NioSocketChannel;  
+
+public class Client {  
+    public void connect(String host, int port) throws Exception {  
+        EventLoopGroup workerGroup = new NioEventLoopGroup();  
+        try {  
+            Bootstrap b = new Bootstrap();   
+            b.group(workerGroup);   
+            b.channel(NioSocketChannel.class);   
+            b.option(ChannelOption.SO_KEEPALIVE, true);
+            //发送Person格式的协议  
+            b.handler(new ChannelInitializer<SocketChannel>() {  
+                @Override  
+                public void initChannel(SocketChannel ch) throws Exception {  
+                    ch.pipeline().addLast(new PersonEncoder());  
+                    Person person = new Person();  
+                    person.setName("guowl");  
+                    person.setSex("man");  
+                    person.setAge(30);  
+                    ch.pipeline().addLast(new ClientInitHandler(person));  
+                }  
+            });
+
+            //发送String格式的协议
+            /* b.handler(new ChannelInitializer<SocketChannel>() {  
+                @Override  
+                public void initChannel(SocketChannel ch) throws Exception {  
+                    ch.pipeline().addLast(new StringEncoder());  
+                    Person person = new Person();  
+                    person.setName("guoxy");  
+                    person.setSex("girl");  
+                    person.setAge(4);  
+                    ch.pipeline().addLast(new ClientInitHandler(person));  
+                }  
+            }); */
+
+            ChannelFuture f = b.connect(host, port).sync();  
+            f.channel().closeFuture().sync();  
+        } finally {  
+            workerGroup.shutdownGracefully();  
+        }  
+
+    }  
+
+    public static void main(String[] args) throws Exception {  
+        Client client = new Client();  
+        client.connect("127.0.0.1", 8000);  
+    }  
+}  
+
+
+import io.netty.channel.ChannelHandlerContext;  
+import io.netty.channel.ChannelInboundHandlerAdapter;  
+import org.slf4j.Logger;  
+import org.slf4j.LoggerFactory;  
+
+public class ClientInitHandler extends ChannelInboundHandlerAdapter {  
+    private static Logger   logger  = LoggerFactory.getLogger(ClientInitHandler.class);  
+    private Person person;  
+    public ClientInitHandler(Person person){  
+        this.person = person;  
+    }  
+    @Override  
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {  
+        logger.info("ClientInitHandler.channelActive");  
+        ctx.write(person);  
+        ctx.flush();  
+    }  
+}
+
+
+import com.guowl.utils.ByteObjConverter;  
+import io.netty.buffer.ByteBuf;  
+import io.netty.channel.ChannelHandlerContext;  
+import io.netty.handler.codec.MessageToByteEncoder;  
+
+public class PersonEncoder extends MessageToByteEncoder<Person>  {  
+    @Override  
+    protected void encode(ChannelHandlerContext ctx, Person msg, ByteBuf out) throws Exception {  
+        out.writeBytes(ByteObjConverter.objectToByte(msg));  
+    }  
+}  
+
+import io.netty.buffer.ByteBuf;  
+import io.netty.channel.ChannelHandlerContext;  
+import io.netty.handler.codec.MessageToByteEncoder;  
+import com.guowl.testobjcoder.Person;  
+
+public class StringEncoder extends MessageToByteEncoder<Person> {  
+    @Override  
+    protected void encode(ChannelHandlerContext ctx, Person msg, ByteBuf out) throws Exception {  
+        // 转成字符串：name:xx;age:xx;sex:xx;  
+        StringBuffer sb = new StringBuffer();  
+        sb.append("name:").append(msg.getName()).append(";");  
+        sb.append("age:").append(msg.getAge()).append(";");  
+        sb.append("sex:").append(msg.getSex()).append(";");  
+        out.writeBytes(sb.toString().getBytes());  
+    }  
+}  
+{% endhighlight %}
+未完待续~

@@ -156,6 +156,13 @@
   <ol class="post-list">
     
     <li>
+      <h2 class="post-list__post-title post-title"><a href="/2015/03/glut-he/" title="访问 glut.h函数无法正常连接问题">glut.h函数无法正常连接问题</a></h2>
+      <p class="excerpt">看了一本书《OpenGL三维图形系统开发与应用技术》，但是，其中涉及到glut.h文件的函数无法正常连接，典型的错误如下：------ 已启动生成: 项目: gears, 配置: Debug Win32 ------1&gt;正在链接...1&gt;GEARS.obj : error LNK2019: 无法解析的外部符号 ___glutInitWithExit@12，该符号在函数 _glutInit_ATEXIT_HACK@8 中被引用1&gt;GEARS.obj : error LNK2...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2015-03-15 22:27:29 +0800" class="post-list__meta--date date">2015-03-15</time> &#8226; <span class="post-list__meta--tags tags">opengl</span><a class="btn-border-small" href=/2015/03/glut-he/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
       <h2 class="post-list__post-title post-title"><a href="/2015/03/max-points-on-a-line/" title="访问 Max Points on a Line">Max Points on a Line</a></h2>
       <p class="excerpt">给定一些二维平面上的点，求出其中共线点最多时的点个数：  解法：采用暴力枚举，时间复杂度有O（n^2），循环计算两点之间的斜率，构造一个哈希表来存储循环检查的情况，其中key为斜率，value就是共线点的个数。特殊处理：当出现斜率无限大，也就是两点的x轴相同而y轴不同时，记斜率slope为std:numeric_limits&lt;double&gt;::infinity，即无限大。 代码：int maxPoints(vector&lt;Point&gt; &amp;points) {  ...&hellip;</p>
       <div class="post-list__meta"><time datetime="2015-03-12 21:52:12 +0800" class="post-list__meta--date date">2015-03-12</time> &#8226; <span class="post-list__meta--tags tags">算法</span><a class="btn-border-small" href=/2015/03/max-points-on-a-line/>继续阅读</a></div>
@@ -218,13 +225,6 @@
       <hr class="post-list__divider" />
     </li>
     
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2015/03/uestcphotos/" title="访问 去年秋天拍的银杏">去年秋天拍的银杏</a></h2>
-      <p class="excerpt">&hellip;</p>
-      <div class="post-list__meta"><time datetime="2015-03-04 18:26:31 +0800" class="post-list__meta--date date">2015-03-04</time> &#8226; <span class="post-list__meta--tags tags">摄影</span><a class="btn-border-small" href=/2015/03/uestcphotos/>继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-    
   </ol>
 
   <hr class="post-list__divider " />
@@ -245,7 +245,7 @@
             <section class="footer">
     <footer>
     	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
-        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-07-03 生成</span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-07-19 生成</span>
         <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
     </footer>
 </section>

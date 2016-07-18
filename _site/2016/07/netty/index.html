@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Netty4.0框架使用简介（一）</title>
+  <meta name="description" content="Netty前言      在JAVA并发编程领域中，主要存在以下三种不同的IO类型：">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Netty4.0框架使用简介（一）">
+  <meta name="twitter:description" content="Netty前言      在JAVA并发编程领域中，主要存在以下三种不同的IO类型：">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Netty4.0框架使用简介（一）">
+  <meta property="og:description" content="Netty前言      在JAVA并发编程领域中，主要存在以下三种不同的IO类型：">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="/2016/07/netty/">
+  <link rel="alternate" type="application/rss+xml" title="Mageric" href="/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Mageric 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Mageric logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Mageric" class="blog-button">Mageric</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">42 世界尽头</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Mageric的个人小站.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="http://mageric-one.com" target="_blank" title="My old site">OldSite</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/magericyoung" title="@magericyoung 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Mageric0412" title="@Mageric0412 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- instagram -->
+  <li class="navigation__item">
+   <a href="https://www.instagram.com/mageric0412" title="@mageric0412 的Instagram" target="_blank">
+     <i class='social fa fa-instagram'></i>
+     <span class="label">instagram</span>
+   </a>
+  </li>
+  
+
+<!--
+  
+  <!-- website -->
+  <!--
+  <li class="navigation__item">
+    <a href="https://mageric-one.com" rel="author" title="mageric的小站" target="_blank">
+        <i class='social fa fa-rss'> </i>
+      <span class="label">website</span>
+    </a>
+  </li>
+  
+-->
+
+
+
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:mageric0412@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-07-17 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2016-07-17</time> &#8226; <span class="post-meta__tags tags">Netty</span>
+    </div>
+    <h1 class="post-title">Netty4.0框架使用简介（一）</h1>
+  </header>
+
+  <section class="post">
+    <h3 id="netty">Netty前言</h3>
+<p>      在JAVA并发编程领域中，主要存在以下三种不同的IO类型：</p>
+
+<ul>
+  <li><em>BIO</em>（同步阻塞IO）:即在C/S模式中，服务器与客户端的每次连接都需要单独启动一个线程进行处理，势必阻塞其他的IO请求。适合小型固定的架构</li>
+  <li><em>NIO1.0</em>（同步非阻塞IO）:简单来说一个线程处理一个请求，并使用多路复用器轮询连接请求。用户进程需要询问IO是否就绪。适合连接短且频繁的架构</li>
+  <li><em>AIO</em>（又名NIO2.0，异步非阻塞IO）:用户进程只需要发起一个IO操作，等待服务器回复IO操作完成的通知，实际的IO读写交由内核完成。适合连接数目多且连接较长的架构</li>
+</ul>
+
+<p>      Netty正是基于AIO(NIO2.0)的Reactor模式实现的一种异步非阻塞的并发框架。相比传统的Reactor模式，Netty将Reactor分为两部分，mainReator(Boss)负责监听server socket，accept新连接并建立socket分派给subReactor(NioWorker)。subReactor负责多路分离这些socket，而将读写数据、业务处理等功能扔给worker线程池完成。
+<img src="http://7xvk1t.com1.z0.glb.clouddn.com/image/netty/main.png" alt="" /></p>
+
+<h3 id="netty-1">Netty模块</h3>
+<p>      Netty主要模块：
+<em>Channel</em>、<em>ChannelEvent</em>、<em>ChannelPipeline</em>、<em>ChannelHandler</em>。其中，Channel是Netty通讯的载体，而<em>ChannelHandler</em>负责其中的逻辑处理，ChannelPipeline可以理解为Channel的通道，所有的Handler都在通道中注册，并按顺序组织。在Netty 4.X以后取消了ChannelEvent，改进了GC开销。   <br />
+      我们可以将ChannelPipeline理解为一个地铁隧道，其中有载着各种乘客（msg）的地铁在行驶，到达不同的站点ChannelHandler时，由于站点的提示等处理，让乘客进行基于各自目的地的移动。在隧道中，地铁存在两个行驶方向，<code class="highlighter-rouge">ChannelInboundHandler</code>和<code class="highlighter-rouge">ChannelOutboundHandler</code>。</p>
+
+<ul>
+  <li>ChannelInboundHandler: 一般处理客户端发往服务器的报文，执行解码（Decoder）、读取客户端数据、业务处理等。按照InitChannel注册的顺序执行。</li>
+  <li>ChannelOutboundHandler: 处理服务器发往客户端的报文，一般用来编码（Encoder）、发送报文到端等操作。按照注册的逆序执行。</li>
+</ul>
+
+<p>      在下面模拟Client与Server间通讯的例子中，Server注册两个OutBound和两个InBound，通过OutBound传给客户端消息，用InBound读取客户端：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">io.netty.bootstrap.ServerBootstrap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.channel.ChannelFuture</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.channel.ChannelInitializer</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.channel.ChannelOption</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.channel.EventLoopGroup</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.channel.nio.NioEventLoopGroup</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.channel.socket.SocketChannel</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.channel.socket.nio.NioServerSocketChannel</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloServer</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">start</span><span class="o">(</span><span class="kt">int</span> <span class="n">port</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="n">EventLoopGroup</span> <span class="n">bossGroup</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NioEventLoopGroup</span><span class="o">();</span>
+    <span class="n">EventLoopGroup</span> <span class="n">workerGroup</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NioEventLoopGroup</span><span class="o">();</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="n">ServerBootstrap</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ServerBootstrap</span><span class="o">();</span>
+      <span class="n">b</span><span class="o">.</span><span class="na">group</span><span class="o">(</span><span class="n">bossGroup</span><span class="o">,</span> <span class="n">workerGroup</span><span class="o">).</span><span class="na">channel</span><span class="o">(</span><span class="n">NioServerSocketChannel</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+      <span class="o">.</span><span class="na">childHandler</span><span class="o">(</span><span class="k">new</span> <span class="n">ChannelInitializer</span><span class="o">&lt;</span><span class="n">SocketChannel</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">initChannel</span><span class="o">(</span><span class="n">SocketChannel</span> <span class="n">ch</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+          <span class="c1">// 注册两个OutboundHandler，执行顺序为注册顺序的逆序，所以应该是OutboundHandler2 OutboundHandler1，且放在InBound之前，否则无法传递到OutBound。</span>
+          <span class="n">ch</span><span class="o">.</span><span class="na">pipeline</span><span class="o">().</span><span class="na">addLast</span><span class="o">(</span><span class="k">new</span> <span class="n">OutboundHandler1</span><span class="o">());</span>
+          <span class="n">ch</span><span class="o">.</span><span class="na">pipeline</span><span class="o">().</span><span class="na">addLast</span><span class="o">(</span><span class="k">new</span> <span class="n">OutboundHandler2</span><span class="o">());</span>
+          <span class="c1">// 注册两个InboundHandler，执行顺序为注册顺序，所以应该是InboundHandler1 InboundHandler2</span>
+          <span class="n">ch</span><span class="o">.</span><span class="na">pipeline</span><span class="o">().</span><span class="na">addLast</span><span class="o">(</span><span class="k">new</span> <span class="n">InboundHandler1</span><span class="o">());</span>
+          <span class="n">ch</span><span class="o">.</span><span class="na">pipeline</span><span class="o">().</span><span class="na">addLast</span><span class="o">(</span><span class="k">new</span> <span class="n">InboundHandler2</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="o">}).</span><span class="na">option</span><span class="o">(</span><span class="n">ChannelOption</span><span class="o">.</span><span class="na">SO_BACKLOG</span><span class="o">,</span> <span class="mi">128</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">childOption</span><span class="o">(</span><span class="n">ChannelOption</span><span class="o">.</span><span class="na">SO_KEEPALIVE</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+      <span class="n">ChannelFuture</span> <span class="n">f</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="na">bind</span><span class="o">(</span><span class="n">port</span><span class="o">).</span><span class="na">sync</span><span class="o">();</span>
+      <span class="n">f</span><span class="o">.</span><span class="na">channel</span><span class="o">().</span><span class="na">closeFuture</span><span class="o">().</span><span class="na">sync</span><span class="o">();</span>
+		<span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+			<span class="n">workerGroup</span><span class="o">.</span><span class="na">shutdownGracefully</span><span class="o">();</span>
+			<span class="n">bossGroup</span><span class="o">.</span><span class="na">shutdownGracefully</span><span class="o">();</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+		<span class="n">HelloServer</span> <span class="n">server</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HelloServer</span><span class="o">();</span>
+		<span class="n">server</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="mi">8000</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>      其中<code class="highlighter-rouge">f.channel().closeFuture().sync()</code>一句，意义是在线程同步阻塞等待服务器绑定到指定端口之后，给channel增加一个pipeline关闭的监听器并同步阻塞，知道channel关闭，线程才往下执行，结束进程。</p>
+
+<h3 id="netty-2">Netty自定义通讯协议</h3>
+<p>      接下来构建一个Server同时支持Person和String通讯协议。此时来自客户端的请求会依次传递两个通讯接口进行解析，如果是则解析，不是则传递给其他接口解析。Server端存在四个类：Server、PersonDecoder、StringDecoder、BusinessHandler。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">io.netty.bootstrap.ServerBootstrap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.channel.ChannelFuture</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.channel.ChannelInitializer</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.channel.ChannelOption</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.channel.EventLoopGroup</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.channel.nio.NioEventLoopGroup</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.channel.socket.SocketChannel</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.channel.socket.nio.NioServerSocketChannel</span><span class="o">;</span>
+
+<span class="c1">// 测试coder 和 handler 的混合使用</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Server</span> <span class="o">{</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">start</span><span class="o">(</span><span class="kt">int</span> <span class="n">port</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+		<span class="n">EventLoopGroup</span> <span class="n">bossGroup</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NioEventLoopGroup</span><span class="o">();</span>
+		<span class="n">EventLoopGroup</span> <span class="n">workerGroup</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NioEventLoopGroup</span><span class="o">();</span>
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="n">ServerBootstrap</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ServerBootstrap</span><span class="o">();</span>
+			<span class="n">b</span><span class="o">.</span><span class="na">group</span><span class="o">(</span><span class="n">bossGroup</span><span class="o">,</span> <span class="n">workerGroup</span><span class="o">).</span><span class="na">channel</span><span class="o">(</span><span class="n">NioServerSocketChannel</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+					<span class="o">.</span><span class="na">childHandler</span><span class="o">(</span><span class="k">new</span> <span class="n">ChannelInitializer</span><span class="o">&lt;</span><span class="n">SocketChannel</span><span class="o">&gt;()</span> <span class="o">{</span>
+						<span class="nd">@Override</span>
+						<span class="kd">public</span> <span class="kt">void</span> <span class="nf">initChannel</span><span class="o">(</span><span class="n">SocketChannel</span> <span class="n">ch</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+					    <span class="n">ch</span><span class="o">.</span><span class="na">pipeline</span><span class="o">().</span><span class="na">addLast</span><span class="o">(</span><span class="k">new</span> <span class="n">PersonDecoder</span><span class="o">());</span>
+						  <span class="n">ch</span><span class="o">.</span><span class="na">pipeline</span><span class="o">().</span><span class="na">addLast</span><span class="o">(</span><span class="k">new</span> <span class="n">StringDecoder</span><span class="o">());</span>
+						  <span class="n">ch</span><span class="o">.</span><span class="na">pipeline</span><span class="o">().</span><span class="na">addLast</span><span class="o">(</span><span class="k">new</span> <span class="n">BusinessHandler</span><span class="o">());</span>
+						<span class="o">}</span>
+					<span class="o">}).</span><span class="na">option</span><span class="o">(</span><span class="n">ChannelOption</span><span class="o">.</span><span class="na">SO_BACKLOG</span><span class="o">,</span> <span class="mi">128</span><span class="o">).</span><span class="na">childOption</span><span class="o">(</span><span class="n">ChannelOption</span><span class="o">.</span><span class="na">SO_KEEPALIVE</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+			<span class="n">ChannelFuture</span> <span class="n">f</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="na">bind</span><span class="o">(</span><span class="n">port</span><span class="o">).</span><span class="na">sync</span><span class="o">();</span>
+
+			<span class="n">f</span><span class="o">.</span><span class="na">channel</span><span class="o">().</span><span class="na">closeFuture</span><span class="o">().</span><span class="na">sync</span><span class="o">();</span>
+		<span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+			<span class="n">workerGroup</span><span class="o">.</span><span class="na">shutdownGracefully</span><span class="o">();</span>
+			<span class="n">bossGroup</span><span class="o">.</span><span class="na">shutdownGracefully</span><span class="o">();</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+		<span class="n">Server</span> <span class="n">server</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Server</span><span class="o">();</span>
+		<span class="n">server</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="mi">8000</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kn">import</span> <span class="nn">io.netty.buffer.ByteBuf</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.channel.ChannelHandlerContext</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.handler.codec.ByteToMessageDecoder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.guowl.utils.ByteBufToBytes</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.guowl.utils.ByteObjConverter</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PersonDecoder</span> <span class="kd">extends</span> <span class="n">ByteToMessageDecoder</span> <span class="o">{</span>
+	<span class="nd">@Override</span>
+	<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">decode</span><span class="o">(</span><span class="n">ChannelHandlerContext</span> <span class="n">ctx</span><span class="o">,</span> <span class="n">ByteBuf</span> <span class="n">in</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+		<span class="kt">byte</span> <span class="n">n</span> <span class="o">=</span> <span class="s">"n"</span><span class="o">.</span><span class="na">getBytes</span><span class="o">()[</span><span class="mi">0</span><span class="o">];</span>
+		<span class="kt">byte</span> <span class="n">p</span> <span class="o">=</span> <span class="n">in</span><span class="o">.</span><span class="na">readByte</span><span class="o">();</span>
+		<span class="n">in</span><span class="o">.</span><span class="na">resetReaderIndex</span><span class="o">();</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">!=</span> <span class="n">p</span><span class="o">)</span> <span class="o">{</span>
+			<span class="c1">// 把读取的起始位置重置</span>
+			<span class="n">ByteBufToBytes</span> <span class="n">reader</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ByteBufToBytes</span><span class="o">();</span>
+			<span class="n">out</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">ByteObjConverter</span><span class="o">.</span><span class="na">byteToObject</span><span class="o">(</span><span class="n">reader</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">in</span><span class="o">)));</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="c1">// 执行其它的decode</span>
+			<span class="n">ctx</span><span class="o">.</span><span class="na">fireChannelRead</span><span class="o">(</span><span class="n">in</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kn">import</span> <span class="nn">io.netty.buffer.ByteBuf</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.channel.ChannelHandlerContext</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.netty.handler.codec.ByteToMessageDecoder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.guowl.utils.ByteBufToBytes</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringDecoder</span> <span class="kd">extends</span> <span class="n">ByteToMessageDecoder</span> <span class="o">{</span>
+	<span class="nd">@Override</span>
+	<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">decode</span><span class="o">(</span><span class="n">ChannelHandlerContext</span> <span class="n">ctx</span><span class="o">,</span> <span class="n">ByteBuf</span> <span class="n">in</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+		<span class="c1">// 判断是否是String协议</span>
+		<span class="kt">byte</span> <span class="n">n</span> <span class="o">=</span> <span class="s">"n"</span><span class="o">.</span><span class="na">getBytes</span><span class="o">()[</span><span class="mi">0</span><span class="o">];</span>
+		<span class="kt">byte</span> <span class="n">p</span> <span class="o">=</span> <span class="n">in</span><span class="o">.</span><span class="na">readByte</span><span class="o">();</span>
+		<span class="c1">// 把读取的起始位置重置</span>
+		<span class="n">in</span><span class="o">.</span><span class="na">resetReaderIndex</span><span class="o">();</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">==</span> <span class="n">p</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">ByteBufToBytes</span> <span class="n">reader</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ByteBufToBytes</span><span class="o">();</span>
+			<span class="n">String</span> <span class="n">msg</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="n">reader</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">in</span><span class="o">));</span>
+			<span class="n">Person</span> <span class="n">person</span> <span class="o">=</span> <span class="n">buildPerson</span><span class="o">(</span><span class="n">msg</span><span class="o">);</span>
+			<span class="n">out</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">person</span><span class="o">);</span>
+			<span class="c1">//in.release();</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="n">ctx</span><span class="o">.</span><span class="na">fireChannelRead</span><span class="o">(</span><span class="n">in</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+
+	<span class="kd">private</span> <span class="n">Person</span> <span class="nf">buildPerson</span><span class="o">(</span><span class="n">String</span> <span class="n">msg</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">Person</span> <span class="n">person</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Person</span><span class="o">();</span>
+		<span class="n">String</span><span class="o">[]</span> <span class="n">msgArray</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">";|:"</span><span class="o">);</span>
+		<span class="n">person</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">msgArray</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
+		<span class="n">person</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">msgArray</span><span class="o">[</span><span class="mi">3</span><span class="o">]));</span>
+		<span class="n">person</span><span class="o">.</span><span class="na">setSex</span><span class="o">(</span><span class="n">msgArray</span><span class="o">[</span><span class="mi">5</span><span class="o">]);</span>
+		<span class="k">return</span> <span class="n">person</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kn">import</span> <span class="nn">io.netty.channel.ChannelHandlerContext</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">io.netty.channel.ChannelInboundHandlerAdapter</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">org.slf4j.Logger</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">org.slf4j.LoggerFactory</span><span class="o">;</span>  
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BusinessHandler</span> <span class="kd">extends</span> <span class="n">ChannelInboundHandlerAdapter</span> <span class="o">{</span>  
+    <span class="kd">private</span> <span class="n">Logger</span>  <span class="n">logger</span>  <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">BusinessHandler</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>  
+    <span class="nd">@Override</span>  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">channelRead</span><span class="o">(</span><span class="n">ChannelHandlerContext</span> <span class="n">ctx</span><span class="o">,</span> <span class="n">Object</span> <span class="n">msg</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>  
+        <span class="n">Person</span> <span class="n">person</span> <span class="o">=</span> <span class="o">(</span><span class="n">Person</span><span class="o">)</span> <span class="n">msg</span><span class="o">;</span>  
+        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"BusinessHandler read msg from client :"</span> <span class="o">+</span> <span class="n">person</span><span class="o">);</span>  
+    <span class="o">}</span>  
+    <span class="nd">@Override</span>  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">channelReadComplete</span><span class="o">(</span><span class="n">ChannelHandlerContext</span> <span class="n">ctx</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>  
+        <span class="n">ctx</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>  
+    <span class="o">}</span>  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">exceptionCaught</span><span class="o">(</span><span class="n">ChannelHandlerContext</span> <span class="n">ctx</span><span class="o">,</span> <span class="n">Throwable</span> <span class="n">cause</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>  
+        <span class="n">ctx</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>  
+    <span class="o">}</span>  
+<span class="o">}</span></code></pre></figure>
+
+<p>      客户端发送类：Client、ClientInitHandler、PersonEncoder、StringEncoder。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">io.netty.bootstrap.Bootstrap</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">io.netty.channel.ChannelFuture</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">io.netty.channel.ChannelInitializer</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">io.netty.channel.ChannelOption</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">io.netty.channel.EventLoopGroup</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">io.netty.channel.nio.NioEventLoopGroup</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">io.netty.channel.socket.SocketChannel</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">io.netty.channel.socket.nio.NioSocketChannel</span><span class="o">;</span>  
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Client</span> <span class="o">{</span>  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">connect</span><span class="o">(</span><span class="n">String</span> <span class="n">host</span><span class="o">,</span> <span class="kt">int</span> <span class="n">port</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>  
+        <span class="n">EventLoopGroup</span> <span class="n">workerGroup</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NioEventLoopGroup</span><span class="o">();</span>  
+        <span class="k">try</span> <span class="o">{</span>  
+            <span class="n">Bootstrap</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Bootstrap</span><span class="o">();</span>   
+            <span class="n">b</span><span class="o">.</span><span class="na">group</span><span class="o">(</span><span class="n">workerGroup</span><span class="o">);</span>   
+            <span class="n">b</span><span class="o">.</span><span class="na">channel</span><span class="o">(</span><span class="n">NioSocketChannel</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>   
+            <span class="n">b</span><span class="o">.</span><span class="na">option</span><span class="o">(</span><span class="n">ChannelOption</span><span class="o">.</span><span class="na">SO_KEEPALIVE</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="c1">//发送Person格式的协议  </span>
+            <span class="n">b</span><span class="o">.</span><span class="na">handler</span><span class="o">(</span><span class="k">new</span> <span class="n">ChannelInitializer</span><span class="o">&lt;</span><span class="n">SocketChannel</span><span class="o">&gt;()</span> <span class="o">{</span>  
+                <span class="nd">@Override</span>  
+                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">initChannel</span><span class="o">(</span><span class="n">SocketChannel</span> <span class="n">ch</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>  
+                    <span class="n">ch</span><span class="o">.</span><span class="na">pipeline</span><span class="o">().</span><span class="na">addLast</span><span class="o">(</span><span class="k">new</span> <span class="n">PersonEncoder</span><span class="o">());</span>  
+                    <span class="n">Person</span> <span class="n">person</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Person</span><span class="o">();</span>  
+                    <span class="n">person</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"guowl"</span><span class="o">);</span>  
+                    <span class="n">person</span><span class="o">.</span><span class="na">setSex</span><span class="o">(</span><span class="s">"man"</span><span class="o">);</span>  
+                    <span class="n">person</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="mi">30</span><span class="o">);</span>  
+                    <span class="n">ch</span><span class="o">.</span><span class="na">pipeline</span><span class="o">().</span><span class="na">addLast</span><span class="o">(</span><span class="k">new</span> <span class="n">ClientInitHandler</span><span class="o">(</span><span class="n">person</span><span class="o">));</span>  
+                <span class="o">}</span>  
+            <span class="o">});</span>
+
+            <span class="c1">//发送String格式的协议</span>
+            <span class="cm">/* b.handler(new ChannelInitializer&lt;SocketChannel&gt;() {  
+                @Override  
+                public void initChannel(SocketChannel ch) throws Exception {  
+                    ch.pipeline().addLast(new StringEncoder());  
+                    Person person = new Person();  
+                    person.setName("guoxy");  
+                    person.setSex("girl");  
+                    person.setAge(4);  
+                    ch.pipeline().addLast(new ClientInitHandler(person));  
+                }  
+            }); */</span>
+
+            <span class="n">ChannelFuture</span> <span class="n">f</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="na">connect</span><span class="o">(</span><span class="n">host</span><span class="o">,</span> <span class="n">port</span><span class="o">).</span><span class="na">sync</span><span class="o">();</span>  
+            <span class="n">f</span><span class="o">.</span><span class="na">channel</span><span class="o">().</span><span class="na">closeFuture</span><span class="o">().</span><span class="na">sync</span><span class="o">();</span>  
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>  
+            <span class="n">workerGroup</span><span class="o">.</span><span class="na">shutdownGracefully</span><span class="o">();</span>  
+        <span class="o">}</span>  
+
+    <span class="o">}</span>  
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>  
+        <span class="n">Client</span> <span class="n">client</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Client</span><span class="o">();</span>  
+        <span class="n">client</span><span class="o">.</span><span class="na">connect</span><span class="o">(</span><span class="s">"127.0.0.1"</span><span class="o">,</span> <span class="mi">8000</span><span class="o">);</span>  
+    <span class="o">}</span>  
+<span class="o">}</span>  
+
+
+<span class="kn">import</span> <span class="nn">io.netty.channel.ChannelHandlerContext</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">io.netty.channel.ChannelInboundHandlerAdapter</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">org.slf4j.Logger</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">org.slf4j.LoggerFactory</span><span class="o">;</span>  
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClientInitHandler</span> <span class="kd">extends</span> <span class="n">ChannelInboundHandlerAdapter</span> <span class="o">{</span>  
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Logger</span>   <span class="n">logger</span>  <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">ClientInitHandler</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>  
+    <span class="kd">private</span> <span class="n">Person</span> <span class="n">person</span><span class="o">;</span>  
+    <span class="kd">public</span> <span class="nf">ClientInitHandler</span><span class="o">(</span><span class="n">Person</span> <span class="n">person</span><span class="o">){</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">person</span> <span class="o">=</span> <span class="n">person</span><span class="o">;</span>  
+    <span class="o">}</span>  
+    <span class="nd">@Override</span>  
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">channelActive</span><span class="o">(</span><span class="n">ChannelHandlerContext</span> <span class="n">ctx</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>  
+        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"ClientInitHandler.channelActive"</span><span class="o">);</span>  
+        <span class="n">ctx</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">person</span><span class="o">);</span>  
+        <span class="n">ctx</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>  
+    <span class="o">}</span>  
+<span class="o">}</span>
+
+
+<span class="kn">import</span> <span class="nn">com.guowl.utils.ByteObjConverter</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">io.netty.buffer.ByteBuf</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">io.netty.channel.ChannelHandlerContext</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">io.netty.handler.codec.MessageToByteEncoder</span><span class="o">;</span>  
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PersonEncoder</span> <span class="kd">extends</span> <span class="n">MessageToByteEncoder</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span>  <span class="o">{</span>  
+    <span class="nd">@Override</span>  
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">encode</span><span class="o">(</span><span class="n">ChannelHandlerContext</span> <span class="n">ctx</span><span class="o">,</span> <span class="n">Person</span> <span class="n">msg</span><span class="o">,</span> <span class="n">ByteBuf</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>  
+        <span class="n">out</span><span class="o">.</span><span class="na">writeBytes</span><span class="o">(</span><span class="n">ByteObjConverter</span><span class="o">.</span><span class="na">objectToByte</span><span class="o">(</span><span class="n">msg</span><span class="o">));</span>  
+    <span class="o">}</span>  
+<span class="o">}</span>  
+
+<span class="kn">import</span> <span class="nn">io.netty.buffer.ByteBuf</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">io.netty.channel.ChannelHandlerContext</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">io.netty.handler.codec.MessageToByteEncoder</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">com.guowl.testobjcoder.Person</span><span class="o">;</span>  
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringEncoder</span> <span class="kd">extends</span> <span class="n">MessageToByteEncoder</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="o">{</span>  
+    <span class="nd">@Override</span>  
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">encode</span><span class="o">(</span><span class="n">ChannelHandlerContext</span> <span class="n">ctx</span><span class="o">,</span> <span class="n">Person</span> <span class="n">msg</span><span class="o">,</span> <span class="n">ByteBuf</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>  
+        <span class="c1">// 转成字符串：name:xx;age:xx;sex:xx;  </span>
+        <span class="n">StringBuffer</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>  
+        <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"name:"</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">msg</span><span class="o">.</span><span class="na">getName</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">";"</span><span class="o">);</span>  
+        <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"age:"</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">msg</span><span class="o">.</span><span class="na">getAge</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">";"</span><span class="o">);</span>  
+        <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"sex:"</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">msg</span><span class="o">.</span><span class="na">getSex</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">";"</span><span class="o">);</span>  
+        <span class="n">out</span><span class="o">.</span><span class="na">writeBytes</span><span class="o">(</span><span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">().</span><span class="na">getBytes</span><span class="o">());</span>  
+    <span class="o">}</span>  
+<span class="o">}</span>  </code></pre></figure>
+
+<p>未完待续~</p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2016/06/nio/" title="link to NIO技术小结">NIO技术小结</a></h2>
+       <p class="excerpt">NIO是 JAVA New IO 的简称，在 jdk1.4 里提供的新api。官方标榜的特性如下：  为所有的原始类型提供 (Buffer) 缓存支持。  字符集编码解码解决方案。  Channel ：一个新的原始 I/O 抽象。  支持锁和内存映射文件的文件访问接口。  提供多路 (non-bloking) 非阻塞式的高伸缩性网络 I/O 。      NIO与传统的IO一个最大的区别就是：IO是面向流的，NIO是面向缓冲区的，因此，IO流操作势必要求完成读取完流中的数据后才能进行接下来...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-06-06 19:25:52 +0800" class="post-list__meta--date date">2016-06-06</time> &#8226; <span class="post-list__meta--tags tags">JAVA IO</span><a class="btn-border-small" href=/2016/06/nio/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "/2016/07/netty/";
+        this.page.identifier = "/2016/07/netty/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2016-07-19 生成</span>
+        <span class="footer__copyright">本站由 <a href="http://mageric-one.com">@mageric</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2016</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>
